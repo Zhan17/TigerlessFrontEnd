@@ -4,7 +4,7 @@ import { Work_Sans } from "next/font/google";
 // layout and the Storybook preview so both render the same font.
 export const workSans = Work_Sans({
   variable: "--font-work-sans",
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["400", "500"],
   display: "swap",
 });
