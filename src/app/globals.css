@@ -136,6 +136,17 @@
   --text-eyebrow-lg: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
   --text-eyebrow-lg--line-height: 1.32;
   --text-eyebrow-lg--letter-spacing: 0.125rem;
+  /* Prices: same size on both boards (measured from the screenshots). */
+  /* Program sections (birth control / sleep): "From" 32, amount 52 */
+  --text-price: 3.25rem;
+  --text-price--line-height: 1.24;
+  --text-price-unit: 2rem;
+  --text-price-unit--line-height: 1.24;
+  /* Product cards (weight loss): "From" 24, amount 40 */
+  --text-price-sm: 2.5rem;
+  --text-price-sm--line-height: 1.24;
+  --text-price-sm-unit: 1.5rem;
+  --text-price-sm-unit--line-height: 1.24;
   /* Captions (BMI scale legend): 12 */
   --text-caption: 0.75rem;
   --text-caption--line-height: 1;
