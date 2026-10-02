@@ -35,8 +35,8 @@ export const images = {
   phoneMockup: {
     src: "/images/phone-mockup.webp",
     alt: "Phone showing a video consultation with a physician",
-    width: 1109,
-    height: 832,
+    width: 271,
+    height: 553,
   },
   providerAvatar: {
     src: "/images/provider-avatar.webp",

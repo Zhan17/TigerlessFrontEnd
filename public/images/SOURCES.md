@@ -12,7 +12,7 @@ largest rendered size and converted to WebP (quality 82, alpha kept).
 | weight-loss-woman.webp | `1:537` |
 | birth-control-woman.webp | `1:671` |
 | sleep-woman.webp | `1:673` |
-| phone-mockup.webp | `1:736` (white background matches the card) |
+| phone-mockup.webp | `1:736`, cropped to the phone body (the source is only 1109×832 with the phone ~265px wide, so it is kept at source resolution) |
 | provider-avatar.webp | Cropped from the phone mockup for the chat preview |
 | clinicians.webp | `1:781` |
 | wegovy-pens.webp | `1:787` |
