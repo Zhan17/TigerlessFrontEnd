@@ -160,6 +160,9 @@
   --spacing-gutter: clamp(1.25rem, 0.3697rem + 3.7559vw, 3.75rem);
   /* mx-shell-inset: inset of the white shells, 12px -> 28px */
   --spacing-shell-inset: clamp(0.75rem, 0.3979rem + 1.5023vw, 1.75rem);
+  /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
+  --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
+  --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
 
   /* ---- Radius ------------------------------------------------------------ */
   /* rounded-full stays available for pills and circular buttons. */

@@ -32,7 +32,7 @@ const twMerge = extendTailwindMerge({
       ],
       shadow: ["card", "soft", "pill", "raised", "layered"],
       radius: ["shell", "card", "panel"],
-      spacing: ["gutter", "shell-inset"],
+      spacing: ["gutter", "shell-inset", "pill", "pill-x"],
       container: ["shell", "content"],
       ease: ["out-expo", "standard"],
     },
