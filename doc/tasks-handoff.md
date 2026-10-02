@@ -1,10 +1,10 @@
 # Tasks & Handoff
 
-更新：2026-10-02（Claude Code 会话 `49a5b82d…`，T08 第 ⑤ 组完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
+更新：2026-10-02（Claude Code 会话 `49a5b82d…`，T10 完成、T11 只剩 AI 日志）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
 
 ## Current status
 
-- **阶段**：T03–T08 已完成，整页所有区块都已实现（导航、Hero、信任条、How it works、三个项目区块 + 产品 + BMI、服务轮播、成功案例、FAQ、结尾 CTA、页脚）。下一步是 T10（动效 / 键盘的整体检查）和 T11（收尾）。
+- **阶段**：T03–T10 已完成；T11 除了 AI 日志都已完成（favicon、README、干净 clone 验证）。**剩下的唯一事项：导出 AI 日志，需要用户先检查能否公开**（见下方 T11）。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
 - **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
 - **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
@@ -158,7 +158,18 @@
     - 320 / 768 / 1024 / 1920 检查过（768 的 CTA 改为紧凑布局；1024 页脚列可以收窄，长链接左对齐换行）
     - 120 个单元测试、21 个 e2e 测试全部通过；build-storybook 通过，156 个 story 逐个打开无报错
   - README 已写入第 ⑤ 组的偏差（F10、FAQ 默认展开 / 多开、F11、平板 CTA、F02、F13）、“已注意未修改”（移动端没有 FAQs 眉标、页脚大部分链接还没有目标地址）和交互状态
-  - **下一步：T10 / T11**
+  - **T10 / T11 进度**（用户 2026-10-02：K17 先上线并标注 “(Test answer.)”，K18 保持现状，其余可以）：
+    - `3bd7814` K17：起草的 FAQ 答案末尾加 “(Test answer.)”
+    - `c817a14` T10 无障碍：e2e 加 axe 扫描（375 / 1440，WCAG 2.x A/AA，只允许已记录的两处对比度例外）和整页 Tab 遍历（每一站都有焦点环、并滚动到视口内）；修复轮播列表语义（slide 的 group 放进真正的 li 里）和滚动区域的键盘焦点；新增开发依赖 `@axe-core/playwright`
+    - T10 动效核对：design.md 4b 交互表逐项都已实现；开启“减少动态效果”时整页没有运行中的动画，跑马灯静止
+    - `bdc19e0` favicon：用字标的 “A” 做的 SVG 图标（K3 已解决）
+    - `f5f456d` README：当前状态、阅读指引（先看 `src/content/schemas`）、修复被空行拆开的结构表、AI 使用说明
+    - `5e3c5d9` 干净 clone 发现 `npm run typecheck` 找不到 Next 生成的 `LayoutProps`，脚本改为先 `next typegen`
+    - **干净 clone 验证**（scratchpad 里 `git clone` 后）：`npm install`、lint、typecheck、120 个单元测试、build、build-storybook、24 个 e2e 全部通过；`npm run dev`、`npm run storybook` 都返回 200
+  - **T11 剩余：AI 日志**（等用户检查，**用户确认前不复制进仓库、不推送**）
+    - Claude Code：`C:/Users/h8438/.claude/projects/F--AI-TigerlessTask-Front-End-Task/49a5b82d-24c0-49f7-8a28-b0a36d54120b.jsonl`（约 70 MB，会话结束前还会变大）和同名文件夹（tool-results，约 0.4 MB）
+    - Codex（cwd 为 `F:/AI/TigerlessTask` 的会话），在 `~/.codex/sessions/` 下：`2026/10/01/` 的 14-50-39（15 MB）、16-37-47、17-09-04；`2026/10/02/` 的 09-38-23、09-45-11（今天这两条要用户确认是否属于本项目）
+    - 注意：GitHub 单文件上限 100 MB，超过 50 MB 会有警告
 
 ## Next
 
@@ -176,7 +187,7 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 | --- | --- | --- |
 | K1 | `npm install` 会出现 npm 11 的 `allow-scripts` 警告（esbuild 的 postinstall） | 无害，esbuild 的二进制通过 optionalDependencies 安装，build 正常。README 已说明。以后可以考虑 `npm approve-scripts esbuild` 消除警告 |
 | K2 | ~~还没有 story~~ | 已解决：T04 加了 Foundations/Tokens |
-| K3 | favicon 还是 Next 默认的 | 以后用 L1 字标生成 |
+| K3 | ~~favicon 还是 Next 默认的~~ | 已解决：`src/app/icon.svg` |
 | K4 | 没装 `@vitejs/plugin-react`：它的 Babel 8 可选依赖和 @svgr/cli 的 Babel 7 冲突，装上就得用 `--legacy-peer-deps` | 测试用 Vite 8 自带的 JSX 转换，已经验证能渲染组件、处理事件 |
 | K5 | 本机 Git 全局 `core.autocrlf=true`；`.gitattributes` 给 ts、tsx、json、css、md、mjs、mts、js、svg、.nvmrc 指定了 LF | 新增文件类型时补上对应规则 |
 | K6 | Hero 徽章文字对比度不足（C10） | 产品完成后统一调色时处理 |
@@ -233,16 +244,16 @@ npm run storybook
 
 | 检查 | 状态 | 说明 |
 | --- | --- | --- |
-| 干净安装 `npm install` | 通过 | 2026-10-01，Node 24.19.0；删除 node_modules 后重新安装，0 vulnerabilities |
+| 干净 clone 全流程 | 通过 | 2026-10-02，`5e3c5d9`：install、lint、typecheck、test、build、build-storybook、test:e2e、dev 200、storybook 200 |
 | `npm run build` | 通过 | 2026-10-02，第 ④ 组后（静态预渲染） |
 | `npm run dev` | 通过 | 端口 3300 返回 200（T03 时验证） |
 | `npm run storybook` | 通过 | 端口 6006 返回 200 |
 | `npm run build-storybook` | 通过 | 2026-10-02；全部 156 个 story 逐个打开，无控制台错误 |
-| lint / typecheck / test | 通过 | 120 个单元测试（第 ⑤ 组后） |
-| `npm run test:e2e` | 通过 | 21 个：320–1920 每个宽度无溢出、导航、Hero、BMI、轮播、FAQ / 页脚 |
+| lint / typecheck / test | 通过 | 120 个单元测试；typecheck 在干净 clone 上也通过 |
+| `npm run test:e2e` | 通过 | 24 个：320–1920 每个宽度无溢出、导航、Hero、BMI、轮播、FAQ / 页脚、axe、键盘遍历 |
 | Tokens 渲染 | 通过 | Storybook 里人工查看；流式 token 端点有单元测试 |
 | 375 / 1440 视觉对照 | 全部区块已完成 | 截图拼接对照（K20）；1440 整页高度和设计稿一致 |
-| AI 原始日志 | 未完成 | Codex 和 Claude Code 的会话都还没导出 |
+| AI 原始日志 | 未完成 | 文件已定位，等用户检查后再导出 |
 
 ## Git 和提交
 

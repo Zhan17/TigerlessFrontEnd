@@ -156,8 +156,9 @@ Working documents and handoff summaries do not replace original transcripts.
 ## Validation and known limitations
 
 - PDF requirement extraction and Figma design audit: done (see `doc/design.md`).
-- Scaffold: `npm install`, `build`, `dev`, `storybook`, `lint`, `typecheck`, `test` and `test:e2e` verified from a clean install on Node 24.19.0 / npm 11.17.0.
+- Fresh clone (2026-10-02, Node 24.19.0 / npm 11.17.0): `npm install`, `lint`, `typecheck`, `test` (120 unit / component tests), `build`, `build-storybook` and `test:e2e` (24 tests) pass; `dev` and `storybook` serve the page and the 156 stories.
 - Page: navigation, hero, trust strip, how it works, the three program sections with products and the BMI calculator, the services carousel, the success stories, the FAQ, the closing CTA and the footer are implemented and compared with both boards (375 / 1440) plus 320, 768, 1024, 1280 and 1920. The page height at 1440 matches the desktop board (10155px).
-- AI transcript export: pending.
+- AI transcript export: the session files are located; they are added after the user has reviewed them for publication.
+- Known limitations: no real backend (the `api` data source is tested only against a mocked fetch); hero badge contrast kept for fidelity (C10); the copyright year is computed at build time.
 
 See [current handoff](doc/tasks-handoff.md) for the next concrete task.
