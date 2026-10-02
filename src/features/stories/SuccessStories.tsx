@@ -30,7 +30,7 @@ export function SuccessStories({
         <div className="text-center">
           <h2
             id="stories-title"
-            className="text-section font-medium text-heading-strong"
+            className="text-section font-medium text-heading"
           >
             <RichText segments={heading} />
           </h2>

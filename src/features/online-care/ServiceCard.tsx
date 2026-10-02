@@ -41,7 +41,7 @@ export function ServiceCard({ title, media, className }: Props) {
       <h3
         className={cn(
           "px-6 pt-8 text-center text-card-heading font-normal",
-          onPhoto ? "text-white" : "text-heading-strong",
+          onPhoto ? "text-white" : "text-heading",
         )}
       >
         {title}

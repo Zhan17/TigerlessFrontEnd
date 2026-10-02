@@ -144,7 +144,7 @@ export function ServicesCarousel({
       <div className="mx-auto box-content flex max-w-content flex-col gap-3 px-gutter md:flex-row md:items-end md:justify-between md:gap-8">
         <h2
           id={headingId}
-          className="max-w-[33.6875rem] text-section font-medium text-heading-strong"
+          className="max-w-[33.6875rem] text-section font-medium text-heading"
         >
           <RichText segments={heading} />
         </h2>
