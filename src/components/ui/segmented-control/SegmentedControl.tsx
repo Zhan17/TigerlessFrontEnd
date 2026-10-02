@@ -89,7 +89,7 @@ export function SegmentedControl<T extends string>({
               "calc((100% - 0.5rem - (var(--n) - 1) * 0.25rem) / var(--n))",
           } as CSSProperties
         }
-        className="relative flex h-control gap-1 rounded-full border-[0.5px] border-primary p-1"
+        className="relative isolate flex h-control gap-1 rounded-full border-[0.5px] border-primary p-1"
       >
         {/* Goo filter: blur, then a hard alpha threshold re-draws the
             edges, so shapes close together grow a bridge; the original
@@ -112,9 +112,12 @@ export function SegmentedControl<T extends string>({
             </filter>
           </defs>
         </svg>
+        {/* Layers: hover tints (z-0) < liquid (z-10) < label text (z-20),
+            so the pill and droplet always paint over a fading hover tint
+            and the text always paints over the pill. */}
         <div
           aria-hidden
-          className="absolute inset-0"
+          className="absolute inset-0 z-10"
           style={{ filter: `url(#${goo})` }}
         >
           <span
@@ -152,18 +155,19 @@ export function SegmentedControl<T extends string>({
             <label
               key={option.value}
               className={cn(
-                "relative flex min-w-0 flex-1 cursor-pointer items-center justify-center rounded-full px-3 whitespace-nowrap",
-                "text-badge font-medium transition-[color,background-color,scale] duration-(--duration-base) ease-standard",
+                "group/option relative flex min-w-0 flex-1 cursor-pointer items-center justify-center rounded-full px-3 whitespace-nowrap",
+                "text-badge font-medium",
                 "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus",
-                "active:scale-[0.97]",
-                // The new option turns white as the pill's leading edge reaches
-                // it; the old one waits for the trailing edge to leave before
-                // turning dark, so no text vanishes against the pill.
-                checked
-                  ? "text-on-primary delay-[360ms]"
-                  : "text-heading delay-[520ms] hover:bg-faq-tint hover:text-accent hover:delay-0",
               )}
             >
+              {/* Hover tint, below the liquid layer. */}
+              <span
+                aria-hidden
+                className={cn(
+                  "absolute inset-0 z-0 rounded-full transition-colors duration-(--duration-base) ease-standard",
+                  !checked && "group-hover/option:bg-faq-tint",
+                )}
+              />
               <input
                 type="radio"
                 name={name}
@@ -172,7 +176,21 @@ export function SegmentedControl<T extends string>({
                 onChange={() => select(option.value)}
                 className="sr-only"
               />
-              {option.label}
+              <span
+                className={cn(
+                  // Text above the liquid; the press shrink lives here so the
+                  // label never becomes its own stacking context.
+                  "relative z-20 transition-[color,scale] duration-(--duration-base) ease-standard group-active/option:scale-[0.97]",
+                  // The new option turns white as the pill's leading edge
+                  // reaches it; the old one waits for the trailing edge to
+                  // leave before turning dark, so no text vanishes on the pill.
+                  checked
+                    ? "text-on-primary delay-[400ms]"
+                    : "text-heading delay-[520ms] group-hover/option:text-accent group-hover/option:delay-0",
+                )}
+              >
+                {option.label}
+              </span>
             </label>
           );
         })}
