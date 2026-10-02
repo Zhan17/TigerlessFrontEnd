@@ -1,10 +1,10 @@
 # Tasks & Handoff
 
-更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T04 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
+更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T05 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
 
 ## Current status
 
-- **阶段**：T03 搭项目、T04 design tokens 已完成；下一步是 T05（图标）。页面还是占位页。
+- **阶段**：T03 搭项目、T04 design tokens、T05 图标已完成；下一步是 T06（基础组件）。页面还是占位页。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
 - **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
 - **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
@@ -39,6 +39,18 @@
   4. `bf77454` `@theme static`（所有 token 都输出为 CSS 变量）；Work Sans 移到 `src/app/fonts.ts`，Storybook 也用同一个字体
   5. `9259e77` Storybook `Foundations/Tokens`：颜色、字号、圆角 / 阴影、分类主题；数值从 CSS 变量实时读取，不会和样式表不一致
 
+- **T05 图标**：
+  1. `86af2cb` 21 个规范化后的 SVG 源文件放在 `src/components/icons/svg/`：颜色改为 `currentColor`；两色图标里面的部分用 `var(--icon-contrast, #fff)`；形状相同的合并（左右箭头、24 / 48 描边箭头、32 / 40 实心箭头、展开 / 收起箭头）。来源和授权写在 `SOURCES.md`
+  2. `ec7352b` 运行 `npm run icons`（SVGR 命令行）会清空并重新生成 `src/components/icons/generated/*.tsx`，再用 Biome 格式化；生成的图标默认 1em 大小、`aria-hidden`；从 `@/components/icons` 导入，名字是 `XxxIcon`。重复运行，输出不变
+  3. `8f7e69e` 修复 T04 的命名冲突：颜色别名 `body` 改名为 `copy`。原来 `text-body` 只会生成颜色，字号用不了；已检查其他所有 token 名，没有冲突
+  4. `9e4ad9f` Storybook `Foundations/Icons`：全部图标（大小和颜色可以调）、两色箭头在主按钮 / 次按钮上的两种配色、镜像方向
+
+  **用法约定**：
+  - 图标颜色跟随文字颜色（`text-*`）
+  - 两色图标里面的部分用 `[--icon-contrast:var(--color-...)]` 或 `style` 设置
+  - 左箭头用 `rotate-180`，收起的箭头用 `-scale-y-100`
+  - 图标本身是装饰性的，无障碍名称写在父级按钮或链接上
+
 ## In Progress
 
 - 无。
@@ -49,7 +61,6 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 
 | 顺序 | 任务 | 完成条件 |
 | --- | --- | --- |
-| T05 | 图标：用 SVGR 命令行把 `design-ref` 里的 SVG 生成 `.tsx` 组件，颜色用 `currentColor` | 有一个可以重复运行的生成脚本；图标总览 story |
 | T06 | 基础组件（`components/ui`）：Button、IconButton、Eyebrow、CheckList、Price、Rating、SocialLinks 等，每个组件和它的状态、story 一起做 | 每个状态一个 story；hover / focus / 按下 / 禁用状态统一 |
 | T07 | 数据层：Zod schema（按资源 + `content/home`）、mock、取数函数加 `DATA_SOURCE` 开关、映射到组件 props | 类型可读；mock 通过校验；有测试 |
 | T08 | 逐个区块实现（导航和 Hero 先做），桌面和移动同时做 | 375 / 1440 对照截图；`test:e2e` 通过 |
@@ -71,6 +82,8 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 | K8 | 结尾 CTA 的渐变、页脚分隔线、星星颜色、避孕区块分隔线是从截图取色的近似值（页脚实例没读到结构化数据） | 视觉上和设计一致即可（用户规则：达到设计意图） |
 | K9 | 移动端白色外壳的圆角还没量（token 现在是 32） | T08 做 Hero 时核对 |
 | K10 | Tailwind 的默认色板、字号、圆角、阴影都被清掉了，只能用设计 token | 有意为之；需要新值时在 `globals.css` 里加 token |
+| K11 | 新增 token 时要避免和 Tailwind 工具类前缀撞名（例：`--color-body` 和 `--text-body` 都对应 `text-body`） | 新增 token 后用一次构建检查生成的 CSS |
+| K12 | 评价卡片上的 LinkedIn 图标用的是 Hugeicons `linkedin-01`（描边），设计里是实心的 “in” | 按用户规则，图标达到设计意图即可，不需要处理 |
 
 ## 如何审查（给接手的 agent 或审查者）
 
