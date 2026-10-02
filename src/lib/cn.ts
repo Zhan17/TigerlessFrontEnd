@@ -1,5 +1,39 @@
 import { type CxOptions, cx } from "class-variance-authority";
-import { twMerge } from "tailwind-merge";
+import { extendTailwindMerge } from "tailwind-merge";
+
+/**
+ * tailwind-merge only knows Tailwind's default theme. Register the custom
+ * tokens from globals.css so it can tell e.g. `text-button` (font size) from
+ * `text-on-primary` (colour) and does not drop one of them as a "conflict".
+ * Keep these lists in sync with the @theme block.
+ */
+const twMerge = extendTailwindMerge({
+  extend: {
+    theme: {
+      text: [
+        "display",
+        "section",
+        "card-title",
+        "card-heading",
+        "product-title",
+        "title",
+        "body",
+        "body-sm",
+        "button",
+        "label",
+        "badge",
+        "eyebrow",
+        "eyebrow-lg",
+        "caption",
+      ],
+      shadow: ["card", "soft", "pill", "raised", "layered"],
+      radius: ["shell", "card", "panel"],
+      spacing: ["gutter", "shell-inset"],
+      container: ["shell", "content"],
+      ease: ["out-expo", "standard"],
+    },
+  },
+});
 
 /**
  * Join conditional class names and resolve Tailwind conflicts
