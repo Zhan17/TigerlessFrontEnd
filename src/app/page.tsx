@@ -5,6 +5,7 @@ import { HowItWorks, toHowItWorksProps } from "@/features/how-it-works";
 import { SiteHeader, toNavigationProps } from "@/features/navigation";
 import { ServicesCarousel, toOnlineCareProps } from "@/features/online-care";
 import { ProgramSection, toProgramSectionsProps } from "@/features/programs";
+import { SuccessStories, toStoriesProps } from "@/features/stories";
 import { TrustStrip } from "@/features/trust-strip";
 
 /**
@@ -20,6 +21,7 @@ export default async function HomePage() {
   );
   const { programId: bmiHost, ...bmi } = toBmiProps(data.home);
   const onlineCare = toOnlineCareProps(data.home, data.services);
+  const stories = toStoriesProps(data.home, data.testimonials, data.programs);
 
   return (
     <>
@@ -38,6 +40,7 @@ export default async function HomePage() {
         {onlineCare.services.length > 0 ? (
           <ServicesCarousel {...onlineCare} />
         ) : null}
+        {stories.stories.length > 0 ? <SuccessStories {...stories} /> : null}
       </main>
     </>
   );

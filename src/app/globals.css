@@ -51,6 +51,7 @@
   --color-mist: #f4fafa; /* Background Color */
   --color-faq-tint: #f0f6f3; /* expanded FAQ item */
   --color-chat-panel: #e9f4f2; /* chat preview panel (services carousel) */
+  --color-story-photo: #e5fcee; /* behind the cut-out on the photo story card */
 
   /* Borders */
   --color-border-mint: #cddcd3; /* Border Mint: inputs, outlined buttons */
@@ -175,6 +176,11 @@
   --text-stat--line-height: 1.25;
   --text-stat-label: clamp(0.75rem, 0.618rem + 0.5634vw, 1.125rem);
   --text-stat-label--line-height: 1.24;
+  /* Testimonial author: name 20, location 16 (same on both boards) */
+  --text-author: 1.25rem;
+  --text-author--line-height: 1.6;
+  --text-meta: 1rem;
+  --text-meta--line-height: 1.6;
   /*
    * Chat preview inside the services carousel: an illustration of the app
    * UI, drawn at the board's size on both boards (9 / 8 / 7px).
@@ -264,6 +270,9 @@
   --spacing-phone-w: clamp(15.25rem, 13.9076rem + 5.7277vw, 19.0625rem);
   --spacing-phone-top: clamp(6rem, 5.3398rem + 2.8169vw, 7.875rem);
   --spacing-chat-bottom: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
+  /* Success stories: shell padding 8 -> 120, card height 400 -> 530 */
+  --spacing-stories-y: clamp(0.5rem, -1.9648rem + 10.5164vw, 7.5rem);
+  --spacing-story-h: clamp(25rem, 22.1391rem + 12.2066vw, 33.125rem);
   /* Form controls (BMI inputs, radios, segmented control): 40 -> 52 */
   --spacing-control: clamp(2.5rem, 2.2359rem + 1.1268vw, 3.25rem);
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */

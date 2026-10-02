@@ -51,6 +51,15 @@ export const uiCopy = {
     result: (sex: "female" | "male", bmi: string, category: string) =>
       `As a ${sex === "female" ? "woman" : "man"}, your BMI is ${bmi} — ${category}.`,
   },
+  social: {
+    platforms: {
+      x: "X",
+      instagram: "Instagram",
+      linkedin: "LinkedIn",
+      facebook: "Facebook",
+    },
+    profile: (name: string, platform: string) => `${name} on ${platform}`,
+  },
   rating: {
     label: (value: number, max: number) => `Rated ${value} out of ${max}`,
   },
