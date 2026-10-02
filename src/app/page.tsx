@@ -1,5 +1,12 @@
 import { getHomePageData } from "@/content/api";
 import { BmiCalculator, toBmiProps } from "@/features/bmi";
+import { FaqSection, toFaqProps } from "@/features/faq";
+import {
+  ClosingCta,
+  SiteFooter,
+  toClosingCtaProps,
+  toFooterProps,
+} from "@/features/footer";
 import { Hero, toHeroProps } from "@/features/hero";
 import { HowItWorks, toHowItWorksProps } from "@/features/how-it-works";
 import { SiteHeader, toNavigationProps } from "@/features/navigation";
@@ -22,6 +29,7 @@ export default async function HomePage() {
   const { programId: bmiHost, ...bmi } = toBmiProps(data.home);
   const onlineCare = toOnlineCareProps(data.home, data.services);
   const stories = toStoriesProps(data.home, data.testimonials, data.programs);
+  const faq = toFaqProps(data.home, data.faqs);
 
   return (
     <>
@@ -41,7 +49,12 @@ export default async function HomePage() {
           <ServicesCarousel {...onlineCare} />
         ) : null}
         {stories.stories.length > 0 ? <SuccessStories {...stories} /> : null}
+        {faq.items.length > 0 ? <FaqSection {...faq} /> : null}
+        <ClosingCta {...toClosingCtaProps(data.home)} />
       </main>
+      <SiteFooter
+        {...toFooterProps(data.home, data.programs, new Date().getFullYear())}
+      />
     </>
   );
 }
