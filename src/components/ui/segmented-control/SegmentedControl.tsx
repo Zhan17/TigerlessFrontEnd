@@ -59,14 +59,14 @@ export function SegmentedControl<T extends string>({
       animate(
         droplet.current,
         { scale: [0, 1] },
-        { duration: 0.22, ease: [0.16, 1, 0.3, 1] },
+        { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
       );
       animate(
         pill.current,
         { scaleY: [1, 0.84, 1.04, 1] },
         {
-          duration: 0.55,
-          delay: 0.14,
+          duration: 0.6,
+          delay: 0.22,
           times: [0, 0.35, 0.75, 1],
           ease: "easeInOut",
         },
@@ -141,8 +141,8 @@ export function SegmentedControl<T extends string>({
               "right-[calc(0.25rem+(var(--n)-1-var(--i))*(var(--seg)+0.25rem))]",
               // Leading edge first (after the droplet appears), trailing
               // edge a beat later and slower.
-              "data-[direction=right]:[transition:right_420ms_cubic-bezier(0.5,0,0.25,1)_120ms,left_460ms_cubic-bezier(0.65,0,0.35,1)_260ms]",
-              "data-[direction=left]:[transition:left_420ms_cubic-bezier(0.5,0,0.25,1)_120ms,right_460ms_cubic-bezier(0.65,0,0.35,1)_260ms]",
+              "data-[direction=right]:[transition:right_520ms_cubic-bezier(0.6,0,0.25,1)_200ms,left_480ms_cubic-bezier(0.65,0,0.35,1)_380ms]",
+              "data-[direction=left]:[transition:left_520ms_cubic-bezier(0.6,0,0.25,1)_200ms,right_480ms_cubic-bezier(0.65,0,0.35,1)_380ms]",
             )}
           />
         </div>
@@ -160,8 +160,8 @@ export function SegmentedControl<T extends string>({
                 // it; the old one waits for the trailing edge to leave before
                 // turning dark, so no text vanishes against the pill.
                 checked
-                  ? "text-on-primary delay-[180ms]"
-                  : "text-heading delay-[460ms] hover:bg-faq-tint hover:text-accent hover:delay-0",
+                  ? "text-on-primary delay-[360ms]"
+                  : "text-heading delay-[520ms] hover:bg-faq-tint hover:text-accent hover:delay-0",
               )}
             >
               <input
