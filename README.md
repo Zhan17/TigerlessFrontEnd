@@ -93,7 +93,7 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | — | Services carousel | White titles sit directly on bright photos (e.g. the sky behind "Free Expedited Shipping") | A light dark-to-transparent scrim behind the top of photo cards | Title contrast |
 | — | Services carousel | Both arrows look identical at the start | "Previous" disabled at the start, "Next" at the end (40% opacity) | Shows where the row ends (agreed disabled states) |
 | F07 | Success stories | "David L" | "David L." | Matches "Maria R." and "An N." |
-| F10 | FAQ | Only the first question has an answer | Answers drafted for the other three from facts elsewhere on the page (lengths vary to exercise the accordion) | An FAQ needs answers; pending client review |
+| F10 | FAQ | Only the first question has an answer | Answers drafted for the other three from facts elsewhere on the page (lengths vary to exercise the accordion), each marked "(Test answer.)" | An FAQ needs answers; the marked ones are placeholders until the client supplies real copy |
 | — | FAQ | No states designed for the rows | First question open by default, several may be open at once (see states below) | Comparing answers is easier when they can stay open |
 | F11 | Closing CTA | "Start free consultations" | "Start a free consultation" (the shared CTA label, same as the hero) | One wording for the same action |
 | — | Closing CTA (640–1023) | Only the 375 / 1440 layouts exist | Tablets use the centred layout without the tall mobile height | Avoids a large empty gap in the card |

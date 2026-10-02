@@ -42,7 +42,8 @@ describe("FaqSection", () => {
     const region = screen.getByRole("region", {
       name: "What is compounded medication?",
     });
-    expect(region.querySelectorAll("p")).toHaveLength(3);
+    // Three paragraphs plus the "(Test answer.)" note (K17).
+    expect(region.querySelectorAll("p")).toHaveLength(4);
   });
 
   it("is the #faq anchor target", () => {
