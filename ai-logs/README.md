@@ -11,7 +11,7 @@ The assignment requires complete, unedited AI session records for this project. 
 
 Notes:
 
-- The Claude Code files are copied byte-for-byte from `~/.claude/projects/F--AI-TigerlessTask-Front-End-Task/`; nothing was edited or removed. The session was still running when the copy was taken (2026-10-02), so the last few turns may be missing; the copy is refreshed before submission if the session continues.
+- The Claude Code files are copied byte-for-byte from `~/.claude/projects/F--AI-TigerlessTask-Front-End-Task/`; nothing was edited or removed. The session was still running when the copy was taken, so the last few turns may be missing. Last refreshed 2026-10-02 (≈ 79 MB), after the user's local-testing fixes.
 - Earlier parts of the session were automatically compacted by Claude Code when the context grew long; the transcript keeps the original turns, and the compaction summaries appear in it as written.
 
 ## Archiving
