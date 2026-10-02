@@ -385,12 +385,31 @@
 }
 
 @layer base {
-  /* One consistent, visible focus ring for every interactive element. */
   html {
     scroll-behavior: smooth;
-    /* Keep anchored sections clear of the sticky nav. */
-    scroll-padding-top: 6rem;
   }
+
+  /*
+   * Keep anchored sections and focused controls clear of the sticky nav.
+   * Not `scroll-padding-top` on <html>: that also applies to the sticky
+   * nav's own controls, so focusing them (a click on the menu button, or
+   * focus returning to it when the menu closes) scrolled the page ~400px
+   * and cut short the scroll to the chosen section.
+   */
+  main [id],
+  :is(main, footer)
+    :is(
+      a[href],
+      button,
+      input,
+      select,
+      textarea,
+      [tabindex]:not([tabindex="-1"])
+    ) {
+    scroll-margin-top: 6rem;
+  }
+
+  /* One consistent, visible focus ring for every interactive element. */
 
   :focus-visible {
     outline: 2px solid var(--color-focus);

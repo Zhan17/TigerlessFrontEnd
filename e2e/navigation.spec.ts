@@ -80,3 +80,37 @@ test("the logo glides back to the top on the home page without reloading", async
   ).toBe(true);
   await expect(page).toHaveURL(/\/$/);
 });
+
+test("the mobile menu lands on the chosen section from anywhere on the page", async ({
+  page,
+}) => {
+  // Regression: focus moving to / from the sticky menu button used to
+  // scroll the page (scroll-padding on <html>) and cut the jump short.
+  await page.setViewportSize({ width: 375, height: 812 });
+  await page.goto("/");
+  for (const [start, name, id] of [
+    [9000, "Sleep", "sleep"],
+    [3000, "Birth Control", "birth-control"],
+  ] as const) {
+    await page.evaluate(
+      (y) => window.scrollTo({ top: y, behavior: "instant" }),
+      start,
+    );
+    await page.getByRole("button", { name: "Open menu" }).click();
+    await page.getByRole("dialog").getByRole("link", { name }).click();
+    await expect
+      .poll(
+        () =>
+          page.evaluate(
+            (target) =>
+              Math.round(
+                document.getElementById(target)?.getBoundingClientRect().top ??
+                  -1,
+              ),
+            id,
+          ),
+        { timeout: 4000 },
+      )
+      .toBe(96);
+  }
+});
