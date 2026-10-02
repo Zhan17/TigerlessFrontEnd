@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 
 describe("Button", () => {
   it("renders a non-submitting button by default", () => {
@@ -40,6 +40,23 @@ describe("Button", () => {
     expect(container.querySelector("svg")).toHaveAttribute(
       "aria-hidden",
       "true",
+    );
+  });
+});
+
+describe("ButtonLink", () => {
+  it("renders a link with the button look", () => {
+    render(<ButtonLink href="#faq">FAQs</ButtonLink>);
+    const link = screen.getByRole("link", { name: "FAQs" });
+    expect(link).toHaveAttribute("href", "#faq");
+    expect(link).not.toHaveAttribute("target");
+  });
+
+  it("opens external URLs in a new tab safely", () => {
+    render(<ButtonLink href="https://example.com">Docs</ButtonLink>);
+    expect(screen.getByRole("link", { name: "Docs" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
     );
   });
 });

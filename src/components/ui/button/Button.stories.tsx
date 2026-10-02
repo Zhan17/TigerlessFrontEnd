@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Button } from "./Button";
+import { Button, ButtonLink } from "./Button";
 
 const meta = {
   title: "UI/Button",
@@ -146,4 +146,17 @@ export const Sizes: Story = {
       <Button size="md">No arrow</Button>
     </div>
   ),
+};
+
+/** Same styles on an anchor (CTAs that have a destination). */
+export const AsLink: Story = {
+  render: () => (
+    <ButtonLink href="#faq" size="lg" withArrow>
+      Start a free consultation
+    </ButtonLink>
+  ),
+};
+export const AsLinkHover: Story = {
+  ...AsLink,
+  parameters: { pseudo: { hover: true } },
 };

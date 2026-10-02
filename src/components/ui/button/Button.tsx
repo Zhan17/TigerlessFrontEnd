@@ -1,5 +1,9 @@
 import { cva, type VariantProps } from "class-variance-authority";
-import type { ButtonHTMLAttributes, ReactNode } from "react";
+import type {
+  AnchorHTMLAttributes,
+  ButtonHTMLAttributes,
+  ReactNode,
+} from "react";
 import { ArrowRightCircleFilledIcon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
@@ -19,17 +23,18 @@ export const buttonVariants = cva(
     "group/button inline-flex shrink-0 items-center justify-center gap-2 rounded-full",
     "text-button font-medium whitespace-nowrap select-none",
     "transition-[scale,translate,background-color,box-shadow,color] duration-(--duration-base) ease-standard",
-    "enabled:hover:scale-[1.03] enabled:active:scale-[0.97]",
+    "not-disabled:hover:scale-[1.03] not-disabled:active:scale-[0.97]",
     "disabled:cursor-not-allowed disabled:opacity-40",
   ],
   {
     variants: {
       variant: {
         primary:
-          "bg-primary text-on-primary enabled:hover:bg-brand-800 enabled:hover:shadow-soft",
-        secondary: "bg-surface text-heading-strong enabled:hover:shadow-card",
+          "bg-primary text-on-primary not-disabled:hover:bg-brand-800 not-disabled:hover:shadow-soft",
+        secondary:
+          "bg-surface text-heading-strong not-disabled:hover:shadow-card",
         outline:
-          "border border-primary bg-transparent text-heading enabled:hover:bg-selected",
+          "border border-primary bg-transparent text-heading not-disabled:hover:bg-selected",
       },
       size: {
         lg: "h-14 px-8",
@@ -68,6 +73,29 @@ const arrowStyles = {
   outline: "text-primary [--icon-contrast:var(--color-white)]",
 } as const;
 
+type Variant = NonNullable<VariantProps<typeof buttonVariants>["variant"]>;
+type Size = NonNullable<VariantProps<typeof buttonVariants>["size"]>;
+
+/** Two-tone arrow used inside buttons; nudges right on hover. */
+export function ButtonArrow({
+  variant,
+  size,
+}: {
+  variant: Variant;
+  size: Size;
+}) {
+  return (
+    <ArrowRightCircleFilledIcon
+      className={cn(
+        "shrink-0 transition-transform duration-(--duration-base) ease-standard",
+        "group-hover/button:translate-x-0.5 group-disabled/button:translate-x-0",
+        size === "lg" ? "size-10" : "size-8",
+        arrowStyles[variant],
+      )}
+    />
+  );
+}
+
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
     children: ReactNode;
@@ -94,15 +122,44 @@ export function Button({
     >
       <span>{children}</span>
       {withArrow ? (
-        <ArrowRightCircleFilledIcon
-          className={cn(
-            "shrink-0 transition-transform duration-(--duration-base) ease-standard",
-            "group-hover/button:translate-x-0.5 group-disabled/button:translate-x-0",
-            size === "lg" ? "size-10" : "size-8",
-            arrowStyles[variant ?? "primary"],
-          )}
-        />
+        <ButtonArrow variant={variant ?? "primary"} size={size ?? "md"} />
       ) : null}
     </button>
+  );
+}
+
+export type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> &
+  VariantProps<typeof buttonVariants> & {
+    href: string;
+    children: ReactNode;
+  };
+
+/** Same look as Button, rendered as a link. External URLs open a new tab. */
+export function ButtonLink({
+  variant = "primary",
+  size = "md",
+  withArrow = false,
+  fullWidth = false,
+  className,
+  href,
+  children,
+  ...props
+}: ButtonLinkProps) {
+  const external = /^https?:\/\//.test(href);
+  return (
+    <a
+      href={href}
+      className={cn(
+        buttonVariants({ variant, size, withArrow, fullWidth }),
+        className,
+      )}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...props}
+    >
+      <span>{children}</span>
+      {withArrow ? (
+        <ButtonArrow variant={variant ?? "primary"} size={size ?? "md"} />
+      ) : null}
+    </a>
   );
 }
