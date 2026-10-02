@@ -52,7 +52,7 @@ test.describe("language marquee", () => {
   test("pills toggle a multi-select highlight on every copy (keyboard)", async ({
     page,
   }) => {
-    const english = marquee(page).locator("button:not([inert] *)", {
+    const english = marquee(page).locator("button:not([aria-hidden] *)", {
       hasText: "English",
     });
     await expect(english).toHaveAttribute("aria-pressed", "false");
@@ -62,11 +62,13 @@ test.describe("language marquee", () => {
     await expect(english).toHaveAttribute("aria-pressed", "true");
     // Defaults stay selected (multi-select, K16).
     await expect(
-      marquee(page).locator("button:not([inert] *)", { hasText: "中文" }),
+      marquee(page).locator("button:not([aria-hidden] *)", { hasText: "中文" }),
     ).toHaveAttribute("aria-pressed", "true");
     // Clones mirror the state.
     await expect(
-      marquee(page).locator("[inert] button", { hasText: "English" }).first(),
+      marquee(page)
+        .locator("[aria-hidden] button", { hasText: "English" })
+        .first(),
     ).toHaveAttribute("aria-pressed", "true");
     await page.keyboard.press("Enter");
     await expect(english).toHaveAttribute("aria-pressed", "false");
@@ -113,7 +115,7 @@ test.describe("language marquee", () => {
     expect(Math.min(delta, Math.abs(period - delta))).toBeGreaterThan(120);
     // No pill got toggled by the drag.
     await expect(
-      marquee(page).locator("button[aria-pressed=true]:not([inert] *)"),
+      marquee(page).locator("button[aria-pressed=true]:not([aria-hidden] *)"),
     ).toHaveCount(2);
   });
 
@@ -121,9 +123,55 @@ test.describe("language marquee", () => {
     page,
   }) => {
     const visible = await marquee(page)
-      .locator("button:not([inert] *)")
+      .locator("button:not([aria-hidden] *)")
       .count();
     expect(visible).toBe(11);
+    const clones = marquee(page).locator("[aria-hidden] button");
+    expect(await clones.count()).toBeGreaterThan(0);
+    for (const tabIndex of await clones.evaluateAll((els) =>
+      els.map((el) => el.getAttribute("tabindex")),
+    )) {
+      expect(tabIndex).toBe("-1");
+    }
+  });
+
+  test("a mouse click on any pill on screen toggles its language", async ({
+    page,
+  }) => {
+    // Most pills on screen are copies; clicking one must toggle the
+    // language just like the original (this used to do nothing). Hovering
+    // the middle first pauses the row so the pill stays put.
+    const box = await marquee(page).boundingBox();
+    if (!box) throw new Error("marquee not rendered");
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 4);
+    await page.waitForTimeout(200);
+    const target = await marquee(page)
+      .locator("[aria-hidden] button")
+      .evaluateAll((els) => {
+        const box = (el: Element) => el.getBoundingClientRect();
+        const pick = els.find((el) => {
+          const r = box(el);
+          return r.left > 300 && r.right < window.innerWidth - 300;
+        });
+        if (!pick) return null;
+        const r = box(pick);
+        return {
+          label: pick.textContent ?? "",
+          x: r.left + r.width / 2,
+          y: r.top + r.height / 2,
+        };
+      });
+    expect(target).not.toBeNull();
+    if (!target) return;
+    const original = marquee(page).locator("button:not([aria-hidden] *)", {
+      hasText: target.label,
+    });
+    const before = await original.getAttribute("aria-pressed");
+    await page.mouse.click(target.x, target.y);
+    await expect(original).toHaveAttribute(
+      "aria-pressed",
+      before === "true" ? "false" : "true",
+    );
   });
 });
 
@@ -136,6 +184,8 @@ test.describe("reduced motion", () => {
     await expect(marquee(page).locator(".will-change-transform")).toHaveCount(
       0,
     );
-    await expect(marquee(page).locator("[inert]")).toHaveCount(0);
+    // One plain set of 11 pills, no copies.
+    await expect(marquee(page).getByRole("button")).toHaveCount(11);
+    await expect(marquee(page).locator("button")).toHaveCount(11);
   });
 });

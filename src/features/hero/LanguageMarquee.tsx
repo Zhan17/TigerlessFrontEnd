@@ -325,7 +325,10 @@ function MarqueeRow({
           {renderSet(false)}
         </div>
         {Array.from({ length: copies - 1 }, (_, i) => i + 1).map((copy) => (
-          <div key={copy} className={cn("flex gap-pill-gap")} inert aria-hidden>
+          // Copies are hidden from assistive tech and the tab order, but they
+          // stay clickable: most of the pills on screen at any moment are
+          // copies, and each toggles the same language as the original.
+          <div key={copy} className={cn("flex gap-pill-gap")} aria-hidden>
             {renderSet(true)}
           </div>
         ))}

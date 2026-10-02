@@ -45,7 +45,7 @@ describe("Hero", () => {
       name: "Languages available for your consultation",
     });
     expect(group).toBeInTheDocument();
-    // Clones are inert, so only one set is exposed.
+    // Copies are aria-hidden, so only one set is exposed.
     expect(screen.getByRole("button", { name: "العربية" })).toHaveAttribute(
       "dir",
       "rtl",
