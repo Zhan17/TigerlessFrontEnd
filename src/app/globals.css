@@ -332,7 +332,7 @@
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
   /* Trust strip: endless leftward scroll (track = two identical copies). */
-  --animate-marquee: marquee 32s linear infinite;
+  --animate-marquee: marquee 64s linear infinite;
   /* FAQ answers: height from Radix's measured content height. */
   --animate-accordion-down: accordion-down 300ms var(--ease-out-expo);
   --animate-accordion-up: accordion-up 200ms var(--ease-standard);
