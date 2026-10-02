@@ -1,93 +1,109 @@
 # Tasks & Handoff
 
-更新：2026-10-01（America/Los_Angeles）。这是当前状态的唯一入口；交接覆盖本页快照，重要历史由 Git 保存。
+更新：2026-10-01（Claude Code 会话 `49a5b82d…`）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
 
 ## Current status
 
-- 阶段：初始化文档；尚未实现前端或安装依赖。
-- 工作目录：`Front-End Task`，本机路径 `F:\AI\TigerlessTask\Front-End Task`。
-- 本地分支：`main`；交接时重新运行 Git 命令核实，不依赖文档里的旧 commit 值。
-- Figma：原始文件读不了（仅查看权限）；用户副本 `0WMyYj8ycFQlykicaNToc1` 可读。**整页逐块审稿已完成**，见 [design.md](design.md)：13 个区块、同类组件、交互 brainstorm、设计错误候选、Q1–Q7 待用户决定。
-- ⚠️ Figma MCP（Starter 计划）调用额度已用完，素材还没导出。参考截图保存在仓库外的 `F:\AI\TigerlessTask\design-ref\`。
-- AI：初始化由 Codex 完成；2026-10-01 起 Claude Code 参与（第 2 个会话：复核需求、确认 Figma 访问）。两段会话的原始记录都需要导出到 `ai-logs/`。
+- **阶段**：T03 搭项目已完成；下一步是 T04（tokens 和基础组件）。页面还是占位页。
+- **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
+- **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
+- **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
+- **素材**：已齐，放在仓库外的 `F:\AI\TigerlessTask\design-ref\assets\`，清单见 [assets-checklist.md](assets-checklist.md)。
+- **用户的工作规则（必须遵守）**：
+  - 每个大任务、每个小任务都单独 commit
+  - 不确定的地方停下来问，不要猜
+  - 不擅自改 requirements、architecture、design 里已经定好的内容，要改先问
+  - 禁止 `any`
+  - 内容一律走数据层
+  - 每个有状态组件，每个状态一个 story
+  - 发现的小问题先记录在本页的 Known issues，以后统一优化
 
 ## Done
 
-- 已完整读取 PDF 第 1 页并查看渲染页；提取原始 Figma 链接。
-- 已将 PDF 要求、用户目标和参考笔记区分，建立验收映射。
-- 已收敛为五份工作文档，补充根 README 和 AI 日志说明。
-- 已记录设计访问限制、候选整页区块及 Hero 待核对项。
-- 已初始化本地 Git 为 `main`，设置忽略规则和文本属性；初始提交通过 `git log` 查看，不在文档中复制 commit hash。
-- 已检查全部本地 Markdown 链接、UTF-8 文本、R01–R12 条目；确认 lockfile/原始日志可跟踪，依赖/构建/环境文件被忽略，原始日志不转换换行。
+- **T01 审稿和讨论**：design.md 第 4b 节，包括修正 F01–F14、已发现但不修改的清单、交互方案，C1–C10 都有结论。C6（BMI 结果里怎么体现性别）写代码前再和用户确认。
+- **T01b 素材**：全部到位（L1 字标由用户导出；图标来自 Hugeicons / Unicons）。
+- **T02 架构选型**：全部确定（D06）。
+- **T03 搭项目**，每个小任务一个 commit：
+  1. `0b74c25` create-next-app 16.3.8：App Router、TS strict、`src/`、Tailwind v4、Biome
+  2. `a57dc5f` Storybook 10.6（`@storybook/nextjs-vite`、addon-docs）；preview 引入 `globals.css`
+  3. `55b01be` 运行时依赖：zod、cva、tailwind-merge、motion、Radix Accordion / Dialog，开发依赖 @svgr/cli；`src/lib/cn.ts`
+  4. `5dd12a0` Vitest 5 + Testing Library + jsdom；`cn` 的单元测试
+  5. `5c0ec35` Playwright：320–1920 逐个宽度的横向溢出检查（`e2e/responsive.spec.ts`）。已用故意制造的溢出验证过，能抓到问题
+  6. `38ce828` Biome：`noExplicitAny` 设为 error
+  7. `7f3a672` 去掉 Next 的示例页，换成 Work Sans 字体和占位页
 
 ## In Progress
 
-- 无进行中的应用实现任务。若后续暂停开发，在此写具体任务、已改文件和未完成验证，不写模糊的“UI 开发中”。
+- 无。
 
 ## Next
 
+T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
+
 | 顺序 | 任务 | 完成条件 |
 | --- | --- | --- |
-| T01 | ✅ 审稿和逐块讨论已完成 | 结论见 design.md 的 4b 节：修正 F01–F14、已发现但不修改的清单、交互方案，C1–C10 全部有结论。C6（BMI 性别如何在结果里体现）实现前再和用户确认一次 |
-| T01b | 导出素材 | 用户按 [assets-checklist.md](assets-checklist.md) 手动导出，放到 `F:\AI\TigerlessTask\design-ref\assets\`；Figma MCP 额度为每月 20 次，2026-10 已用完 |
-| T02 | 架构选型已确定（见 [architecture.md](architecture.md) 的决定汇总 / decisions D06）；下一步是写出数据契约（Zod schema）和 mock | 有实际类型、符合类型的 mock、动态内容覆盖表；重要选择写 decisions，架构从草案更新 |
-| T03 | 初始化 Next.js / Storybook | App Router、TS strict、Tailwind、lockfile 和四个目标命令可用；记录真实版本和运行结果 |
-| T04 | 做首个端到端区块，再逐区块实现 | 数据 → 页面 → 组件链路成立；Hero 与导航先验证两个画板及中间宽度；随后完成全页 |
-| T05 | 交互、stories 与响应式验收 | 每个交互元素有状态/过渡；每个有状态组件每状态有 story；持续缩放 320–1920 并修复问题 |
-| T06 | 提交收尾 | README 的实际结构、偏差、交互与 AI 贡献完整；全部原始日志入库；干净检出验证；公开 GitHub 链接 |
+| T04 | Design tokens：在 `globals.css` 的 `@theme` 里定义颜色、字号（流式 `clamp`）、间距、圆角、阴影、动效时长；分类主题用 `data-theme` | 所有 token 来自 design.md 第 1 节；Storybook 里有一个能看到 tokens 的页面 |
+| T05 | 图标：用 SVGR 命令行把 `design-ref` 里的 SVG 生成 `.tsx` 组件，颜色用 `currentColor` | 有一个可以重复运行的生成脚本；图标总览 story |
+| T06 | 基础组件（`components/ui`）：Button、IconButton、Eyebrow、CheckList、Price、Rating、SocialLinks 等，每个组件和它的状态、story 一起做 | 每个状态一个 story；hover / focus / 按下 / 禁用状态统一 |
+| T07 | 数据层：Zod schema（按资源 + `content/home`）、mock、取数函数加 `DATA_SOURCE` 开关、映射到组件 props | 类型可读；mock 通过校验；有测试 |
+| T08 | 逐个区块实现（导航和 Hero 先做），桌面和移动同时做 | 375 / 1440 对照截图；`test:e2e` 通过 |
+| T09 | 有状态组件：移动菜单、语言跑马灯、轮播、FAQ、BMI（BMI 前先确认 C6） | 状态 story 齐全；BMI 纯函数有测试 |
+| T10 | 动效（Motion）、减少动态效果、键盘操作 | 和 design.md 4b 的交互表一致 |
+| T11 | 收尾：README 写偏差日志和自设计状态、导出 AI 日志、从干净的 clone 验证、推送 | 见 checklist.md |
 
-任务顺序可调整：T02 / T03 可在设计核对期间部分推进；不要求每个阶段都完成一套正式审批。实现任务按可验证小块拆分，不一次把全页记为 Done。
+## Known issues / 以后再处理的小问题
 
-## Review Priority
+| # | 问题 | 处理 |
+| --- | --- | --- |
+| K1 | `npm install` 会出现 npm 11 的 `allow-scripts` 警告（esbuild 的 postinstall） | 无害，esbuild 的二进制通过 optionalDependencies 安装，build 正常。README 已说明。以后可以考虑 `npm approve-scripts esbuild` 消除警告 |
+| K2 | 还没有任何 story，Storybook 启动时会提示 “No story files found” | T04–T06 加 story 后自然消失 |
+| K3 | favicon 还是 Next 默认的 | 以后用 L1 字标生成 |
+| K4 | 没装 `@vitejs/plugin-react`：它的 Babel 8 可选依赖和 @svgr/cli 的 Babel 7 冲突，装上就得用 `--legacy-peer-deps` | 测试用 Vite 8 自带的 JSX 转换，已经验证能渲染组件、处理事件 |
+| K5 | 本机 Git 全局 `core.autocrlf=true`；`.gitattributes` 给 ts、tsx、json、css、md、mjs、mts、js、svg、.nvmrc 指定了 LF | 新增文件类型时补上对应规则 |
+| K6 | Hero 徽章文字对比度不足（C10） | 产品完成后统一调色时处理 |
 
-这是时间分配建议，不是新增验收等级。
+## 如何审查（给接手的 agent 或审查者）
 
-1. **P0 / 提交完整性**：必需技术栈、lockfile、四条命令、动态契约与 mock、完整历史、原始 AI 日志和 README 必需内容。
-2. **P1 / 页面与行为**：每个区块、375 / 1440 默认状态还原、320–1920 完整性；导航、Hero、计算器/浮层/轮播等真实高风险区域；状态与 stories 对应。
-3. **P2 / 打磨**：跨宽度适配、动画一致性、键盘体验、素材与视觉细节。
-
-P0 和 P1 都需要完成；P2 中如发现实际违背 PDF 的缺陷，提升优先级，而非因为标签就忽略。
-
-## Turn handoff
-
-- Turn task：评估并初始化轻量文档及本地 Git，未开始 UI 实现。
-- 本轮变化：见 Done；应用目录树只是提议，不是已有文件。
-- 下一次第一步：读本页、requirements 与 [checklist.md](checklist.md)（与用户对齐过的需求理解和打勾清单）；检查工作树；核对设计输入。普通开发不需要再重做本轮的文档规划。
-- 不能直接读到/尚未知：Figma 具体画板与 tokens、真实素材、确切移动区块关系、邮件截止日期、最终依赖版本、AI 原始导出文件、GitHub 远程仓库地址。
-- 可用参考：父目录的 PDF 与两份分析/SOP；新克隆仓库可能没有它们，不能假定本机路径在别处存在。
-- 无需冻结：断点、组件拆分、状态管理、双模型角色、架构草案；按实际证据调整。
-- 不要误判为完成：Figma 审阅、UI、API 类型、mock、stories、build、日志归档、远程发布。
-
-接手时的最小检查：
+1. 读本页、[checklist.md](checklist.md)、design.md 的 4b 节、architecture.md 的决定汇总。
+2. 查看工作区状态：
 
 ```sh
 git status --short --branch
-git log -5 --oneline
-git diff
-git diff --cached
+git log --oneline -15
 ```
+
+3. 运行检查：
+
+```sh
+npm install
+npm run lint
+npm run typecheck
+npm test
+npm run build
+npx playwright install chromium   # 只需要第一次
+npm run test:e2e
+npm run storybook
+```
+
+4. 对照 checklist.md 的硬性要求 H1–H8 和 design.md 4b 的修正 / 交互表，确认每一项都有对应的实现和证据。
 
 ## Validation evidence
 
-| 检查 | 本轮状态 | 说明 |
+| 检查 | 状态 | 说明 |
 | --- | --- | --- |
-| PDF | 已执行 | 1 页文字、链接提取及渲染查看 |
-| Figma | 部分完成 | 原始文件：编辑权限错误。用户副本：get_metadata 成功，已取得画板/区块节点；未审阅细节 |
-| 文档链接 / 需求映射 / Git | 已执行 | 本地链接与 UTF-8 检查通过；PDF 条款映射 R01–R12；main 已初始化，忽略与原始日志文本属性检查符合预期 |
-| install / build / dev / storybook | 未执行 | 尚无 package.json，不能宣称通过 |
-| 375 / 1440 与 320–1920 | 未执行 | 尚无 UI |
-| AI 原始日志完整性 | 未完成 | 本轮会话结束后需导出；已有笔记不是完整记录 |
+| 干净安装 `npm install` | 通过 | 2026-10-01，Node 24.19.0；删除 node_modules 后重新安装，0 vulnerabilities |
+| `npm run build` | 通过 | 占位页 |
+| `npm run dev` | 通过 | 端口 3300 返回 200，页面渲染出 h1 “Apsu” |
+| `npm run storybook` | 通过 | 端口 6006 返回 200（提示还没有 story） |
+| `npm run build-storybook` | 通过 | — |
+| lint / typecheck / test | 通过 | 2 个单元测试 |
+| `npm run test:e2e` | 通过 | 1601 个宽度共 5.4 秒；故意制造溢出时能检测到 |
+| 375 / 1440 视觉对照 | 未执行 | 还没有页面 |
+| AI 原始日志 | 未完成 | Codex 和 Claude Code 的会话都还没导出 |
 
-后续记录命令、结果、失败点和截图/文件位置即可；不必为每次样式调整写长报告。
+## Git 和提交
 
-## Git 和公开提交
-
-- 本地初始化与最终远程发布分开；当前未提供 GitHub 仓库 URL，不创建或推送未知远程。
-- 以有意义的小块提交，保留完整历史。不要把提交前清理变成 squash 或重写项目历史。
-- 提交源码、lockfile、文档、必要素材及原始 AI 日志；依赖目录、构建输出和环境密钥不入库。
-- AI 日志按 [ai-logs/README.md](../ai-logs/README.md) 保存；本次初始化也计入项目 AI 使用。
-- 公开发布前核对原始日志的可公开性。若发现秘密或私人内容，与“未编辑日志”要求的冲突不能靠静默改写日志解决；先由用户与出题方明确处理方式。
-
-## 下一次更新只需这些
-
-任务/执行者、Done、In Progress、Next、未提交文件、验证结果、阻碍或未知信息、必要的 decision ID。没有变化的设计和架构文档无需重写。
+- 每个小任务一个 commit，不 squash。远程仓库是私有的；推送前不需要额外确认，但涉及 `ai-logs/` 的内容要先让用户检查。
+- 提交源码、lockfile、文档、要用到的素材（以后放进 `public/`）、原始 AI 日志。不提交 `node_modules`、`.next`、`storybook-static`、Playwright 报告、`.env`。
+- `CLAUDE.md` 是用户的本地工作协议，**不提交**（用户要求）。
+- AI 日志按 [ai-logs/README.md](../ai-logs/README.md) 保存。
