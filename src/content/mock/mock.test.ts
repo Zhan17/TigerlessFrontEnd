@@ -6,6 +6,7 @@ import {
   HomeContent,
   type Image,
   LanguageList,
+  Money,
   type NavItem,
   ProductList,
   ProgramList,
@@ -93,5 +94,19 @@ describe("mock images", () => {
       (image) => !existsSync(join(process.cwd(), "public", image.src)),
     );
     expect(missing.map((image) => image.src)).toEqual([]);
+  });
+});
+
+describe("Money contract", () => {
+  it("rejects currency codes Intl does not know (R12)", () => {
+    expect(
+      Money.safeParse({ amountMinor: 2000, currency: "USD" }).success,
+    ).toBe(true);
+    expect(
+      Money.safeParse({ amountMinor: 2000, currency: "ZZZ" }).success,
+    ).toBe(false);
+    expect(
+      Money.safeParse({ amountMinor: 2000, currency: "usd" }).success,
+    ).toBe(false);
   });
 });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isSupportedCurrency } from "@/lib/format/money";
 
 /**
  * Shared building blocks of the API contract.
@@ -56,7 +57,10 @@ export const Image = z.object({
  */
 export const Money = z.object({
   amountMinor: z.number().int().nonnegative(),
-  currency: z.string().length(3),
+  /** ISO 4217 code known to Intl; unknown codes fail validation (R12). */
+  currency: z.string().refine(isSupportedCurrency, {
+    message: "Unsupported ISO 4217 currency code",
+  }),
 });
 
 export const BillingInterval = z.enum(["week", "month", "year"]);

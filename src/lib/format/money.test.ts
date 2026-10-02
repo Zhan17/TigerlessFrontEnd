@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatMoney } from "./money";
+import { formatMoney, isSupportedCurrency } from "./money";
 
 describe("formatMoney", () => {
   it("drops decimals for whole amounts", () => {
@@ -24,8 +24,17 @@ describe("formatMoney", () => {
     expect(formatMoney(5000, "KWD")).toMatch(/^KWD\s5$/);
   });
 
-  it("rejects an unknown currency code instead of guessing", () => {
+  it("rejects malformed and unknown currency codes instead of guessing (R12)", () => {
     expect(() => formatMoney(100, "XYZ1")).toThrow(RangeError);
+    expect(() => formatMoney(100, "usd")).toThrow(RangeError);
+    // Well-formed but unknown: Intl alone would print "ZZZ 1.00".
+    expect(() => formatMoney(100, "ZZZ")).toThrow(RangeError);
+  });
+
+  it("knows which codes are supported", () => {
+    expect(isSupportedCurrency("USD")).toBe(true);
+    expect(isSupportedCurrency("JPY")).toBe(true);
+    expect(isSupportedCurrency("ZZZ")).toBe(false);
   });
 
   it("rejects non-integer minor units", () => {
