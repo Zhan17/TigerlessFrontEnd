@@ -59,6 +59,7 @@ const twMerge = extendTailwindMerge({
         "step-pb",
         "feature-pad",
         "program-gap",
+        "control",
         "product-media",
       ],
       container: ["shell", "content"],

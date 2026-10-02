@@ -89,6 +89,9 @@
   --color-inverse: var(--color-brand-900);
   --color-on-inverse: var(--color-off-white);
   --color-focus: var(--color-green-600);
+  --color-danger: var(
+    --color-bmi-obese
+  ); /* form errors (no error colour in the design) */
 
   /* ---- Typography ------------------------------------------------------ */
   /*
@@ -206,6 +209,8 @@
   --spacing-feature-pad: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
   /* Product card image area height: 225 -> 332 */
   --spacing-product-media: clamp(14.0625rem, 11.7077rem + 10.0469vw, 20.75rem);
+  /* Form controls (BMI inputs, radios, segmented control): 40 -> 52 */
+  --spacing-control: clamp(2.5rem, 2.2359rem + 1.1268vw, 3.25rem);
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
   --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
   --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
