@@ -26,3 +26,21 @@ yarn-error.log*
 Thumbs.db
 
 # Intentionally track package-lock.json and original files in ai-logs/.
+
+# Next.js scaffold extras
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+/build
+*.pem
+.pnpm-debug.log*
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
