@@ -1,8 +1,14 @@
 import { expect, type Page, test } from "@playwright/test";
 
+/** The language marquee, found by its accessible name (other fieldsets exist). */
+const marquee = (page: Page) =>
+  page.getByRole("group", {
+    name: "Languages available for your consultation",
+  });
+
 const trackX = (page: Page, row: number) =>
-  page
-    .locator("fieldset .will-change-transform")
+  marquee(page)
+    .locator(".will-change-transform")
     .nth(row)
     .evaluate((el) => new DOMMatrix(getComputedStyle(el).transform).m41);
 
@@ -23,7 +29,7 @@ test.describe("language marquee", () => {
   test("hovering the middle pauses, hovering an edge speeds up", async ({
     page,
   }) => {
-    const box = await page.locator("fieldset").boundingBox();
+    const box = await marquee(page).boundingBox();
     if (!box) throw new Error("marquee not rendered");
     const y = box.y + box.height / 4;
 
@@ -46,7 +52,7 @@ test.describe("language marquee", () => {
   test("pills toggle a multi-select highlight on every copy (keyboard)", async ({
     page,
   }) => {
-    const english = page.locator("fieldset button:not([inert] *)", {
+    const english = marquee(page).locator("button:not([inert] *)", {
       hasText: "English",
     });
     await expect(english).toHaveAttribute("aria-pressed", "false");
@@ -56,11 +62,11 @@ test.describe("language marquee", () => {
     await expect(english).toHaveAttribute("aria-pressed", "true");
     // Defaults stay selected (multi-select, K16).
     await expect(
-      page.locator("fieldset button:not([inert] *)", { hasText: "中文" }),
+      marquee(page).locator("button:not([inert] *)", { hasText: "中文" }),
     ).toHaveAttribute("aria-pressed", "true");
     // Clones mirror the state.
     await expect(
-      page.locator("fieldset [inert] button", { hasText: "English" }).first(),
+      marquee(page).locator("[inert] button", { hasText: "English" }).first(),
     ).toHaveAttribute("aria-pressed", "true");
     await page.keyboard.press("Enter");
     await expect(english).toHaveAttribute("aria-pressed", "false");
@@ -71,7 +77,11 @@ test.describe("language marquee", () => {
   }) => {
     const before = await trackX(page, 0);
     const moved = await page.evaluate(() => {
-      const viewport = document.querySelector("fieldset .touch-pan-y");
+      const viewport = [...document.querySelectorAll("fieldset")]
+        .find((f) =>
+          f.querySelector("legend")?.textContent?.startsWith("Languages"),
+        )
+        ?.querySelector(".touch-pan-y");
       if (!viewport) return null;
       const r = viewport.getBoundingClientRect();
       const y = r.top + r.height / 2;
@@ -95,23 +105,23 @@ test.describe("language marquee", () => {
     expect(moved).toBe(true);
     const after = await trackX(page, 0);
     // Dragged ~200px left (offset wraps, so compare the distance both ways).
-    const period = await page
-      .locator("fieldset .will-change-transform > div")
+    const period = await marquee(page)
+      .locator(".will-change-transform > div")
       .first()
       .evaluate((el) => el.getBoundingClientRect().width);
     const delta = Math.abs(after - before);
     expect(Math.min(delta, Math.abs(period - delta))).toBeGreaterThan(120);
     // No pill got toggled by the drag.
     await expect(
-      page.locator("fieldset button[aria-pressed=true]:not([inert] *)"),
+      marquee(page).locator("button[aria-pressed=true]:not([inert] *)"),
     ).toHaveCount(2);
   });
 
   test("clones are hidden from assistive tech and keyboard", async ({
     page,
   }) => {
-    const visible = await page
-      .locator("fieldset button:not([inert] *)")
+    const visible = await marquee(page)
+      .locator("button:not([inert] *)")
       .count();
     expect(visible).toBe(11);
   });
@@ -123,9 +133,9 @@ test.describe("reduced motion", () => {
   test("rows are static and scroll horizontally instead", async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 812 });
     await page.goto("/");
-    await expect(page.locator("fieldset .will-change-transform")).toHaveCount(
+    await expect(marquee(page).locator(".will-change-transform")).toHaveCount(
       0,
     );
-    await expect(page.locator("fieldset [inert]")).toHaveCount(0);
+    await expect(marquee(page).locator("[inert]")).toHaveCount(0);
   });
 });
