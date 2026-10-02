@@ -153,6 +153,9 @@
   /* Big step numbers "01" / "02": 52 -> 80 */
   --text-step-number: clamp(3.25rem, 2.6338rem + 2.6291vw, 5rem);
   --text-step-number--line-height: 1.2;
+  /* BMI gauge score: 40 -> 56 */
+  --text-score: clamp(2.5rem, 2.1479rem + 1.5023vw, 3.5rem);
+  --text-score--line-height: 1.24;
   /* Prices: same size on both boards (measured from the screenshots). */
   /* Program sections (birth control / sleep): "From" 32, amount 52 */
   --text-price: 3.25rem;
@@ -255,6 +258,17 @@
   :root {
     --spacing-nav: 3.75rem;
   }
+}
+
+/* BMI scale bar (design stops at 0 / 33.3 / 66.7 / 100%). */
+:root {
+  --gradient-bmi: linear-gradient(
+    90deg,
+    var(--color-bmi-under) 0%,
+    var(--color-bmi-healthy) 33.333%,
+    var(--color-bmi-over) 66.667%,
+    var(--color-bmi-obese) 100%
+  );
 }
 
 /* Motion durations (use as duration-(--duration-fast) etc.). */

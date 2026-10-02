@@ -27,6 +27,7 @@ const twMerge = extendTailwindMerge({
         "lead",
         "strip",
         "step-number",
+        "score",
         "price",
         "price-unit",
         "price-sm",

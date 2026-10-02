@@ -1,4 +1,5 @@
 import { getHomePageData } from "@/content/api";
+import { BmiCalculator, toBmiProps } from "@/features/bmi";
 import { Hero, toHeroProps } from "@/features/hero";
 import { HowItWorks, toHowItWorksProps } from "@/features/how-it-works";
 import { SiteHeader, toNavigationProps } from "@/features/navigation";
@@ -16,6 +17,7 @@ export default async function HomePage() {
     data.programs,
     data.products,
   );
+  const { programId: bmiHost, ...bmi } = toBmiProps(data.home);
 
   return (
     <>
@@ -26,7 +28,9 @@ export default async function HomePage() {
         <HowItWorks {...toHowItWorksProps(data.home)} />
         <div className="flex flex-col gap-program-gap pb-section-y">
           {programSections.map((section) => (
-            <ProgramSection key={section.id} {...section} />
+            <ProgramSection key={section.id} {...section}>
+              {section.id === bmiHost ? <BmiCalculator {...bmi} /> : null}
+            </ProgramSection>
           ))}
         </div>
       </main>
