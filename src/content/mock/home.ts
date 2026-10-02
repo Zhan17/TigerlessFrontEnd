@@ -40,6 +40,8 @@ export const homeContent: HomeContent = {
       "US-licensed physicians, AI translates your consultation.",
     ],
     ctaRef: "startConsultation",
+    // K16: multi-select, zh + pt highlighted by default as in the design.
+    highlightedLanguages: ["zh", "pt"],
     categories: {
       programIds: ["weight-loss", "birth-control", "sleep"],
       ctaRef: "seePlans",

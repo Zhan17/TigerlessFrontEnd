@@ -53,6 +53,8 @@ export const HomeContent = z.object({
     /** One string per line. */
     subtitle: z.array(z.string().min(1)),
     ctaRef: CtaRef,
+    /** Language pills shown highlighted by default (codes from /languages). */
+    highlightedLanguages: z.array(z.string()),
     categories: z.object({ programIds: z.array(Id), ctaRef: CtaRef }),
   }),
   trustStrip: z.object({ items: z.array(TrustItem).min(1) }),
