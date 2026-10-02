@@ -1,4 +1,5 @@
 import { getHomePageData } from "@/content/api";
+import { Hero, toHeroProps } from "@/features/hero";
 import { SiteHeader, toNavigationProps } from "@/features/navigation";
 
 export default async function HomePage() {
@@ -7,7 +8,10 @@ export default async function HomePage() {
   return (
     <>
       <SiteHeader {...toNavigationProps(data.home, data.programs)} />
-      <main className="min-h-[200vh]" />
+      <main>
+        <Hero {...toHeroProps(data.home, data.programs, data.languages)} />
+        <div className="h-[100vh]" />
+      </main>
     </>
   );
 }

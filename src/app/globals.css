@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Docs and AI logs mention class names as examples; never generate CSS from them. */
+@source not "../../doc";
+@source not "../../ai-logs";
+
 /*
  * Design tokens for the Apsu home page.
  * Source: Figma variables (file 0WMyYj8ycFQlykicaNToc1) plus colours sampled
@@ -160,6 +164,21 @@
   --spacing-gutter: clamp(1.25rem, 0.3697rem + 3.7559vw, 3.75rem);
   /* mx-shell-inset: inset of the white shells, 12px -> 28px */
   --spacing-shell-inset: clamp(0.75rem, 0.3979rem + 1.5023vw, 1.75rem);
+  /* White shells: inner padding 8 -> 28, top offset on the page 12 -> 32 */
+  --spacing-shell-pad: clamp(0.5rem, 0.0599rem + 1.8779vw, 1.75rem);
+  --spacing-shell-top: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /* Hero: content starts 112 -> 168 below the shell top (clears the nav) */
+  --spacing-hero-top: clamp(7rem, 5.7676rem + 5.2582vw, 10.5rem);
+  --spacing-hero-pills: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+  --spacing-hero-cards: clamp(2.25rem, 1.8099rem + 1.8779vw, 3.5rem);
+  /* Edge fades of the language marquee: 60 -> 120 */
+  --spacing-fade: clamp(3.75rem, 2.4296rem + 5.6338vw, 7.5rem);
+  /* Card inner padding 12 -> 24; small gaps 8 -> 16 and 4 -> 12 */
+  --spacing-card-pad: clamp(0.75rem, 0.4859rem + 1.1268vw, 1.5rem);
+  --spacing-pill-gap: clamp(0.5rem, 0.3239rem + 0.7512vw, 1rem);
+  --spacing-badge-gap: clamp(0.25rem, 0.0739rem + 0.7512vw, 0.75rem);
+  /* Nav pill height, used to tuck the hero shell under the sticky nav */
+  --spacing-nav: 3.5rem;
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
   --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
   --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
@@ -189,6 +208,12 @@
   /* "Fast then slow" settle used for carousel steps and reveals. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+@media (width >= 70rem) {
+  :root {
+    --spacing-nav: 3.75rem;
+  }
 }
 
 /* Motion durations (use as duration-(--duration-fast) etc.). */

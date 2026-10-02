@@ -40,3 +40,15 @@ if (typeof globalThis.IntersectionObserver === "undefined") {
     writable: true,
   });
 }
+
+if (typeof globalThis.ResizeObserver === "undefined") {
+  class NoopResizeObserver implements ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  }
+  Object.defineProperty(globalThis, "ResizeObserver", {
+    value: NoopResizeObserver,
+    writable: true,
+  });
+}

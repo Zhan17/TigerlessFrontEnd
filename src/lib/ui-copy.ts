@@ -10,6 +10,7 @@ export const uiCopy = {
   },
   nav: { label: "Main", home: "Apsu home" },
   menu: { open: "Open menu", close: "Close menu", title: "Menu" },
+  hero: { languages: "Languages available for your consultation" },
   rating: {
     label: (value: number, max: number) => `Rated ${value} out of ${max}`,
   },
