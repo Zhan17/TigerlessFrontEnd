@@ -16,7 +16,7 @@ const meta = {
       control: "inline-radio",
       options: ["primary", "secondary", "outline"],
     },
-    size: { control: "inline-radio", options: ["lg", "md"] },
+    size: { control: "inline-radio", options: ["lg", "md", "responsive"] },
   },
 } satisfies Meta<typeof Button>;
 
@@ -159,4 +159,20 @@ export const AsLink: Story = {
 export const AsLinkHover: Story = {
   ...AsLink,
   parameters: { pseudo: { hover: true } },
+};
+
+/** md on mobile, lg + natural width from the lg breakpoint (program CTAs). */
+export const ResponsiveMobile: Story = {
+  args: {
+    variant: "secondary",
+    size: "responsive",
+    fullWidth: "belowLg",
+    children: "See plans",
+  },
+  decorators: onTintedCard,
+  globals: { viewport: { value: "board375", isRotated: false } },
+};
+export const ResponsiveDesktop: Story = {
+  ...ResponsiveMobile,
+  globals: { viewport: { value: "board1440", isRotated: false } },
 };

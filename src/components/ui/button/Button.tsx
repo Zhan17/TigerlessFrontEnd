@@ -36,17 +36,24 @@ export const buttonVariants = cva(
         outline:
           "border border-primary bg-transparent text-heading not-disabled:hover:bg-selected",
       },
+      // min-h rather than h: a long label in a full-width button may wrap
+      // to two lines on very narrow screens instead of overflowing.
       size: {
-        lg: "h-14 px-8",
-        md: "h-12 px-8",
+        lg: "min-h-14 px-8 py-2",
+        md: "min-h-12 px-8 py-2",
+        /** md (48) on mobile, lg (56) from the lg breakpoint. */
+        responsive: "min-h-12 px-8 py-2 lg:min-h-14",
       },
       withArrow: {
         true: "pr-2",
         false: "",
       },
       fullWidth: {
-        true: "w-full",
+        true: "w-full whitespace-normal text-left",
         false: "",
+        /** Full width on mobile / tablet, natural width from lg. */
+        belowLg:
+          "w-full whitespace-normal text-left lg:w-auto lg:whitespace-nowrap",
       },
     },
     compoundVariants: [
@@ -55,6 +62,11 @@ export const buttonVariants = cva(
         fullWidth: true,
         withArrow: true,
         className: "justify-between pl-6",
+      },
+      {
+        fullWidth: "belowLg",
+        withArrow: true,
+        className: "justify-between pl-6 lg:justify-center lg:pl-8",
       },
     ],
     defaultVariants: {
@@ -89,7 +101,11 @@ export function ButtonArrow({
       className={cn(
         "shrink-0 transition-transform duration-(--duration-base) ease-standard",
         "group-hover/button:translate-x-0.5 group-disabled/button:translate-x-0",
-        size === "lg" ? "size-10" : "size-8",
+        size === "lg"
+          ? "size-10"
+          : size === "responsive"
+            ? "size-8 lg:size-10"
+            : "size-8",
         arrowStyles[variant],
       )}
     />
