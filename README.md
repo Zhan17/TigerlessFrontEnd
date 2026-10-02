@@ -2,7 +2,7 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation and hero. The remaining sections are in progress (see `doc/tasks-handoff.md`).
+**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation, hero, trust strip, How it works and the program sections (birth control / sleep details and BMI still to come). The remaining sections are in progress (see `doc/tasks-handoff.md`).
 
 ## Assignment and design
 
@@ -78,6 +78,10 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | — | Hero, language pills | Labels carried trailing spaces ("Español ") | Clean labels from the languages resource | Spaces offset the text from the pill centre |
 | — | Hero, category cards | First card used a different shadow from the other two | Same card shadow on all three | Inconsistent elevation for identical components |
 | — | Mobile menu | Close icon drawn in a navy blue outside the palette | Brand dark green, same as the menu icon | Keeps the two toggle icons consistent |
+| F01 | Trust strip | "Cash-pay, No Issuance Needed" | "Cash-pay, No Insurance Needed" | Typo; the page elsewhere says "no insurance needed" / "No Insurance Required" |
+| F12 | How it works | Card 02's title sat ~17px lower than card 01's (content bottom-aligned, different list lengths) | Card content is top-aligned; both titles share a line | Visual alignment of two identical cards |
+| F03 | Weight loss | "Loss Weight In Your Way." | "Lose Weight In Your Way." (design casing kept) | Grammar |
+| F09 | Weight loss (mobile) | The weight-loss section, product cards and BMI were placed outside the mobile board | Rendered in the mobile page in the same order as desktop | Content missing from the mobile layout |
 
 ### Noted, not changed
 
@@ -86,6 +90,8 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | Hero, category cards | All three cards show the same Tirzepatide "Weight Loss Program" vial, including Birth Control and Sleep | Treated as a placeholder image (product decision Q4); swapping images is content, not UI |
 | Hero, badges | `#21ac88` 14px text on white is about 2.9:1, below WCAG AA | Kept for fidelity in this version; to be addressed in a later colour pass (C10) |
 | Hero, category cards | Eyebrow "Weight management" vs "Weight Loss" elsewhere | Naming / copy question, low UI impact (Q7) |
+| How it works | List items end with full stops; other sections' lists do not | Copy style, low UI impact (Q7) |
+| Weight loss (mobile) | The "WEIGHT LOSS" eyebrow is shown on desktop only, as in the boards | Followed the design |
 
 ## Self-designed interaction states
 
@@ -101,6 +107,8 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | Mobile menu | Circular reveal from the menu button (top-right) with items sliding down; reverse on close; opacity only under reduced motion. Focus trap, Esc, scroll lock, focus return (Radix Dialog) | Requested reveal direction; accessible dialog behaviour | `Sections/Navigation/MobileMenuOpen` |
 | Hero language marquee | Rows drift in opposite directions; hover middle pauses, hover a faded edge speeds towards it; touch drag scrubs with inertia; focus pauses; static scrollable rows under reduced motion | Requested behaviour (C1); makes it easy to find a language | `Sections/Hero/Languages`, e2e `hero.spec.ts` |
 | Hero category card | Whole card clickable; hover lifts 4px with a softer shadow and the product image grows 4%; pressed shrinks to 0.98 | Requested bubble feedback on the whole card | `Sections/Hero/Card*` |
+| Trust strip | Continuous leftward scroll (CSS); pauses while hovered; static, wrapping list under reduced motion | Requested auto-scroll (C2); pausing gives users control over moving content (WCAG 2.2.2) | `Sections/TrustStrip/*` |
+| Full-width buttons (mobile) | A label too long for the width wraps to two lines (min-height keeps single-line buttons unchanged) | Graceful behaviour at 320px instead of overflowing | `UI/Button/ResponsiveMobile` |
 
 ## AI use and session records
 
