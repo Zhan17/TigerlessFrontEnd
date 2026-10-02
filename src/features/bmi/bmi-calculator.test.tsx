@@ -60,10 +60,10 @@ describe("BmiCalculator", () => {
     await user.click(screen.getByText("cm / kg"));
     expect(
       screen.getByRole("spinbutton", { name: "Height, centimetres" }),
-    ).toHaveValue(183);
+    ).toHaveValue(182.9);
     expect(
       screen.getByRole("spinbutton", { name: "Weight, kilograms" }),
-    ).toHaveValue(80);
+    ).toHaveValue(79.8);
   });
 
   it("labels the legend from the thresholds (F08)", () => {

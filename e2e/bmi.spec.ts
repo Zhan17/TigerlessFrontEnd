@@ -43,7 +43,7 @@ test.describe("BMI calculator", () => {
     await f.getByText("cm / kg").click();
     await expect(
       f.getByRole("spinbutton", { name: "Height, centimetres" }),
-    ).toHaveValue("170");
+    ).toHaveValue("170.2");
     await expect(
       f.getByRole("spinbutton", { name: "Weight, kilograms" }),
     ).toHaveValue("68");
@@ -58,10 +58,57 @@ test.describe("BMI calculator", () => {
     await f.getByRole("spinbutton", { name: "Weight, pounds" }).fill("150");
     const feet = f.getByRole("spinbutton", { name: "Height, feet" });
     await expect(feet).toHaveAttribute("aria-invalid", "true");
-    await expect(feet).toHaveAccessibleDescription("Enter 3–8 ft");
+    await expect(feet).toHaveAccessibleDescription(
+      "Enter 2 ft 11.5 in – 8 ft 2.4 in",
+    );
     await expect(
       f.getByRole("button", { name: "Calculate BMI" }),
     ).toBeDisabled();
+  });
+
+  test("switching units back and forth keeps the BMI and its category (R03)", async ({
+    page,
+  }) => {
+    const f = form(page);
+    await f.getByText("cm / kg").click();
+    await f
+      .getByRole("spinbutton", { name: "Height, centimetres" })
+      .fill("177");
+    await f.getByRole("spinbutton", { name: "Weight, kilograms" }).fill("78.4");
+    await f.getByRole("button", { name: "Calculate BMI" }).click();
+    const result = page.getByText("As a woman, your BMI is 25.0 — Overweight.");
+    await expect(result.last()).toBeVisible();
+    for (let i = 0; i < 3; i++) {
+      await f.getByText("ft / lbs").click();
+      await expect(result.last()).toBeVisible();
+      await f.getByText("cm / kg").click();
+      await expect(result.last()).toBeVisible();
+    }
+    await expect(
+      f.getByRole("spinbutton", { name: "Height, centimetres" }),
+    ).toHaveValue("177");
+    await expect(
+      f.getByRole("spinbutton", { name: "Weight, kilograms" }),
+    ).toHaveValue("78.4");
+  });
+
+  test("a valid measurement stays valid in the other unit (R07)", async ({
+    page,
+  }) => {
+    const f = form(page);
+    await f.getByText("cm / kg").click();
+    await f.getByRole("spinbutton", { name: "Height, centimetres" }).fill("90");
+    await f.getByRole("spinbutton", { name: "Weight, kilograms" }).fill("20");
+    const submit = f.getByRole("button", { name: "Calculate BMI" });
+    await submit.click();
+    const result = page.getByText(/your BMI is 24\.7/);
+    await expect(result.last()).toBeVisible();
+    await f.getByText("ft / lbs").click();
+    await expect(result.last()).toBeVisible();
+    await expect(submit).toBeEnabled();
+    await expect(
+      f.getByRole("spinbutton", { name: "Height, feet" }),
+    ).not.toHaveAttribute("aria-invalid", "true");
   });
 
   test("works with the keyboard only", async ({ page }) => {

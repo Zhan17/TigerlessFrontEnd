@@ -37,6 +37,10 @@ export const uiCopy = {
     decrease: (field: string) => `Decrease ${field.toLowerCase()}`,
     range: (min: number, max: number, unit: string) =>
       `Enter ${min}–${max} ${unit}`,
+    heightRange: (
+      [minFt, minIn]: readonly [number, number],
+      [maxFt, maxIn]: readonly [number, number],
+    ) => `Enter ${minFt} ft ${minIn} in – ${maxFt} ft ${maxIn} in`,
     submit: "Calculate BMI",
     scoreLabel: "Your BMI Score",
     scoreLabelShort: "Your Score",

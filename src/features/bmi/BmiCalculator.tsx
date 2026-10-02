@@ -23,6 +23,7 @@ import {
   type Sex,
   type UnitSystem,
   validate,
+  withoutExact,
 } from "./bmi";
 
 export type BmiCalculatorProps = {
@@ -80,8 +81,13 @@ export function BmiCalculator({
   const valid = Object.keys(errors).length === 0;
   const imperial = input.unit === "imperial";
 
+  // Typing in a field replaces that part of any exact measurement carried
+  // over from a unit switch.
   const set = (field: FieldName) => (value: string) =>
-    setInput((current) => ({ ...current, [field]: value }));
+    setInput((current) => ({
+      ...withoutExact(current, field),
+      [field]: value,
+    }));
 
   const changeUnit = (unit: UnitSystem) => {
     const next = convertInput(input, unit);
@@ -96,12 +102,20 @@ export function BmiCalculator({
 
   // Only out-of-range values get a message; empty fields just keep the
   // button disabled.
+  // Height in ft/in is checked as a whole, so its message names the range.
   const rangeError = (
     field: FieldName,
     min: number,
     max: number,
     unit: string,
-  ) => (errors[field] === "range" ? copy.range(min, max, unit) : undefined);
+  ) => {
+    if (errors[field] !== "range") return undefined;
+    if (field === "heightFt") {
+      const [low, high] = LIMITS.imperial.height;
+      return copy.heightRange(low, high);
+    }
+    return copy.range(min, max, unit);
+  };
 
   const resultText =
     bmi === null
