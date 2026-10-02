@@ -17,3 +17,4 @@ ai-logs/README.md text eol=lf diff
 .nvmrc text eol=lf
 *.js text eol=lf
 *.svg text eol=lf
+*.mts text eol=lf
