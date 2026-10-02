@@ -10,6 +10,7 @@ for the inner glyph.
 | map-location, payment-success, customer-support, social-x, social-instagram, social-linkedin, social-linkedin-outline, social-facebook | [Hugeicons](https://hugeicons.com) stroke-rounded (MIT), via Iconify (`maps-location-01`, `payment-success-01`, `customer-support`, `new-twitter`, `instagram`, `linkedin-01`, `linkedin-02`, `facebook-02`) |
 | star, close-circle | [Unicons](https://iconscout.com/unicons) (Apache-2.0), via Iconify (`uis:star`, `uil:times-circle`) |
 | check-circle, menu | Hand-authored to match the design |
+| logo | Apsu wordmark exported from Figma (`1:308`, user export L1); size it with height + `w-auto` |
 
 Design names match the Figma layer names; icons were compared against the
 design screenshots (see `doc/assets-checklist.md`).

@@ -6,6 +6,7 @@ export { default as ChevronUpIcon } from "./chevron-up";
 export { default as CloseCircleIcon } from "./close-circle";
 export { default as CustomerSupportIcon } from "./customer-support";
 export { default as GlobeEarthIcon } from "./globe-earth";
+export { default as LogoIcon } from "./logo";
 export { default as MapLocationIcon } from "./map-location";
 export { default as MenuIcon } from "./menu";
 export { default as PaymentSuccessIcon } from "./payment-success";
