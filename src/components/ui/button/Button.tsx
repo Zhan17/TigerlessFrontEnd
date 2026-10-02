@@ -57,16 +57,19 @@ export const buttonVariants = cva(
       },
     },
     compoundVariants: [
-      // Full-width buttons with an arrow (mobile cards) push the arrow to the edge.
+      // Full-width buttons with an arrow (mobile cards) push the arrow to the
+      // edge. Tighter insets than the desktop pill (as on the mobile board),
+      // so "Start your birth control consult" stays on one line at 375.
       {
         fullWidth: true,
         withArrow: true,
-        className: "justify-between pl-6",
+        className: "justify-between gap-1 pr-1.5 pl-5.5",
       },
       {
         fullWidth: "belowLg",
         withArrow: true,
-        className: "justify-between pl-6 lg:justify-center lg:pl-8",
+        className:
+          "justify-between gap-1 pr-1.5 pl-5.5 lg:justify-center lg:gap-2 lg:pr-2 lg:pl-8",
       },
     ],
     defaultVariants: {
