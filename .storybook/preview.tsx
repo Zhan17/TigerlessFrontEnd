@@ -8,6 +8,10 @@ const preview: Preview = {
     // The two design boards plus the in-between widths we care about.
     viewport: {
       options: {
+        narrow320: {
+          name: "Narrowest supported (320)",
+          styles: { width: "320px", height: "640px" },
+        },
         board375: {
           name: "Mobile board (375)",
           styles: { width: "375px", height: "812px" },

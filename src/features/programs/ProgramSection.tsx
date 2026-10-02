@@ -1,11 +1,12 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { CheckList } from "@/components/ui/check-list";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { Price } from "@/components/ui/price";
 import { CtaButton } from "@/features/shared/CtaButton";
 import { RichText } from "@/features/shared/RichText";
 import { cn } from "@/lib/cn";
+import { HighlightCards } from "./HighlightCards";
 import { ProductCard } from "./ProductCard";
 import type { ProgramSectionProps } from "./to-programs-props";
 
@@ -28,6 +29,7 @@ export function ProgramSection({
   id,
   category,
   imageSide,
+  layout,
   eyebrow,
   heading,
   intro,
@@ -35,6 +37,7 @@ export function ProgramSection({
   startingPrice,
   cta,
   image,
+  highlights,
   products,
   children,
   className,
@@ -48,7 +51,16 @@ export function ProgramSection({
     >
       <div
         data-theme={category}
-        className="relative mx-auto grid max-w-content grid-cols-[minmax(0,1fr)] rounded-feature bg-theme-surface lg:min-h-154.75 lg:grid-cols-2"
+        style={
+          {
+            "--card-min-h": `${layout.minHeight}rem`,
+            "--copy-w": `${layout.copyWidth}rem`,
+            "--image-x": `${layout.imageCenterX}%`,
+            "--image-h": `${layout.imageHeight}%`,
+            "--image-w": `${layout.imageMaxWidth}%`,
+          } as CSSProperties
+        }
+        className="relative mx-auto grid max-w-content grid-cols-[minmax(0,1fr)] rounded-feature bg-theme-surface lg:min-h-(--card-min-h) lg:grid-cols-2"
       >
         <div
           className={cn(
@@ -63,12 +75,12 @@ export function ProgramSection({
           ) : null}
           <h2
             id={`${id}-title`}
-            className="max-w-[28.5rem] text-section font-medium text-ink-900"
+            className="max-w-(--copy-w) text-section font-medium text-balance text-ink-900 lg:text-wrap"
           >
             <RichText segments={heading} />
           </h2>
           {intro.length > 0 ? (
-            <div className="mt-4 flex max-w-[38rem] flex-col gap-1 text-body text-copy lg:mt-8">
+            <div className="mt-4 flex max-w-(--copy-w) flex-col gap-1 text-body text-copy lg:mt-8">
               {intro.map((paragraph) => (
                 <p key={paragraph}>{paragraph}</p>
               ))}
@@ -78,7 +90,7 @@ export function ProgramSection({
             <CheckList items={points} className="mt-4 lg:mt-5" />
           ) : null}
           {startingPrice ? (
-            <div className="mt-6 max-w-[38rem] border-t border-theme-divider pt-6 lg:mt-8 lg:pt-8">
+            <div className="mt-6 max-w-(--copy-w) border-t border-theme-divider pt-6 lg:mt-8">
               <Price
                 amountMinor={startingPrice.amountMinor}
                 currency={startingPrice.currency}
@@ -97,12 +109,22 @@ export function ProgramSection({
           </div>
         </div>
 
-        {/* Cut-out photo: below the copy on mobile, bottom-anchored half on desktop. */}
+        {/*
+          Cut-out photo: below the copy on mobile (natural aspect, at most
+          program-photo tall, so tall cut-outs narrow instead), and on
+          desktop bottom-anchored with the measured height / centre for this
+          category (see layout).
+        */}
         <div
+          style={
+            {
+              aspectRatio: `${image.width} / ${image.height}`,
+              "--image-ratio": image.width / image.height,
+            } as CSSProperties
+          }
           className={cn(
-            "relative mx-auto aspect-[1185/1327] w-[calc(100%-1.125rem)] max-w-sm",
-            "lg:absolute lg:bottom-0 lg:mx-0 lg:aspect-[682/692] lg:w-[51.7%] lg:max-w-none",
-            imageLeft ? "lg:left-[1.3%]" : "lg:left-[44.8%]",
+            "relative mx-auto w-[calc(100%-1.125rem)] max-w-[calc(var(--spacing-program-photo)*var(--image-ratio))]",
+            "lg:absolute lg:bottom-0 lg:left-(--image-x) lg:mx-0 lg:h-(--image-h) lg:w-auto lg:max-w-(--image-w) lg:-translate-x-1/2",
           )}
         >
           <Image
@@ -113,6 +135,23 @@ export function ProgramSection({
             className="object-contain object-bottom"
           />
         </div>
+
+        {/*
+          Below lg the cards sit centred over the photo at the bottom of the
+          card; from lg they hug the photo's side and never cross into the
+          copy half (they shrink around 1024px instead).
+        */}
+        {highlights.length > 0 ? (
+          <HighlightCards
+            cards={highlights}
+            className={cn(
+              "absolute bottom-highlight-bottom left-1/2 -translate-x-1/2 lg:max-w-[calc(50%-var(--spacing-highlight-inset)-1rem)] lg:translate-x-0",
+              imageLeft
+                ? "lg:left-highlight-inset"
+                : "lg:right-highlight-inset lg:left-auto",
+            )}
+          />
+        ) : null}
       </div>
 
       {products.length > 0 ? (

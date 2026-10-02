@@ -167,6 +167,13 @@
   --text-price-sm--line-height: 1.24;
   --text-price-sm-unit: 1.5rem;
   --text-price-sm-unit--line-height: 1.24;
+  /* Sleep highlight cards: title 16 -> 24, stat value 16 -> 32, label 12 -> 18 */
+  --text-stat-title: clamp(1rem, 0.8239rem + 0.7512vw, 1.5rem);
+  --text-stat-title--line-height: 1.2;
+  --text-stat: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
+  --text-stat--line-height: 1.25;
+  --text-stat-label: clamp(0.75rem, 0.618rem + 0.5634vw, 1.125rem);
+  --text-stat-label--line-height: 1.24;
   /* Captions (BMI scale legend): 12 */
   --text-caption: 0.75rem;
   --text-caption--line-height: 1;
@@ -210,8 +217,28 @@
   --spacing-program-gap: clamp(2rem, 0.9437rem + 4.507vw, 5rem);
   /* Program feature cards: inner padding 12 -> 32 */
   --spacing-feature-pad: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /* Program photo below the copy (mobile / tablet): at most 416 tall */
+  --spacing-program-photo: 26rem;
   /* Product card image area height: 225 -> 332 */
   --spacing-product-media: clamp(14.0625rem, 11.7077rem + 10.0469vw, 20.75rem);
+  /*
+   * Sleep highlight cards over the photo: padding 8 -> 16, gap between the
+   * cards 6 -> 12, inset from the card edge 4 -> 32 and from its bottom
+   * 57 -> 71, widths 204 -> 378 (metrics) and 117 -> 185 (progress), gap
+   * between the two metrics 12 -> 32.
+   */
+  --spacing-highlight-pad: clamp(0.5rem, 0.3239rem + 0.7512vw, 1rem);
+  --spacing-highlight-gap: clamp(0.375rem, 0.243rem + 0.5634vw, 0.75rem);
+  --spacing-highlight-inset: clamp(0.25rem, -0.3662rem + 2.6291vw, 2rem);
+  --spacing-highlight-bottom: clamp(3.5625rem, 3.2544rem + 1.3146vw, 4.4375rem);
+  --spacing-highlight-metrics: clamp(12.75rem, 8.9208rem + 16.338vw, 23.625rem);
+  --spacing-highlight-progress: clamp(
+    7.3125rem,
+    5.816rem +
+    6.385vw,
+    11.5625rem
+  );
+  --spacing-highlight-stat-gap: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
   /* Form controls (BMI inputs, radios, segmented control): 40 -> 52 */
   --spacing-control: clamp(2.5rem, 2.2359rem + 1.1268vw, 3.25rem);
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */

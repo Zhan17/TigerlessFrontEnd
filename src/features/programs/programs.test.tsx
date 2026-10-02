@@ -30,6 +30,31 @@ describe("toProgramSectionsProps", () => {
   it("maps layout per category with a default", () => {
     expect(sections.find((s) => s.id === "sleep")?.imageSide).toBe("left");
     expect(sections[0]?.imageSide).toBe("right");
+    expect(sections[0]?.layout.minHeight).toBe(38.6875);
+
+    const [first] = programs;
+    if (!first) throw new Error("missing mock");
+    const [unknown] = toProgramSectionsProps(
+      {
+        ...homeContent,
+        programs: { ...homeContent.programs, programIds: ["new"] },
+      },
+      [{ ...first, id: "new", category: "dermatology" }],
+      [],
+    );
+    expect(unknown?.imageSide).toBe("right");
+    expect(unknown?.layout).toEqual({
+      minHeight: 42,
+      copyWidth: 34.5,
+      imageCenterX: 72,
+      imageHeight: 105,
+      imageMaxWidth: 45,
+    });
+  });
+
+  it("passes highlight cards through (sleep only)", () => {
+    expect(sections.find((s) => s.id === "sleep")?.highlights).toHaveLength(2);
+    expect(sections[0]?.highlights).toEqual([]);
   });
 });
 
@@ -52,6 +77,25 @@ describe("ProgramSection", () => {
     expect(
       within(cards[0] as HTMLElement).getByText("$200"),
     ).toBeInTheDocument();
+  });
+});
+
+describe("HighlightCards (sleep)", () => {
+  const sleep = toProgramSectionsProps(homeContent, programs, products).find(
+    (s) => s.id === "sleep",
+  );
+
+  it("renders the metrics as a term list and the progress as a progressbar", () => {
+    if (!sleep) throw new Error("missing mock");
+    render(<ProgramSection {...sleep} />);
+    expect(screen.getByText("Olivia Gomes")).toBeInTheDocument();
+    expect(screen.getAllByRole("term").map((t) => t.textContent)).toEqual([
+      "Normal",
+      "Progress",
+    ]);
+    expect(screen.getByText("89.5%")).toBeInTheDocument();
+    const bar = screen.getByRole("progressbar", { name: "Your profile" });
+    expect(bar).toHaveAttribute("aria-valuenow", "82");
   });
 });
 
