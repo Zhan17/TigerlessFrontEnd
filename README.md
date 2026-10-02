@@ -148,8 +148,8 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 
 | Tool | Contribution | Original session record |
 | --- | --- | --- |
-| Codex | Initial requirement analysis, documentation and local Git setup; later collected 9 raw image assets from Figma | Pending export; see [AI log index](ai-logs/README.md) |
-| Claude Code (desktop app, Claude Opus) | Requirement review, Figma audit (`doc/design.md`), asset and icon sourcing (`doc/assets-checklist.md`), architecture options (`doc/architecture.md`); then, following the decisions recorded in `doc/`, the implementation: project scaffold and tooling, design tokens, icons, component library, data contract and mocks, every page section, Storybook stories, unit / e2e / accessibility tests, visual comparison against the boards, and the README logs. The user made the product and design decisions (`doc/design.md` §4b, `doc/decisions.md`) and reviewed each group before it was pushed | Pending export of session `49a5b82d…` (after the user reviews it for publication); see [AI log index](ai-logs/README.md) |
+| Codex | Initial requirement analysis, documentation and local Git setup; later collected 9 raw image assets from Figma | To be added to `ai-logs/` by the user; see [AI log index](ai-logs/README.md) |
+| Claude Code (desktop app, Claude Opus) | Requirement review, Figma audit (`doc/design.md`), asset and icon sourcing (`doc/assets-checklist.md`), architecture options (`doc/architecture.md`); then, following the decisions recorded in `doc/`, the implementation: project scaffold and tooling, design tokens, icons, component library, data contract and mocks, every page section, Storybook stories, unit / e2e / accessibility tests, visual comparison against the boards, and the README logs. The user made the product and design decisions (`doc/design.md` §4b, `doc/decisions.md`) and reviewed each group before it was pushed | [`ai-logs/claude-code/`](ai-logs/claude-code/) (session `49a5b82d…`, unedited); see [AI log index](ai-logs/README.md) |
 
 Working documents and handoff summaries do not replace original transcripts.
 
@@ -158,7 +158,7 @@ Working documents and handoff summaries do not replace original transcripts.
 - PDF requirement extraction and Figma design audit: done (see `doc/design.md`).
 - Fresh clone (2026-10-02, Node 24.19.0 / npm 11.17.0): `npm install`, `lint`, `typecheck`, `test` (120 unit / component tests), `build`, `build-storybook` and `test:e2e` (24 tests) pass; `dev` and `storybook` serve the page and the 156 stories.
 - Page: navigation, hero, trust strip, how it works, the three program sections with products and the BMI calculator, the services carousel, the success stories, the FAQ, the closing CTA and the footer are implemented and compared with both boards (375 / 1440) plus 320, 768, 1024, 1280 and 1920. The page height at 1440 matches the desktop board (10155px).
-- AI transcript export: the session files are located; they are added after the user has reviewed them for publication.
+- AI transcripts: the Claude Code session is in `ai-logs/claude-code/` (unedited copy); the Codex session is added by the user.
 - Known limitations: no real backend (the `api` data source is tested only against a mocked fetch); hero badge contrast kept for fidelity (C10); the copyright year is computed at build time.
 
 See [current handoff](doc/tasks-handoff.md) for the next concrete task.

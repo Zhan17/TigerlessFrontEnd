@@ -1,0 +1,482 @@
+=== README.md
+# Apsu Home Page
+
+Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
+
+**Current status:** requirements and development documentation are initialized. Application code, dependencies, and Storybook have not been created. The implementation and submission are not complete.
+
+## Assignment and design
+
+- Required stack: Next.js App Router, React, strict TypeScript, and Tailwind CSS.
+- Fidelity targets: 375px and 1440px. Layout integrity is required at every width from 320px to 1920px.
+- Dynamic content must have typed future API contracts and conforming mock data.
+- Interactive elements need hover, focus, pressed states, and transitions. Stateful components need one Storybook story per state.
+- Preserve the full commit history and complete, unedited AI session records under `ai-logs/`.
+- [Figma reference](https://www.figma.com/design/DmTQCqCODfpqMmdsZUFCnj/Front-end-Assignment?node-id=0-1)
+
+The source assignment is `Front-End Take-Home Assignment (1).pdf`, page 1, supplied separately in the local workspace. Its requirements are summarized in [requirements](doc/requirements.md).
+
+## Running the project
+
+The evaluator will run the following commands. **They are target commands, not working commands yet:** this repository does not currently contain `package.json`.
+
+```sh
+npm install
+npm run build
+npm run dev
+npm run storybook
+```
+
+Add the actual Node/npm versions, scripts, ports, and committed lockfile when the application is initialized.
+
+## Repository structure
+
+| Path | Purpose |
+| --- | --- |
+| `doc/requirements.md` | Assignment requirements, acceptance criteria, and scope boundaries |
+| `doc/design.md` | Design inventory, evidence, unresolved questions, and Hero audit |
+| `doc/architecture.md` | Proposed code structure, content contracts, and component boundaries |
+| `doc/decisions.md` | Significant choices, reasons, alternatives, and optional model handoff workflow |
+| `doc/tasks-handoff.md` | Current progress, next task, validation evidence, and handoff |
+| `ai-logs/` | Original AI session records and an index explaining their scope |
+
+The application structure is still proposed. Replace this section with the implemented directories and their rationale as code is added.
+
+## Design deviations
+
+No design fix has been implemented yet. Design details have not been verified directly through Figma; connector access failed during initialization. Candidate issues in working notes are not accepted deviations.
+
+Record **every implemented design fix** here, rather than keeping the submission log only in internal documentation.
+
+| ID | Section / source node | Original issue | Implemented change | Why | Verification |
+| --- | --- | --- | --- | --- | --- |
+
+## Self-designed interaction states
+
+No interaction states have been implemented yet. Record every self-designed state and its rationale here; link the corresponding Storybook stories once available.
+
+| Component | States / transition | Why | Story / verification |
+| --- | --- | --- | --- |
+
+## AI use and session records
+
+| Tool | Contribution | Original session record |
+| --- | --- | --- |
+| Codex | Initial requirement analysis, documentation, and local Git setup; no application UI code yet | Pending export of this complete session; see [AI log index](ai-logs/README.md) |
+
+Update this table with actual tools and contributions. Claude Code is an optional future tool and has not contributed in this initialization session. Working documents and handoff summaries do not replace original transcripts.
+
+## Validation and known limitations
+
+- PDF requirement extraction and visual inspection: completed during initialization.
+- Figma design inspection: pending; the connector returned an edit-access error.
+- Application build, responsive checks, and Storybook checks: not run; no application exists yet.
+- AI transcript export and public GitHub publication: pending.
+
+See [current handoff](doc/tasks-handoff.md) for the next concrete task.
+=== ai-logs/README.md
+# AI session records
+
+The assignment requires complete, unedited AI session records for this project. This index, working notes, decision logs, commit messages, and handoff summaries are **not** substitutes for original transcripts.
+
+## Current coverage
+
+| Session | Tool | Contribution | Original record status |
+| --- | --- | --- | --- |
+| 2026-10-01 initialization | Codex | PDF analysis, documentation design and creation, local Git initialization | Pending export after this session ends |
+
+No original transcript has been archived yet. Do not mark the AI-log submission requirement complete until every project session is present.
+
+## Archiving
+
+- Save each tool's complete original export unchanged under this directory; preserve its format. Example filenames: `2026-10-01-codex-initialization.<original-extension>` or a per-session folder for a multi-file export.
+- Use the tool's available export/session-record capability. Do not invent an export command or claim a summary is an original log.
+- Include initialization, implementation, review, and handoff sessions from every AI tool actually used on this project.
+- Add a row linking the real file and describing its contribution; update the root README AI-use table as well.
+- Do not merge, abridge, rewrite, or replace original exports with generated summaries.
+- Confirm suitability for public publication before pushing. If an original record includes secrets or private content, resolve the conflict with the user and assignment owner rather than silently editing an export and calling it unedited.
+
+Future optional Claude Code use must be documented only if it actually occurs.
+=== doc/architecture.md
+# Architecture
+
+更新：2026-10-01。**当前没有应用代码；下列目录是建议草案，不是“最终采用结构”。** 实现后以代码和配置为准，更新本文件及 README 的实际结构。
+
+## 已固定 / 仍可调整
+
+- 作业固定：Next.js App Router、React、TypeScript strict、Tailwind CSS、提交 lockfile；其余选择见 [requirements.md](requirements.md)。
+- 暂建议使用 npm 与 `package-lock.json`，与验收命令一致；具体版本在脚手架阶段核对兼容性并记录，不在本轮凭空固定。
+- 本轮实际结构：根 README、`doc/`、`ai-logs/README.md`、Git 辅助文件。
+
+## 推荐起点：单页、清晰类型、少量分层
+
+```text
+src/
+  app/
+    layout.tsx
+    page.tsx                # 首页组合与数据读取
+    globals.css             # Tailwind 入口及实际设计 tokens
+  components/
+    ui/                     # Button、Input 等真正可复用的基础组件
+    sections/               # Hero、FAQ 等首页区块，按盘点结果建立
+  types/
+    home.ts                 # 动态首页内容的未来 API 契约
+  data/
+    home.mock.ts            # 符合契约的 mock 内容
+  lib/
+    get-home-page.ts        # 简单数据入口，未来可替换为真实请求
+public/
+  assets/                   # 实际使用的本地图片、图标、字体
+.storybook/                 # 脚手架阶段建立
+doc/
+ai-logs/
+```
+
+这棵树尚未创建。stories 可与组件放在一起，复杂业务纯函数也可就近保存；出现真实复杂度再拆模块。不要为了目录完整先生成空层、仓库模式或通用 schema 框架。
+
+## 数据流与契约
+
+`types → 符合类型的 mock → getHomePage → page → 区块 → 基础组件`。
+
+- 先盘点全部动态内容，再定义类型。候选包括导航、标题/CTA、语言、产品/价格、服务卡、评价、FAQ 和页脚链接；是否动态要有明确依据，不把所有文案一概写死，也不把 CSS 布局塞进 API。
+- 类型与 mock 分开，mock 用 TypeScript 类型约束检查结构；实际 API 尚不存在，不虚构已有 endpoint。
+- 稳定 id、语义字段、图片信息、链接目标按需要定义；金额、单位、可选字段与联合类型要能解释选择原因。
+- Rich heading 可用文本片段表达高亮，避免依赖任意 HTML 字符串。
+- 交互临时状态（菜单展开、表单输入、轮播位置）属于 UI；动态内容契约不要混入 DOM 节点或 setter。
+- `getHomePage` 只作为简单替换入口，不必创建真实 API route、数据库或全局状态库。
+
+最终契约以实际 TypeScript 文件为准；此处解释设计理由，不重复粘贴整份接口定义。
+
+## 组件与渲染边界
+
+- 首页与静态展示优先保留服务端组件；需要事件、浏览器 API 或本地状态的局部组件使用客户端边界。边界随实现验证，不预先将整页设为客户端。
+- 基础组件提供一致的交互状态；区块负责组合与响应式；页面负责顺序和数据分发。只提取实际复用或有独立状态/验证价值的组件。
+- 组件的状态应可在 Storybook 中稳定复现；按需要提供 props 或交互步骤，不为写 stories 给所有组件强行受控接口。
+- 若 Figma 核实需要 BMI，计算/换算/分类纯函数与展示分开；规则来源和输入边界在实现时确认，不把参考笔记当作已验证业务规格。
+- CTA 目标和未实现的后续流程需给出明确行为；不扩展成整个后端产品。
+
+## 响应式与验证
+
+- 用正常文档流、flex/grid 和内容决定断点；局部浮层/装饰确有需要时再绝对定位。Hero 最终布局尚未确定。
+- 在 375 / 1440 比较视觉，在 320–1920 连续检查完整性；不以 `overflow-x: hidden` 遮盖页面问题。
+- 配置 `npm run build`、`dev`、`storybook`；脚手架建立后再按实际需要增加类型、lint 或测试命令。
+- 复杂逻辑、菜单/轮播边界、输入转换等值得针对性测试；可逆文档改动和简单静态样式不必为测试数量写测试。
+- “最终采用”记录只保留已落地结构、相关 decision ID 与例外；不用为每个文件移动另写决策。
+=== doc/decisions.md
+# Decisions
+
+更新：2026-10-01。这里只记录会影响架构、验收、设计偏差或交接的重要取舍；普通样式修正和局部重构直接做即可。
+
+## D01：五份工作文档 + 提交 README
+
+- 状态：已采用。
+- Decision：保留 requirements、design、architecture、decisions；合并 Task 与 Handoff 为 tasks-handoff；README 面向验收者。
+- Why：需求、设计证据、结构理由、重要取舍和当前状态各有一个归属；减少重复更新。
+- 未采用：六份工作文档另加独立 review-priority 和 deviation 文件。
+- Reason to reject：任务状态与交接容易冲突；Review Priority 只需一节；偏差作业明确要求写 README。
+- 重新考虑条件：真实交接积累到难以阅读时再拆分；不是因为以后“可能用到”而先扩张。
+
+## D02：文档是上下文，不是审批流程
+
+- 状态：已采用。
+- Decision：明确分开作业硬性要求、已落地决策、建议、待验证；代码变化后修订建议。
+- Why：用户希望记录上下文，但不希望文档成为开发负担。
+- 未采用：把全部 SOP、固定阶段、固定断点和所有目录变成强制规则。
+- Reason to reject：当前任务小，设计尚未核实，过早冻结会增加返工和维护量。
+- 更新时机：任务完成/暂停/交接时更新状态；重要取舍时追加 decision；实施设计修正或自设计交互时更新 README。不要求每轮对话更新所有文件。
+- 当前不创建长篇 AGENTS.md / CLAUDE.md。若后来确有双工具需要，可添加很短的入口，只指向这些文件并写少量真实规则。
+
+## D03：Codex / Claude Code 可选串行协作
+
+- 状态：轻量建议；Claude Code 尚未用于本轮。
+- Decision：默认一个执行者负责当前任务；有必要时另一个模型针对风险点复核，再由当前执行者落实。用户决定采用哪些工具。
+- Why：交接有价值，但第二模型不是完成作业的前提。共用源码、Git 和状态文件，比复制两套计划可靠。
+- 未采用：两模型轮流重写同一区块、每一步强制双审、同时修改同一批文件。
+- Reason to reject：增加冲突、上下文重复和时间成本；不能用模型互相同意替代实测。
+- 适用复核点：数据契约、Hero 中间宽度布局、复杂交互、Storybook 状态覆盖、最终验收缺口。
+
+推荐流程：
+
+1. 接手者读 requirements、tasks-handoff，再按任务读设计/架构/决策及相关代码。
+2. 查看 `git status`、分支、最近提交和未提交 diff；已有改动不假定可丢弃。
+3. 明确本次任务、输入证据、完成条件；同一工作区同一批文件保持一个写入者。
+4. 执行并记录真实验证结果；必要时把具体 diff、截图和疑问交给第二模型复核。
+5. 收尾更新 Done / In Progress / Next 和短交接；保存各工具的完整原始日志及实际贡献。
+
+这一流程不固定谁“更擅长”设计或代码，也不要求每次换工具都新开分支。
+
+## D04：架构建议尚未冻结
+
+- 状态：草案，见 [architecture.md](architecture.md)。
+- 建议：单页组合 + ui/sections + types/mock + 简单数据入口。
+- Why：让评审能先看类型，再追踪数据与组件；符合当前单页范围。
+- 替代方案：所有内容放 page.tsx；完整 feature/domain/repository 多层结构。
+- 暂不选原因：前者难审阅类型与组件；后者目前缺少复杂度依据。这是设计推演，尚未通过真实代码验证。
+- 成为已采用的条件：完成设计盘点、脚手架和首个端到端区块后，按实际代码修订。
+
+## D05：Hero layout 留待证据确定
+
+- 状态：待验证，尚无布局实现。
+- 待解决：字体、标题换行、胶囊和分类卡的尺寸/顺序、移动与桌面关系。
+- 当前倾向：文档流 + flex/grid；只对有依据的装饰局部定位。
+- 替代方案：整个 Hero 按桌面坐标绝对定位；整个区块按比例缩放。
+- 倾向不选原因：320–1920 中间宽度、文本换行和触达尺寸可能不稳定；尚未做实际比较，不记为已验证 rejection。
+- 拍板证据：375 / 1440 的 Hero 节点与截图、所用素材、至少一次中间宽度和断点附近验证。
+- 最终记录：选择了什么、为什么、未选方案的具体风险、代码位置和验证证据。
+
+## 需要时使用的记录格式
+
+`ID / 状态（建议、已采用、被替代） / 问题与证据 / Decision / Why / Alternatives & rejection reason / 验证 / 重新考虑条件`。
+
+没有实际评估过的方案写“备选/待比较”，不要虚构 rejected 记录。已采用的重要决策被替代时，保留原条目并链接新条目；普通临时想法可以删改。
+
+设计偏差和自设计交互的提交日志直接写 [README](../README.md)，这里只在有重要取舍时引用对应 ID。
+=== doc/design.md
+# Design audit / 设计盘点
+
+更新：2026-10-01。将用户提到的 Design Audience 按“设计审阅/盘点”理解；Hero 是本文件的一节，而不是全页设计文档的唯一内容。
+
+## 证据与当前访问状态
+
+- [Figma 页面](https://www.figma.com/design/DmTQCqCODfpqMmdsZUFCnj/Front-end-Assignment?node-id=0-1)，file key：`DmTQCqCODfpqMmdsZUFCnj`，页面节点：`0:1`。
+- PDF 确认目标画板宽度：移动 375、桌面 1440；尚未取得实际画板 node ID。
+- 本轮尝试两个 Figma 连接的 metadata 读取，均返回缺少编辑权限；网页读取也未成功。**未直接核实设计画面、tokens、组件、文案或动画。**
+- 参考笔记中的截图观察可用于定位，但不能替代当前画板证据。后续可通过有权限的 Figma 页面或用户提供的截图继续盘点；无需因为连接报错就认定作业必须授予编辑权限。
+
+## 整页 inventory：候选，全部待核对
+
+以下 13 行来自现有任务分析笔记，尚不是确认后的组件拆分或完整设计事实。
+
+| 区块 | 笔记描述 / 优先核对点 |
+| --- | --- |
+| Header / Navigation | 桌面链接、CTA、移动菜单；是否另有菜单画板及其状态 |
+| Hero | 信任徽章、分色标题、CTA、语言胶囊、分类卡；桌面/移动顺序 |
+| Trust strip | 深绿信任条；是否静态、横向滚动或动画，不能从裁切推定 marquee |
+| How it works | 两张编号说明卡；文本、对齐与移动布局 |
+| Weight Loss / Products | 人物图、产品与价格；移动内容是否在独立画板 |
+| BMI calculator | 输入、单位、结果、默认状态；是否存在逻辑矛盾 |
+| Birth Control | 图文顺序、产品图与文案匹配 |
+| Sleep | 图文与浮层信息的含义、在窄屏下的位置 |
+| Online care / Carousel | 卡片、箭头、局部裁切；滚动边界与默认位置 |
+| Success Stories | 文字/图片卡变体与内容完整性 |
+| FAQ | 默认展开项、展开规则、内容 |
+| Closing CTA | 标题、按钮、水印；窄屏是否溢出 |
+| Footer | 链接列、图标、免责声明、字标与版权 |
+
+核实后，逐行补充：桌面/移动 node 链接、截图或素材路径、内容顺序、交互、相关类型/组件。只补当前区块需要的信息，不要求先完成全部设计规格再动手。
+
+## Hero audit
+
+Hero 容易暴露字体、行宽、换行、图片比例和中间宽度布局问题，因此优先核对；它不替代全页验收。
+
+| 项目 | 已知或候选 | 下一次需要的证据 |
+| --- | --- | --- |
+| 内容 | 笔记提到徽章、标题、CTA、语言胶囊、分类卡 | 两个画板的 Hero 节点与局部截图 |
+| 标题 | 笔记提到 “speaks your language” 高亮 | 准确文本、字体/字重、字号、行高、实际换行 |
+| 布局 | 不能仅凭描述决定 flex/grid 或绝对定位 | 容器宽度、留白、元素顺序、卡片尺寸及移动变化 |
+| 语言胶囊 | 笔记提到两行、边缘淡出及混合书写方向 | 实际列表、RTL 内容；是否有明确运动规格 |
+| 响应式 | 375 / 1440 忠实，320–1920 完整 | 最小宽度、布局切换条件、断点附近截图 |
+| 交互 | PDF 要求状态和过渡，未提供 hover 设计 | CTA/card 的真实操作；最终状态和 Storybook 覆盖 |
+
+Hero layout 的最终方案和 rejected alternatives 写入 [decisions.md](decisions.md)，本文件只保存观察、证据与待验证问题。
+
+## 设计问题的处理
+
+先核对原稿，再判断是否需要偏离；修正设计错误不意味着可以任意改版。
+
+| 候选问题（来自笔记） | 需核对什么 | 当前状态 |
+| --- | --- | --- |
+| `Issuance` / `Comapny` 等拼写 | 原稿确实存在且上下文支持修正 | 未核实、未修复 |
+| BMI 输入与结果不一致、区间文案异常 | 实际默认值、结果含义、产品预期 | 未核实、未修复 |
+| 移动画板缺少减重内容 | 是否在独立画板，最终页面顺序如何 | 未核实、未修复 |
+| 产品图与品类不符 | 原始素材、可用替代素材与展示意图 | 未核实、未修复 |
+| 语言胶囊挤压或不同方向内容混排 | 字符串、容器、语言方向 | 未核实、未修复 |
+
+不从人名推断人物性别或身份，也不把所有刻意的局部裁切都当成设计错误。疑问保存为疑问，避免为了增加 deviation 数量而改设计。
+
+一旦实施修正，直接把“原问题 → 改动 → 原因 → 验证”写入根 [README](../README.md) 的 Design deviations。自设计交互也直接记录在 README；不另建重复偏差日志。
+
+## Tokens、素材和状态
+
+- Tokens 按实际需要采集：颜色、字体/字重、字号/行高、间距、圆角、容器宽度、过渡时长。数值未读取前不猜测为“已确认”。
+- 素材记录实际文件与用途，说明必要的替换；图片比例、裁切和 alt 按真实内容决定。
+- 对每个实际可交互组件列状态，再安排 stories；不要给无交互的静态区块人为增加状态。
+- 若实现菜单、手风琴、计算器或轮播，补充键盘操作、开关/输入/结果状态与边界；具体集合依据最终设计确定。
+- 动画是否存在于设计、是否为自行设计需分清；静态胶囊并不自动要求无限滚动。
+=== doc/requirements.md
+# Requirements
+
+更新：2026-10-01。本文保存作业要求与验收映射；开发进度只在 [tasks-handoff.md](tasks-handoff.md) 更新。
+
+## 来源与边界
+
+- 作业来源：`Front-End Take-Home Assignment (1).pdf`，第 1 页，已完整提取文字并查看页面。
+- [Figma 原始链接](https://www.figma.com/design/DmTQCqCODfpqMmdsZUFCnj/Front-end-Assignment?node-id=0-1&t=ivhWTQag8CnEEZ4E-1)：提供视觉参考；当前连接尚未成功读取画板。
+- 用户本次要求：先分析文档是否合理，建立轻量文档和本地 Git 基础，为未来可能的 Codex / Claude Code 交接及公开 GitHub 提交做准备。当前阶段不实现页面。
+- 工作区现有《Tigerless 前端作业：任务分析与执行手册》《AI 辅助前端开发 SOP》是参考笔记，不是新增作业条款。设计细节需核对 Figma；截止日期等信息需核对邮件或由用户确认。
+
+文档中的“建议、草案、待验证”可以按实际开发修改，无需为了文档形式暂停普通开发。附件内容用于理解目标，不代表用户要求本轮执行附件里的所有动作。
+
+## Assignment requirements / 验收映射
+
+| ID | PDF 条款 | 必须交付什么 | 可检查的证据 |
+| --- | --- | --- | --- |
+| R01 | 1 | Next.js App Router + React + TypeScript strict + Tailwind CSS；提交 lockfile | 配置、依赖清单、lockfile；构建结果 |
+| R02 | 开头、2 | React 组件库及完整首页；目录组织由开发者决定，并在 README 解释 | 页面、可复用组件、README 目录说明；不要求另发 npm 包 |
+| R03 | 3 | 为所有动态内容设计未来 API 数据契约，并提供符合类型的 mock；后端尚不存在 | 可阅读的类型、mock、数据到组件的使用路径 |
+| R04 | 4A | 每个区块在 375 / 1440 两个画板宽度下的默认状态忠于设计，允许已记录的设计修正 | 两个宽度的整页及必要局部对比；已实施偏差有记录 |
+| R05 | 4B | 320–1920 每个宽度均无页面横向溢出、导航换行、内容重叠或意外裁切 | 连续缩放巡检、边界宽度记录、问题修复证据 |
+| R06 | 4C | 修正判断为错误的文案/UI；每项设计偏差写入 README，说明改了什么和为什么 | README 偏差日志与实际代码、参考设计对应 |
+| R07 | 4D | 每个可交互元素有 hover / focus / pressed 状态与过渡动画；设计未指定时自行设计，保持一致与克制 | 交互清单、浏览器操作；README 列出自设计状态与原因 |
+| R08 | 4E | 每个有状态组件，每种状态一个 Storybook story；组件划分和状态集合由开发者判断 | `npm run storybook` 可启动；按最终状态清单逐项查看 |
+| R09 | 5 | README 披露实际使用的 AI 工具、各自写了哪些部分，并指向会话记录 | AI 使用表与 `ai-logs/` 文件可以对应 |
+| R10 | 6 | 提交 GitHub 仓库链接，保留完整 commit 历史，不 squash | GitHub 链接、可访问仓库、完整提交记录 |
+| R11 | 6 | 使用 AI 时，将本项目完整、未编辑的原始会话记录放在 `ai-logs/` | 原始导出文件与会话索引；摘要不能替代原始记录 |
+| R12 | 6 | 验收方会运行安装、构建、开发、Storybook 四条命令 | 干净检出后执行下列命令，并记录真实结果 |
+
+```sh
+npm install
+npm run build
+npm run dev
+npm run storybook
+```
+
+README 的必需内容分散在 PDF 第 2、4C、4D、5 节：目录说明、每项设计修正、自设计交互状态、AI 工具和对应原始日志。
+
+## 加分与自主选择
+
+- PDF 明确加分：画板之间及之外的优雅适配，并能解释实现方式。两个画板宽度之外只要求布局完整，不要求逐像素还原。
+- PDF 自主项：tokens、图片和图标处理、状态管理、路由、API 契约及数据层、代码目录、组件和状态划分。
+- 项目建议：语义化 HTML、键盘操作、可见焦点、减少动态效果偏好；这些是实现质量考虑，不伪装成 PDF 单独列出的额外条款。
+- 非当前硬性要求：双模型协作、某种固定目录、固定测试覆盖率、线上部署、数据库、真实后端、完整登录/支付/问诊流程。
+- PDF 要 GitHub 仓库链接，未明确规定仓库必须公开；用户希望最终公开，这是用户目标，单独记录。
+- PDF 没有提供截止日期、工时或固定区块数量。
+
+## 验证方式的实际边界
+
+- 375 / 1440 做视觉对比；320–1920 做布局完整性巡检。只检查两个画板不足以证明 R05。
+- 建议额外抽查 320、390、768、1024、1920，以及实际断点前后各 1px；连续拖动窗口仍需执行。这些检查点可调整，不是新增要求。
+- 页面根节点禁止意外横向滚动；设计本来要求的局部轮播/裁切应控制在局部容器，不能用全局隐藏溢出来掩盖布局问题。
+- “构建通过”不能替代视觉、交互和 Storybook 检查。未执行的检查写“未执行”，不要写通过。
+- 先定义组件状态集合，再与 stories 对照；hover / focus / pressed 不能只靠使用者临时操作却没有可复现的展示方式。
+=== doc/tasks-handoff.md
+# Tasks & Handoff
+
+更新：2026-10-01（America/Los_Angeles）。这是当前状态的唯一入口；交接覆盖本页快照，重要历史由 Git 保存。
+
+## Current status
+
+- 阶段：初始化文档；尚未实现前端或安装依赖。
+- 工作目录：`Front-End Task`，本机路径 `F:\AI\TigerlessTask\Front-End Task`。
+- 本地分支：`main`；交接时重新运行 Git 命令核实，不依赖文档里的旧 commit 值。
+- Figma：读取受阻；已有设计笔记未直接核实。
+- AI：本轮使用 Codex；双模型流程是可选建议，尚未发生 Claude Code 交接。
+
+## Done
+
+- 已完整读取 PDF 第 1 页并查看渲染页；提取原始 Figma 链接。
+- 已将 PDF 要求、用户目标和参考笔记区分，建立验收映射。
+- 已收敛为五份工作文档，补充根 README 和 AI 日志说明。
+- 已记录设计访问限制、候选整页区块及 Hero 待核对项。
+- 已初始化本地 Git 为 `main`，设置忽略规则和文本属性；初始提交通过 `git log` 查看，不在文档中复制 commit hash。
+- 已检查全部本地 Markdown 链接、UTF-8 文本、R01–R12 条目；确认 lockfile/原始日志可跟踪，依赖/构建/环境文件被忽略，原始日志不转换换行。
+
+## In Progress
+
+- 无进行中的应用实现任务。若后续暂停开发，在此写具体任务、已改文件和未完成验证，不写模糊的“UI 开发中”。
+
+## Next
+
+| 顺序 | 任务 | 完成条件 |
+| --- | --- | --- |
+| T01 | 核对 Figma 整页及 Hero | 取得桌面/移动画板 node ID 或可读截图；确认全部区块、默认状态及独立移动画板关系；补 design |
+| T02 | 确定首版结构和动态内容契约 | 有实际类型、符合类型的 mock、动态内容覆盖表；重要选择写 decisions，架构从草案更新 |
+| T03 | 初始化 Next.js / Storybook | App Router、TS strict、Tailwind、lockfile 和四个目标命令可用；记录真实版本和运行结果 |
+| T04 | 做首个端到端区块，再逐区块实现 | 数据 → 页面 → 组件链路成立；Hero 与导航先验证两个画板及中间宽度；随后完成全页 |
+| T05 | 交互、stories 与响应式验收 | 每个交互元素有状态/过渡；每个有状态组件每状态有 story；持续缩放 320–1920 并修复问题 |
+| T06 | 提交收尾 | README 的实际结构、偏差、交互与 AI 贡献完整；全部原始日志入库；干净检出验证；公开 GitHub 链接 |
+
+任务顺序可调整：T02 / T03 可在设计核对期间部分推进；不要求每个阶段都完成一套正式审批。实现任务按可验证小块拆分，不一次把全页记为 Done。
+
+## Review Priority
+
+这是时间分配建议，不是新增验收等级。
+
+1. **P0 / 提交完整性**：必需技术栈、lockfile、四条命令、动态契约与 mock、完整历史、原始 AI 日志和 README 必需内容。
+2. **P1 / 页面与行为**：每个区块、375 / 1440 默认状态还原、320–1920 完整性；导航、Hero、计算器/浮层/轮播等真实高风险区域；状态与 stories 对应。
+3. **P2 / 打磨**：跨宽度适配、动画一致性、键盘体验、素材与视觉细节。
+
+P0 和 P1 都需要完成；P2 中如发现实际违背 PDF 的缺陷，提升优先级，而非因为标签就忽略。
+
+## Turn handoff
+
+- Turn task：评估并初始化轻量文档及本地 Git，未开始 UI 实现。
+- 本轮变化：见 Done；应用目录树只是提议，不是已有文件。
+- 下一次第一步：读本页与 requirements；检查工作树；核对设计输入。普通开发不需要再重做本轮的文档规划。
+- 不能直接读到/尚未知：Figma 具体画板与 tokens、真实素材、确切移动区块关系、邮件截止日期、最终依赖版本、AI 原始导出文件、GitHub 远程仓库地址。
+- 可用参考：父目录的 PDF 与两份分析/SOP；新克隆仓库可能没有它们，不能假定本机路径在别处存在。
+- 无需冻结：断点、组件拆分、状态管理、双模型角色、架构草案；按实际证据调整。
+- 不要误判为完成：Figma 审阅、UI、API 类型、mock、stories、build、日志归档、远程发布。
+
+接手时的最小检查：
+
+```sh
+git status --short --branch
+git log -5 --oneline
+git diff
+git diff --cached
+```
+
+## Validation evidence
+
+| 检查 | 本轮状态 | 说明 |
+| --- | --- | --- |
+| PDF | 已执行 | 1 页文字、链接提取及渲染查看 |
+| Figma | 未成功 | 两个连接读取均返回编辑权限错误；未取得设计内容 |
+| 文档链接 / 需求映射 / Git | 已执行 | 本地链接与 UTF-8 检查通过；PDF 条款映射 R01–R12；main 已初始化，忽略与原始日志文本属性检查符合预期 |
+| install / build / dev / storybook | 未执行 | 尚无 package.json，不能宣称通过 |
+| 375 / 1440 与 320–1920 | 未执行 | 尚无 UI |
+| AI 原始日志完整性 | 未完成 | 本轮会话结束后需导出；已有笔记不是完整记录 |
+
+后续记录命令、结果、失败点和截图/文件位置即可；不必为每次样式调整写长报告。
+
+## Git 和公开提交
+
+- 本地初始化与最终远程发布分开；当前未提供 GitHub 仓库 URL，不创建或推送未知远程。
+- 以有意义的小块提交，保留完整历史。不要把提交前清理变成 squash 或重写项目历史。
+- 提交源码、lockfile、文档、必要素材及原始 AI 日志；依赖目录、构建输出和环境密钥不入库。
+- AI 日志按 [ai-logs/README.md](../ai-logs/README.md) 保存；本次初始化也计入项目 AI 使用。
+- 公开发布前核对原始日志的可公开性。若发现秘密或私人内容，与“未编辑日志”要求的冲突不能靠静默改写日志解决；先由用户与出题方明确处理方式。
+
+## 下一次更新只需这些
+
+任务/执行者、Done、In Progress、Next、未提交文件、验证结果、阻碍或未知信息、必要的 decision ID。没有变化的设计和架构文档无需重写。
+=== .gitignore
+# Dependencies
+node_modules/
+
+# Generated application / Storybook output
+.next/
+out/
+dist/
+storybook-static/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+.vercel/
+
+# Temporary files and local diagnostics
+tmp/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+# Intentionally track package-lock.json and original files in ai-logs/.

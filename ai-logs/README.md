@@ -4,11 +4,15 @@ The assignment requires complete, unedited AI session records for this project. 
 
 ## Current coverage
 
-| Session | Tool | Contribution | Original record status |
+| Session | Tool | Contribution | Original record |
 | --- | --- | --- | --- |
-| 2026-10-01 initialization | Codex | PDF analysis, documentation design and creation, local Git initialization | Pending export after this session ends |
+| 2026-10-01 → 2026-10-02, session `49a5b82d-24c0-49f7-8a28-b0a36d54120b` | Claude Code (desktop app) | Requirement review, Figma audit, asset sourcing, architecture options, then the whole implementation (scaffold, tokens, icons, component library, data contract, every section, Storybook, tests) and the README / handoff documents | [`claude-code/49a5b82d-24c0-49f7-8a28-b0a36d54120b.jsonl`](claude-code/49a5b82d-24c0-49f7-8a28-b0a36d54120b.jsonl) (the session transcript as stored by Claude Code) and [`claude-code/49a5b82d-24c0-49f7-8a28-b0a36d54120b/`](claude-code/49a5b82d-24c0-49f7-8a28-b0a36d54120b/) (large tool outputs and screenshots the transcript refers to) |
+| 2026-10-01 | Codex | PDF analysis, documentation design and creation, local Git initialization, collecting raw image assets from Figma | To be added by the user (the session actually used for the project) |
 
-No original transcript has been archived yet. Do not mark the AI-log submission requirement complete until every project session is present.
+Notes:
+
+- The Claude Code files are copied byte-for-byte from `~/.claude/projects/F--AI-TigerlessTask-Front-End-Task/`; nothing was edited or removed. The session was still running when the copy was taken (2026-10-02), so the last few turns may be missing; the copy is refreshed before submission if the session continues.
+- Earlier parts of the session were automatically compacted by Claude Code when the context grew long; the transcript keeps the original turns, and the compaction summaries appear in it as written.
 
 ## Archiving
 
