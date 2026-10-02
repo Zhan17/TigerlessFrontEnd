@@ -64,6 +64,7 @@
 
   /* Accents */
   --color-star: #ffca00; /* sampled: rating stars */
+  --color-step: #c1e8de; /* sampled: "01" / "02" in How it works */
   --color-bmi-under: #3b82f6; /* BMI scale gradient stops */
   --color-bmi-healthy: #1a8a79;
   --color-bmi-over: #f59e0b;
@@ -140,14 +141,23 @@
   --text-eyebrow-lg: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
   --text-eyebrow-lg--line-height: 1.32;
   --text-eyebrow-lg--letter-spacing: 0.125rem;
+  /* Lead sentence (How it works footnote): 16 -> 20, medium */
+  --text-lead: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  --text-lead--line-height: 1.32;
+  /* Trust strip items: 14 -> 18 */
+  --text-strip: clamp(0.875rem, 0.787rem + 0.3756vw, 1.125rem);
+  --text-strip--line-height: 1.6;
+  /* Big step numbers "01" / "02": 52 -> 80 */
+  --text-step-number: clamp(3.25rem, 2.6338rem + 2.6291vw, 5rem);
+  --text-step-number--line-height: 1.2;
   /* Prices: same size on both boards (measured from the screenshots). */
   /* Program sections (birth control / sleep): "From" 32, amount 52 */
   --text-price: 3.25rem;
   --text-price--line-height: 1.24;
   --text-price-unit: 2rem;
   --text-price-unit--line-height: 1.24;
-  /* Product cards (weight loss): "From" 24, amount 40 */
-  --text-price-sm: 2.5rem;
+  /* Product cards (weight loss): "From" 24, amount 32 (re-measured by width) */
+  --text-price-sm: 2rem;
   --text-price-sm--line-height: 1.24;
   --text-price-sm-unit: 1.5rem;
   --text-price-sm-unit--line-height: 1.24;
@@ -179,6 +189,23 @@
   --spacing-badge-gap: clamp(0.25rem, 0.0739rem + 0.7512vw, 0.75rem);
   /* Nav pill height, used to tuck the hero shell under the sticky nav */
   --spacing-nav: 3.5rem;
+  /* Vertical rhythm between sections: 56 -> 120 */
+  --spacing-section-y: clamp(3.5rem, 2.0915rem + 6.0094vw, 7.5rem);
+  /* Trust strip: gap above 32 -> 80, gap between items 32 -> 56 */
+  --spacing-strip-top: clamp(2rem, 0.9437rem + 4.507vw, 5rem);
+  --spacing-strip-gap: clamp(2rem, 1.4718rem + 2.2535vw, 3.5rem);
+  /* Section intro -> cards: 24 -> 48 */
+  --spacing-intro-cards: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem);
+  /* How it works cards: number -> title 24 -> 59, top 16 -> 40, bottom 38 -> 60 */
+  --spacing-step-number-gap: clamp(1.5rem, 0.7298rem + 3.2864vw, 3.6875rem);
+  --spacing-step-pt: clamp(1rem, 0.4718rem + 2.2535vw, 2.5rem);
+  --spacing-step-pb: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
+  /* Program sections: gap between consecutive ones 32 -> 80 */
+  --spacing-program-gap: clamp(2rem, 1.1197rem + 3.7559vw, 5rem);
+  /* Program feature cards: inner padding 12 -> 32 */
+  --spacing-feature-pad: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /* Product card image area height: 225 -> 332 */
+  --spacing-product-media: clamp(14.0625rem, 11.7077rem + 10.0469vw, 20.75rem);
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
   --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
   --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
@@ -192,6 +219,7 @@
   --radius-shell: 2rem; /* 32: hero / stories / CTA shells */
   --radius-card: 1rem; /* 16: cards, BMI panels */
   --radius-panel: 0.75rem; /* 12: FAQ items */
+  --radius-feature: 1.5rem; /* 24: program feature cards (sampled) */
 
   /* ---- Shadows ----------------------------------------------------------- */
   --shadow-*: initial;
@@ -208,6 +236,14 @@
   /* "Fast then slow" settle used for carousel steps and reveals. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  /* Trust strip: endless leftward scroll (track = two identical copies). */
+  --animate-marquee: marquee 32s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
 }
 
 @media (width >= 70rem) {

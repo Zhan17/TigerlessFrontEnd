@@ -6,7 +6,7 @@ export type PriceProps = {
   amountMinor: number;
   currency: string;
   interval: BillingInterval;
-  /** lg = program sections (52), sm = product cards (40). */
+  /** lg = program sections (52), sm = product cards (32). */
   size?: "lg" | "sm";
   className?: string;
 };
