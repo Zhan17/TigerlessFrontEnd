@@ -2,7 +2,7 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation, hero, trust strip, How it works and the program sections (birth control / sleep details and BMI still to come). The remaining sections are in progress (see `doc/tasks-handoff.md`).
+**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation, hero, trust strip, How it works and the program sections and the BMI calculator (birth control / sleep details still to come). The remaining sections are in progress (see `doc/tasks-handoff.md`).
 
 ## Assignment and design
 
@@ -82,6 +82,10 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | F12 | How it works | Card 02's title sat ~17px lower than card 01's (content bottom-aligned, different list lengths) | Card content is top-aligned; both titles share a line | Visual alignment of two identical cards |
 | F03 | Weight loss | "Loss Weight In Your Way." | "Lose Weight In Your Way." (design casing kept) | Grammar |
 | F09 | Weight loss (mobile) | The weight-loss section, product cards and BMI were placed outside the mobile board | Rendered in the mobile page in the same order as desktop | Content missing from the mobile layout |
+| F08 | BMI | Inputs show 0 while the score shows 56; legend reads "Healthy Weight <18.5 - 24.9", "Overweight <25.0 - 29.9"; unit label "cm/kgs" | Real calculation with an empty initial state ("—"); legend generated from the thresholds (18.5–24.9, 25–29.9); "cm / kg" | Contradictory default state; wrong ranges; unit spelling |
+| F09 | BMI (mobile) | Mobile board has no unit switch | Same ft/lbs ↔ cm/kg switch as desktop | Feature parity: metric users on mobile |
+| — | BMI | Calculate looks enabled with empty inputs | Disabled (40% opacity) until the input is valid; out-of-range values show a message | Prevents calculating with no / impossible data (product decision) |
+| — | BMI | No result sentence | "As a woman, your BMI is 24.2 — Healthy Weight." under the gauge (announced politely to screen readers) | Shows the category in words and reflects the sex selection (C6, see below) |
 
 ### Noted, not changed
 
@@ -92,6 +96,8 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | Hero, category cards | Eyebrow "Weight management" vs "Weight Loss" elsewhere | Naming / copy question, low UI impact (Q7) |
 | How it works | List items end with full stops; other sections' lists do not | Copy style, low UI impact (Q7) |
 | Weight loss (mobile) | The "WEIGHT LOSS" eyebrow is shown on desktop only, as in the boards | Followed the design |
+| BMI | The sex field does not change the number: adult BMI and its categories are the same for women and men. Kept because the UI design has it; the result sentence names the selection (C6). Alternative considered: a one-line note "Adult BMI ranges are the same for women and men", or removing the field | Follows the design; can be revisited with the product team |
+| BMI (mobile) | Mobile shows no legend and no "See your GLP-1 Options" link, as on the mobile board | Followed the design |
 
 ## Self-designed interaction states
 
@@ -108,6 +114,10 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | Hero language marquee | Rows drift in opposite directions; hover middle pauses, hover a faded edge speeds towards it; touch drag scrubs with inertia; focus pauses; static scrollable rows under reduced motion | Requested behaviour (C1); makes it easy to find a language | `Sections/Hero/Languages`, e2e `hero.spec.ts` |
 | Hero category card | Whole card clickable; hover lifts 4px with a softer shadow and the product image grows 4%; pressed shrinks to 0.98 | Requested bubble feedback on the whole card | `Sections/Hero/Card*` |
 | Trust strip | Continuous leftward scroll (CSS); pauses while hovered; static, wrapping list under reduced motion | Requested auto-scroll (C2); pausing gives users control over moving content (WCAG 2.2.2) | `Sections/TrustStrip/*` |
+| SegmentedControl (BMI units) | Selected pill slides to the other option with a short liquid squash-and-stretch; hover tints the inactive option; pressed shrinks; focus ring on the option. Native radios (arrow keys) | Requested liquid tab switch | `UI/Form controls/Segmented*` |
+| NumberField (BMI inputs) | Hover darkens the border; focus ring; invalid = red border + message; up/down stepper halves highlight on hover/press | Clear feedback for typing and errors | `UI/Form controls/Number*` |
+| RadioPill (BMI sex) | Hover tint + darker border; pressed shrink; focus ring; checked = filled icon + dark border | Consistent with the other pill controls | `UI/Form controls/Radio*` |
+| BMI result | Arc fills and the score counts up (0.9s, fast-then-slow); the scale marker slides to the result; the active legend label turns dark | Makes the result feel computed; instant under reduced motion | `Sections/BMI calculator/Result*` |
 | Full-width buttons (mobile) | A label too long for the width wraps to two lines (min-height keeps single-line buttons unchanged) | Graceful behaviour at 320px instead of overflowing | `UI/Button/ResponsiveMobile` |
 
 ## AI use and session records
