@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Generated application / Storybook output
+.next/
+out/
+dist/
+storybook-static/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+.vercel/
+
+# Temporary files and local diagnostics
+tmp/
+.cache/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+Thumbs.db
+
+# Intentionally track package-lock.json and original files in ai-logs/.
