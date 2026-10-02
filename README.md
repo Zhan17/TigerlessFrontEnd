@@ -63,7 +63,7 @@ Other scripts:
 | `src/styles/` | Storybook foundations (tokens reference) |
 | `scripts/` | Build helpers (SVGR index template) |
 | `src/test/` | Vitest setup |
-| `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour, BMI calculator, services carousel |
+| `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour, BMI calculator, services carousel, FAQ and footer |
 | `.storybook/` | Storybook configuration (`@storybook/nextjs-vite`) |
 
 The full structure (component library in `components/ui`, feature sections in `features/`, a central data contract, `lib/`) is described in `doc/architecture.md`. This table will be updated as those folders are created.
@@ -93,6 +93,12 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | — | Services carousel | White titles sit directly on bright photos (e.g. the sky behind "Free Expedited Shipping") | A light dark-to-transparent scrim behind the top of photo cards | Title contrast |
 | — | Services carousel | Both arrows look identical at the start | "Previous" disabled at the start, "Next" at the end (40% opacity) | Shows where the row ends (agreed disabled states) |
 | F07 | Success stories | "David L" | "David L." | Matches "Maria R." and "An N." |
+| F10 | FAQ | Only the first question has an answer | Answers drafted for the other three from facts elsewhere on the page (lengths vary to exercise the accordion) | An FAQ needs answers; pending client review |
+| — | FAQ | No states designed for the rows | First question open by default, several may be open at once (see states below) | Comparing answers is easier when they can stay open |
+| F11 | Closing CTA | "Start free consultations" | "Start a free consultation" (the shared CTA label, same as the hero) | One wording for the same action |
+| — | Closing CTA (640–1023) | Only the 375 / 1440 layouts exist | Tablets use the centred layout without the tall mobile height | Avoids a large empty gap in the card |
+| F02 | Footer | "Comapny" | "Company" | Typo |
+| F13 | Footer | The divider ends at 1352px while the copyright and the last link column run to 1408px | Divider, columns and copyright share the same right edge | Consistent edge alignment |
 
 ### Noted, not changed
 
@@ -108,6 +114,8 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | Services carousel, chat preview | The chat panel uses 7–9px text, as on the board | It illustrates the app at phone scale; drawn as real text (readable by screen readers, editable from data) and kept at the board's size for fidelity |
 | Services carousel, phone | The phone mockup source is low resolution (the phone is ~265px wide in the exported image), so it is slightly soft at 305px | Same asset as the design; replace with a higher-resolution export when available |
 | Success stories | The photo card is signed "David L." but shows a woman | Content question for the client; the card renders whatever the testimonials resource provides |
+| FAQ (mobile) | The "FAQs" eyebrow is shown on desktop only, as in the boards | Followed the design |
+| Footer | Most footer links have no destination yet (About, Blogs, Contact, Terms…) | They render as buttons with press feedback only (decision C3); they become links once the content provides URLs |
 
 ## Self-designed interaction states
 
@@ -131,6 +139,8 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | Full-width buttons (mobile) | A label too long for the width wraps to two lines (min-height keeps single-line buttons unchanged) | Graceful behaviour at 320px instead of overflowing | `UI/Button/ResponsiveMobile` |
 | Services carousel | Arrows glide one card (0.7s, ease-out-expo); swipe / trackpad / keyboard scroll natively with snap; a swipe or wheel during a glide takes over; arrows disabled at the ends; reduced motion jumps instead of gliding | Requested smooth stepping without fighting native scrolling | `Sections/Services carousel/*`, e2e `services.spec.ts` |
 | Success stories, social links | The IconLink bubble states on dark circles (quote cards) and white circles (photo card) | Same circular-control language as everywhere | `Sections/Success stories/*Social*` |
+| FAQ rows | Closed hover tints the row and pops the chevron circle (1.08); pressed shrinks to 0.99; open = sage header with white text, dashed edge and raised shadow, hover a lighter sage; the answer slides open (300ms, ease-out-expo) and closed (200ms) and the chevron turns; keyboard: Tab / Enter / Space and arrow keys between questions | Clear open state and smooth reveal; no animation on page load | `Sections/FAQ/*`, e2e `faq-footer.spec.ts` |
+| Footer links | Hover turns the text mint, pressed a deeper green; social circles use the IconLink states | Readable feedback on the dark background | `Sections/Footer/*` |
 
 ## AI use and session records
 
@@ -145,7 +155,7 @@ Update this table as work continues. Working documents and handoff summaries do 
 
 - PDF requirement extraction and Figma design audit: done (see `doc/design.md`).
 - Scaffold: `npm install`, `build`, `dev`, `storybook`, `lint`, `typecheck`, `test` and `test:e2e` verified from a clean install on Node 24.19.0 / npm 11.17.0.
-- Page: navigation, hero, trust strip, how it works, the three program sections with products and the BMI calculator, the services carousel and the success stories are implemented and compared with both boards (375 / 1440) plus 320, 768, 1024, 1280 and 1920. FAQ, closing CTA and footer are next.
+- Page: navigation, hero, trust strip, how it works, the three program sections with products and the BMI calculator, the services carousel, the success stories, the FAQ, the closing CTA and the footer are implemented and compared with both boards (375 / 1440) plus 320, 768, 1024, 1280 and 1920. The page height at 1440 matches the desktop board (10155px).
 - AI transcript export: pending.
 
 See [current handoff](doc/tasks-handoff.md) for the next concrete task.
