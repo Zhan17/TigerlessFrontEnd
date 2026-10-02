@@ -50,7 +50,10 @@ export const Image = z.object({
   height: z.number().int().positive(),
 });
 
-/** Money in minor units (cents) + ISO 4217 currency; formatted with Intl. */
+/**
+ * Money in the currency's minor units (cents for USD, yen for JPY, fils
+ * for KWD) + ISO 4217 code; formatted with Intl, which knows the decimals.
+ */
 export const Money = z.object({
   amountMinor: z.number().int().nonnegative(),
   currency: z.string().length(3),
