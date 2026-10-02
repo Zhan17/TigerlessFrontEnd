@@ -46,8 +46,8 @@ export function SegmentedControl<T extends string>({
           <label
             key={option.value}
             className={cn(
-              "relative flex min-w-20 cursor-pointer items-center justify-center rounded-full px-4",
-              "text-label font-medium transition-[color,background-color,scale] duration-(--duration-base) ease-standard",
+              "relative flex min-w-20 flex-1 cursor-pointer items-center justify-center rounded-full px-3 whitespace-nowrap",
+              "text-badge font-medium transition-[color,background-color,scale] duration-(--duration-base) ease-standard",
               "has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-focus",
               "active:scale-[0.97]",
               checked
