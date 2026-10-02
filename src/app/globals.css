@@ -8,7 +8,7 @@
  * aliases below, not raw hex values or Tailwind's default palette.
  */
 
-@theme {
+@theme static {
   /* Drop Tailwind's default palette so only design tokens are available. */
   --color-*: initial;
   --color-white: #ffffff;

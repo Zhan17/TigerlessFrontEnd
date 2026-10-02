@@ -1,4 +1,6 @@
 import type { Preview } from "@storybook/nextjs-vite";
+import { useEffect } from "react";
+import { workSans } from "../src/app/fonts";
 import "../src/app/globals.css";
 
 const preview: Preview = {
@@ -10,6 +12,18 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story) => {
+      // Mirror the root layout: expose the Work Sans variable on <html>.
+      useEffect(() => {
+        document.documentElement.classList.add(
+          workSans.variable,
+          "antialiased",
+        );
+      }, []);
+      return <Story />;
+    },
+  ],
 };
 
 export default preview;

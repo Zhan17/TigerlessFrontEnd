@@ -1,14 +1,6 @@
 import type { Metadata } from "next";
-import { Work_Sans } from "next/font/google";
+import { workSans } from "./fonts";
 import "./globals.css";
-
-// The design uses Work Sans only, at weights 400 and 500.
-const workSans = Work_Sans({
-  variable: "--font-work-sans",
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "Apsu — Healthcare that speaks your language",
