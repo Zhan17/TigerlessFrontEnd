@@ -50,6 +50,7 @@
   --color-input: #f6f8fa; /* Background/Normal [25]: input fields */
   --color-mist: #f4fafa; /* Background Color */
   --color-faq-tint: #f0f6f3; /* expanded FAQ item */
+  --color-chat-panel: #e9f4f2; /* chat preview panel (services carousel) */
 
   /* Borders */
   --color-border-mint: #cddcd3; /* Border Mint: inputs, outlined buttons */
@@ -174,6 +175,16 @@
   --text-stat--line-height: 1.25;
   --text-stat-label: clamp(0.75rem, 0.618rem + 0.5634vw, 1.125rem);
   --text-stat-label--line-height: 1.24;
+  /*
+   * Chat preview inside the services carousel: an illustration of the app
+   * UI, drawn at the board's size on both boards (9 / 8 / 7px).
+   */
+  --text-chat-title: 0.5625rem;
+  --text-chat-title--line-height: 1.3;
+  --text-chat: 0.5rem;
+  --text-chat--line-height: 1.25;
+  --text-chat-meta: 0.4375rem;
+  --text-chat-meta--line-height: 1.15;
   /* Captions (BMI scale legend): 12 */
   --text-caption: 0.75rem;
   --text-caption--line-height: 1;
@@ -239,6 +250,20 @@
     11.5625rem
   );
   --spacing-highlight-stat-gap: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /*
+   * Services carousel: extra top space after the programs 0 -> 80 (200 in
+   * total on desktop), heading -> cards 24 -> 48, cards 333x510 -> 382x654
+   * with gaps 12 -> 24. Inside the chat card: phone 244 -> 305 wide, its top
+   * 96 -> 126, the chat panel 38 -> 60 above the card bottom.
+   */
+  --spacing-carousel-top: clamp(0rem, -1.7606rem + 7.5117vw, 5rem);
+  --spacing-carousel-gap: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem);
+  --spacing-service-w: clamp(20.8125rem, 19.7342rem + 4.6009vw, 23.875rem);
+  --spacing-service-h: clamp(31.875rem, 28.706rem + 13.5211vw, 40.875rem);
+  --spacing-service-gap: clamp(0.75rem, 0.4859rem + 1.1268vw, 1.5rem);
+  --spacing-phone-w: clamp(15.25rem, 13.9076rem + 5.7277vw, 19.0625rem);
+  --spacing-phone-top: clamp(6rem, 5.3398rem + 2.8169vw, 7.875rem);
+  --spacing-chat-bottom: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
   /* Form controls (BMI inputs, radios, segmented control): 40 -> 52 */
   --spacing-control: clamp(2.5rem, 2.2359rem + 1.1268vw, 3.25rem);
   /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
@@ -255,6 +280,7 @@
   --radius-card: 1rem; /* 16: cards, BMI panels */
   --radius-panel: 0.75rem; /* 12: FAQ items */
   --radius-feature: 1.5rem; /* 24: program feature cards (sampled) */
+  --radius-bubble: 0.5rem; /* 8: chat bubbles in the services carousel */
 
   /* ---- Shadows ----------------------------------------------------------- */
   --shadow-*: initial;

@@ -12,6 +12,13 @@ export const uiCopy = {
   menu: { open: "Open menu", close: "Close menu", title: "Menu" },
   hero: { languages: "Languages available for your consultation" },
   trustStrip: { label: "Why patients choose Apsu" },
+  carousel: {
+    roleDescription: "carousel",
+    slideRoleDescription: "slide",
+    previous: "Previous",
+    next: "Next",
+    slide: (index: number, total: number) => `${index} of ${total}`,
+  },
   bmi: {
     units: { label: "Units", imperial: "ft / lbs", metric: "cm / kg" },
     height: "Height",

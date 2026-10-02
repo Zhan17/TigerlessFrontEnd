@@ -3,6 +3,7 @@ import { BmiCalculator, toBmiProps } from "@/features/bmi";
 import { Hero, toHeroProps } from "@/features/hero";
 import { HowItWorks, toHowItWorksProps } from "@/features/how-it-works";
 import { SiteHeader, toNavigationProps } from "@/features/navigation";
+import { ServicesCarousel, toOnlineCareProps } from "@/features/online-care";
 import { ProgramSection, toProgramSectionsProps } from "@/features/programs";
 import { TrustStrip } from "@/features/trust-strip";
 
@@ -18,6 +19,7 @@ export default async function HomePage() {
     data.products,
   );
   const { programId: bmiHost, ...bmi } = toBmiProps(data.home);
+  const onlineCare = toOnlineCareProps(data.home, data.services);
 
   return (
     <>
@@ -33,6 +35,9 @@ export default async function HomePage() {
             </ProgramSection>
           ))}
         </div>
+        {onlineCare.services.length > 0 ? (
+          <ServicesCarousel {...onlineCare} />
+        ) : null}
       </main>
     </>
   );
