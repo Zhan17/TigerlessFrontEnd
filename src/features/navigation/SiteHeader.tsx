@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { LogoIcon } from "@/components/icons";
 import { CtaButton } from "@/features/shared/CtaButton";
+import { HomeLink } from "@/features/shared/HomeLink";
 import { cn } from "@/lib/cn";
 import { uiCopy } from "@/lib/ui-copy";
 import { MobileMenu } from "./MobileMenu";
@@ -42,13 +43,12 @@ export function SiteHeader({ items, ctas }: NavigationProps) {
           "nav:grid nav:h-15 nav:grid-cols-[1fr_auto_1fr] nav:py-1.5 nav:pr-1.5 nav:pl-6",
         )}
       >
-        <a
-          href="/"
+        <HomeLink
           aria-label={uiCopy.nav.home}
           className="justify-self-start rounded-full text-heading"
         >
           <LogoIcon className="h-8 w-[5.4375rem]" />
-        </a>
+        </HomeLink>
 
         <ul className="hidden items-center gap-4 justify-self-center nav:flex">
           {items.map((item) => (

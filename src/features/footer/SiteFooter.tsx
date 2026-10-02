@@ -1,5 +1,6 @@
 import { LogoIcon } from "@/components/icons";
 import { SocialLinks } from "@/components/ui/social-links";
+import { HomeLink } from "@/features/shared/HomeLink";
 import { RichText } from "@/features/shared/RichText";
 import { TextAction } from "@/features/shared/TextAction";
 import { cn } from "@/lib/cn";
@@ -36,9 +37,9 @@ export function SiteFooter({
       <div className="mx-auto max-w-footer">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-8">
           <div>
-            <a href="/" aria-label={uiCopy.nav.home} className="inline-block">
+            <HomeLink aria-label={uiCopy.nav.home} className="inline-block">
               <LogoIcon className="h-20.75 w-56.5" />
-            </a>
+            </HomeLink>
             <p className="mt-3 max-w-[22.5rem] text-footer-title">{tagline}</p>
           </div>
 

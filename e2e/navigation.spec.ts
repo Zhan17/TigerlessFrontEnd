@@ -58,3 +58,25 @@ test("nav stays visible while scrolling and gains a stronger shadow", async ({
   expect(top).toBeGreaterThanOrEqual(0);
   expect(top).toBeLessThan(20);
 });
+
+test("the logo glides back to the top on the home page without reloading", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/#faq");
+  await expect
+    .poll(() => page.evaluate(() => window.scrollY))
+    .toBeGreaterThan(1000);
+  await page.evaluate(() => {
+    (window as Window & { __sameDocument?: boolean }).__sameDocument = true;
+  });
+
+  await page.getByRole("link", { name: "Apsu home" }).first().click();
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  expect(
+    await page.evaluate(
+      () => (window as Window & { __sameDocument?: boolean }).__sameDocument,
+    ),
+  ).toBe(true);
+  await expect(page).toHaveURL(/\/$/);
+});
