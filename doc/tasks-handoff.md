@@ -53,7 +53,16 @@
 
 ## In Progress
 
-- 无。
+- **T06 基础组件**（进行中）。用户在 T06 开始时做的决定：
+  - 用 `storybook-addon-pseudo-states` 为 hover / focus / 按下各做一个 story，所以这些交互状态要用 CSS 实现，不用 Motion 的 whileHover
+  - **禁用态只有两处**：轮播箭头滑到两端时、BMI 输入无效时的 “Calculate BMI”；其他按钮都没有禁用态（design.md 未改动，以这里为准）
+
+  已完成：
+  - `0b15b9b` 安装 pseudo-states 插件
+  - `83be438` 修复 tailwind-merge 不认识自定义 token 的问题（原来会把 `text-button` 当成颜色删掉）
+  - `3d4d84f` Button：primary / secondary / outline，lg / md，可选箭头，全宽；hover = 放大到 1.03 + 色调变化 + 箭头右移，按下 = 缩小到 0.97，禁用 = 40% 透明度；每个状态一个 story；有单元测试
+
+  接下来：IconButton（圆形按钮：轮播箭头、社交图标）→ Eyebrow / CheckList / Price / Rating → SocialLinks → 语言胶囊 Pill
 
 ## Next
 
@@ -83,6 +92,7 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 | K9 | 移动端白色外壳的圆角还没量（token 现在是 32） | T08 做 Hero 时核对 |
 | K10 | Tailwind 的默认色板、字号、圆角、阴影都被清掉了，只能用设计 token | 有意为之；需要新值时在 `globals.css` 里加 token |
 | K11 | 新增 token 时要避免和 Tailwind 工具类前缀撞名（例：`--color-body` 和 `--text-body` 都对应 `text-body`） | 新增 token 后用一次构建检查生成的 CSS |
+| K13 | hover / 按下的放大比例（1.03 / 0.97）和色调变化是我自己设计的默认值 | 用户统一讲动效时可能会调整 |
 | K12 | 评价卡片上的 LinkedIn 图标用的是 Hugeicons `linkedin-01`（描边），设计里是实心的 “in” | 按用户规则，图标达到设计意图即可，不需要处理 |
 
 ## 如何审查（给接手的 agent 或审查者）
