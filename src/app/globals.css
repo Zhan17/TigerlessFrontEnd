@@ -82,6 +82,61 @@
   --color-inverse: var(--color-brand-900);
   --color-on-inverse: var(--color-off-white);
   --color-focus: var(--color-green-600);
+
+  /* ---- Typography ------------------------------------------------------ */
+  /*
+   * Fluid sizes interpolate linearly from the 375px board value to the
+   * 1440px board value (clamped outside that range), so both boards match
+   * the design exactly and widths in between scale smoothly. Pairs were
+   * derived from Figma text styles and text-box heights on each board.
+   * Work Sans only uses weights 400 (font-normal) and 500 (font-medium).
+   */
+  --text-*: initial;
+
+  /* Hero H1: 36/1.24 -> 72/1.1 */
+  --text-display: clamp(2.25rem, 1.4577rem + 3.3803vw, 4.5rem);
+  --text-display--line-height: clamp(2.79rem, 2.0294rem + 3.2451vw, 4.95rem);
+  /* Section H2 (How it works, programs, carousel, stories, FAQ): 32 -> 52 */
+  --text-section: clamp(2rem, 1.5599rem + 1.8779vw, 3.25rem);
+  --text-section--line-height: 1.24;
+  /* How-it-works card titles: 32 -> 40 */
+  --text-card-title: clamp(2rem, 1.8239rem + 0.7512vw, 2.5rem);
+  --text-card-title--line-height: 1.24;
+  /* Carousel card headers, testimonial categories: 24 -> 32 */
+  --text-card-heading: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+  --text-card-heading--line-height: 1.16;
+  /* Product names: 20 -> 32 */
+  --text-product-title: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
+  --text-product-title--line-height: 1.16;
+  /* Hero category card titles, FAQ questions, BMI title: 20 -> 24 */
+  --text-title: clamp(1.25rem, 1.162rem + 0.3756vw, 1.5rem);
+  --text-title--line-height: 1.16;
+  /* Body copy and check-list items: 16 -> 20 */
+  --text-body: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  --text-body--line-height: 1.6;
+  /* Smaller body copy (card descriptions, FAQ answers): 16 -> 18 */
+  --text-body-sm: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-body-sm--line-height: 1.6;
+  /* Buttons and nav links: 16 -> 18 */
+  --text-button: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-button--line-height: 1.32;
+  /* Language pills, segmented control: 14 -> 16 */
+  --text-label: clamp(0.875rem, 0.831rem + 0.1878vw, 1rem);
+  --text-label--line-height: 1.24;
+  /* Hero trust badges: 12 -> 14 */
+  --text-badge: clamp(0.75rem, 0.706rem + 0.1878vw, 0.875rem);
+  --text-badge--line-height: 1.6;
+  /* Eyebrow labels (HOW IT WORKS, WEIGHT LOSS, FAQs): 16, tracked 2px */
+  --text-eyebrow: 1rem;
+  --text-eyebrow--line-height: 1.32;
+  --text-eyebrow--letter-spacing: 0.125rem;
+  /* Hero category card eyebrows: 16 -> 18, tracked 2px */
+  --text-eyebrow-lg: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-eyebrow-lg--line-height: 1.32;
+  --text-eyebrow-lg--letter-spacing: 0.125rem;
+  /* Captions (BMI scale legend): 12 */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1;
 }
 
 /*
