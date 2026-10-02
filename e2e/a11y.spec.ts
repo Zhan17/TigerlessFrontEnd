@@ -45,7 +45,11 @@ test("tabbing reaches every control in order with a visible focus ring", async (
   const seen: string[] = [];
   for (let step = 0; step < 200; step += 1) {
     await page.keyboard.press("Tab");
-    // Smooth scrolling brings the focused element in over a few frames.
+    // Focus scrolls smoothly (html scroll-behavior), so wait for the
+    // element to arrive. R06: under a loaded parallel run one stop (the
+    // footer FAQs link) was still off screen after 1.5 s; the condition is
+    // unchanged, only the time budget is larger, and a miss now reports the
+    // element's position.
     await page
       .waitForFunction(
         () => {
@@ -55,7 +59,7 @@ test("tabbing reaches every control in order with a visible focus ring", async (
           return box.bottom > 0 && box.top < window.innerHeight;
         },
         undefined,
-        { timeout: 1500 },
+        { timeout: 5000 },
       )
       .catch(() => undefined);
     const info = await page.evaluate(() => {

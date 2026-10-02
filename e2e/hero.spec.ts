@@ -106,8 +106,19 @@ test.describe("language marquee", () => {
     expect(moved).toBe(true);
     // Measure while the finger is still down: after release the row keeps
     // gliding with inertia, so a later reading depends on timing (and could
-    // land a whole period away, which the wrap below would read as ~0).
-    const after = await trackX(page, 0);
+    // land a whole period away, which the wrap would read as ~0). The drag
+    // is applied on the row's next animation frame, so poll for it.
+    const period = await marquee(page)
+      .locator(".will-change-transform > div")
+      .first()
+      .evaluate((el) => el.getBoundingClientRect().width);
+    await expect
+      .poll(async () => {
+        const delta = Math.abs((await trackX(page, 0)) - before);
+        // Dragged ~200px left (offset wraps, so compare both ways).
+        return Math.min(delta, Math.abs(period - delta));
+      })
+      .toBeGreaterThan(120);
     await page.evaluate(() => {
       const viewport = [...document.querySelectorAll("fieldset")]
         .find((f) =>
@@ -126,13 +137,6 @@ test.describe("language marquee", () => {
         }),
       );
     });
-    // Dragged ~200px left (offset wraps, so compare the distance both ways).
-    const period = await marquee(page)
-      .locator(".will-change-transform > div")
-      .first()
-      .evaluate((el) => el.getBoundingClientRect().width);
-    const delta = Math.abs(after - before);
-    expect(Math.min(delta, Math.abs(period - delta))).toBeGreaterThan(120);
     // No pill got toggled by the drag.
     await expect(
       marquee(page).locator("button[aria-pressed=true]:not([aria-hidden] *)"),
