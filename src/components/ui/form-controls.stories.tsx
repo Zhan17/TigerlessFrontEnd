@@ -38,6 +38,11 @@ export const SegmentedHover: Story = {
   render: () => <Units />,
   parameters: { pseudo: { hover: ["label:nth-of-type(2)"] } },
 };
+/** Pressing the inactive option: its label shrinks slightly. */
+export const SegmentedPressed: Story = {
+  render: () => <Units />,
+  parameters: { pseudo: { active: ["label:nth-of-type(2)"] } },
+};
 export const SegmentedFocus: Story = {
   render: () => <Units />,
   parameters: { pseudo: { focusVisible: ["input"] } },
@@ -69,6 +74,15 @@ export const NumberFilled: Story = { render: () => <Field initial="5" /> };
 export const NumberHover: Story = {
   render: () => <Field initial="5" />,
   parameters: { pseudo: { hover: true } },
+};
+/** Pressing the stepper halves: the pressed half darkens. */
+export const NumberIncrementPressed: Story = {
+  render: () => <Field initial="5" />,
+  parameters: { pseudo: { active: ['button[aria-label^="Increase"]'] } },
+};
+export const NumberDecrementPressed: Story = {
+  render: () => <Field initial="5" />,
+  parameters: { pseudo: { active: ['button[aria-label^="Decrease"]'] } },
 };
 export const NumberFocus: Story = {
   render: () => <Field initial="5" />,
@@ -104,6 +118,11 @@ export const RadioDefault: Story = { render: () => <Sex /> };
 export const RadioHover: Story = {
   render: () => <Sex />,
   parameters: { pseudo: { hover: ["label:first-of-type"] } },
+};
+/** Pressing an option: it shrinks slightly. */
+export const RadioPressed: Story = {
+  render: () => <Sex />,
+  parameters: { pseudo: { active: ["label:first-of-type"] } },
 };
 export const RadioFocus: Story = {
   render: () => <Sex />,
