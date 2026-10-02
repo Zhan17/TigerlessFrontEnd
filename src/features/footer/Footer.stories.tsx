@@ -60,3 +60,15 @@ export const CtaButtonPressed: Story = {
   ...WithClosingCta,
   parameters: { pseudo: { active: ["section button"] } },
 };
+
+/** Footer logo link (back to the top): hover / pressed / focus. */
+const logo = 'a[aria-label="Apsu home"]';
+export const LogoHover: Story = {
+  parameters: { pseudo: { hover: [logo] } },
+};
+export const LogoPressed: Story = {
+  parameters: { pseudo: { active: [logo] } },
+};
+export const LogoFocus: Story = {
+  parameters: { pseudo: { focusVisible: [logo] } },
+};

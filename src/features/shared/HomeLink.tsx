@@ -1,6 +1,7 @@
 "use client";
 
 import type { MouseEvent, ReactNode } from "react";
+import { cn } from "@/lib/cn";
 
 type HomeLinkProps = {
   "aria-label": string;
@@ -13,8 +14,12 @@ type HomeLinkProps = {
  * top instead of reloading (and drops any #section from the URL); modified
  * clicks (new tab, etc.) and other pages keep normal link behaviour.
  * Reduced motion jumps instead of gliding.
+ *
+ * States (same language as the other controls): hover = slight lift in
+ * scale (callers add a colour shift), pressed = small shrink, focus = the
+ * global ring.
  */
-export function HomeLink({ children, ...props }: HomeLinkProps) {
+export function HomeLink({ children, className, ...props }: HomeLinkProps) {
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     const modified =
       event.button !== 0 ||
@@ -35,7 +40,15 @@ export function HomeLink({ children, ...props }: HomeLinkProps) {
   };
 
   return (
-    <a href="/" onClick={onClick} {...props}>
+    <a
+      href="/"
+      onClick={onClick}
+      className={cn(
+        "inline-block transition-[scale,color] duration-(--duration-base) ease-standard hover:scale-[1.03] active:scale-[0.97]",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </a>
   );

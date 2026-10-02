@@ -62,3 +62,18 @@ export const LinkCurrentSection: Story = {
   render: () => (linkItem ? <NavLink item={linkItem} active /> : <span />),
   parameters: { layout: "centered" },
 };
+
+/** Logo link (back to the top): hover / pressed / focus. */
+const logo = 'a[aria-label="Apsu home"]';
+export const LogoHover: Story = {
+  ...Desktop,
+  parameters: { ...Desktop.parameters, pseudo: { hover: [logo] } },
+};
+export const LogoPressed: Story = {
+  ...Desktop,
+  parameters: { ...Desktop.parameters, pseudo: { active: [logo] } },
+};
+export const LogoFocus: Story = {
+  ...Desktop,
+  parameters: { ...Desktop.parameters, pseudo: { focusVisible: [logo] } },
+};

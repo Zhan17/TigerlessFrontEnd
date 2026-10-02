@@ -37,7 +37,10 @@ export function SiteFooter({
       <div className="mx-auto max-w-footer">
         <div className="flex flex-col gap-10 lg:flex-row lg:justify-between lg:gap-8">
           <div>
-            <HomeLink aria-label={uiCopy.nav.home} className="inline-block">
+            <HomeLink
+              aria-label={uiCopy.nav.home}
+              className="hover:text-mint-100 active:text-green-light"
+            >
               <LogoIcon className="h-20.75 w-56.5" />
             </HomeLink>
             <p className="mt-3 max-w-[22.5rem] text-footer-title">{tagline}</p>

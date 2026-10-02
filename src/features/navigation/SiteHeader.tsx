@@ -45,7 +45,7 @@ export function SiteHeader({ items, ctas }: NavigationProps) {
       >
         <HomeLink
           aria-label={uiCopy.nav.home}
-          className="justify-self-start rounded-full text-heading"
+          className="justify-self-start rounded-full text-heading hover:text-accent"
         >
           <LogoIcon className="h-8 w-[5.4375rem]" />
         </HomeLink>
