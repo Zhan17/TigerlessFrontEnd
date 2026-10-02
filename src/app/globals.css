@@ -164,6 +164,9 @@
   --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
   --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
 
+  /* Navigation: full desktop nav from 70rem (all links fit on one line). */
+  --breakpoint-nav: 70rem;
+
   /* ---- Radius ------------------------------------------------------------ */
   /* rounded-full stays available for pills and circular buttons. */
   --radius-*: initial;
@@ -197,6 +200,12 @@
 
 @layer base {
   /* One consistent, visible focus ring for every interactive element. */
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchored sections clear of the sticky nav. */
+    scroll-padding-top: 6rem;
+  }
+
   :focus-visible {
     outline: 2px solid var(--color-focus);
     outline-offset: 2px;

@@ -8,6 +8,8 @@ export const uiCopy = {
     from: "From",
     perInterval: { week: "/wk", month: "/mo", year: "/yr" },
   },
+  nav: { label: "Main", home: "Apsu home" },
+  menu: { open: "Open menu", close: "Close menu", title: "Menu" },
   rating: {
     label: (value: number, max: number) => `Rated ${value} out of ${max}`,
   },

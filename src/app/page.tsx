@@ -1,8 +1,13 @@
-// Placeholder until the home page sections are implemented.
-export default function HomePage() {
+import { getHomePageData } from "@/content/api";
+import { SiteHeader, toNavigationProps } from "@/features/navigation";
+
+export default async function HomePage() {
+  const data = await getHomePageData();
+
   return (
-    <main className="p-8">
-      <h1 className="text-2xl font-medium">Apsu</h1>
-    </main>
+    <>
+      <SiteHeader {...toNavigationProps(data.home, data.programs)} />
+      <main className="min-h-[200vh]" />
+    </>
   );
 }
