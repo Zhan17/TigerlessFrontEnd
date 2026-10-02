@@ -60,6 +60,11 @@ export const uiCopy = {
     },
     profile: (name: string, platform: string) => `${name} on ${platform}`,
   },
+  footer: {
+    navLabel: "Footer",
+    copyright: (year: number, holder: string) =>
+      `© ${year} ${holder}. All rights reserved.`,
+  },
   rating: {
     label: (value: number, max: number) => `Rated ${value} out of ${max}`,
   },
