@@ -2,7 +2,7 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** scaffold, design tokens, icons, the base component library (stories per state) and the data layer (Zod contract, mocks, data access) are in place. The home page sections are not implemented yet; the page is a placeholder.
+**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation and hero. The remaining sections are in progress (see `doc/tasks-handoff.md`).
 
 ## Assignment and design
 
@@ -54,34 +54,53 @@ Other scripts:
 | `doc/tasks-handoff.md` | Current progress, next task, validation evidence, and handoff |
 | `ai-logs/` | Original AI session records and an index explaining their scope |
 
-| `src/app/` | Next.js App Router routes (currently a placeholder home page), `globals.css` design tokens, shared font |
+| `src/app/` | App Router route: `page.tsx` fetches the data once and passes mapped props to each section; `globals.css` design tokens; shared font |
 | `src/components/ui/` | Component library: one folder per component with its stories and tests (Button, IconButton/IconLink, Pill, Eyebrow, CheckList, Price, Rating, SocialLinks) |
 | `src/components/icons/` | `svg/` normalised sources (origins in `SOURCES.md`) and `generated/` typed components from `npm run icons` |
+| `src/features/` | Page sections, one folder per feature (`navigation`, `hero`, …): section components, the mapper from API types to component props (`to-*-props.ts`), stories and tests. `shared/` holds content-to-UI helpers (CtaButton, RichText, link and icon mapping) |
 | `src/content/` | Data layer: `schemas/` (Zod API contract, the future backend shape — start here), `mock/` (responses conforming to it), `api/` (data access with `DATA_SOURCE=mock\|api`) |
 | `src/lib/` | Framework-agnostic helpers: `cn` (class merging aware of design tokens), `format/money`, `ui-copy` (fixed interface phrases) |
 | `src/styles/` | Storybook foundations (tokens reference) |
 | `scripts/` | Build helpers (SVGR index template) |
 | `src/test/` | Vitest setup |
-| `e2e/` | Playwright checks (responsive floor 320–1920 px) |
+| `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour |
 | `.storybook/` | Storybook configuration (`@storybook/nextjs-vite`) |
 
 The full structure (component library in `components/ui`, feature sections in `features/`, a central data contract, `lib/`) is described in `doc/architecture.md`. This table will be updated as those folders are created.
 
 ## Design deviations
 
-No design fix has been implemented yet. Design details have not been verified directly through Figma; connector access failed during initialization. Candidate issues in working notes are not accepted deviations.
+Every change made to the supplied design, and why. Rows are added as each section is implemented (IDs refer to `doc/design.md` §4b). Copy fixes live in the mock content (`src/content/mock`), marked with the same ID.
 
-Record **every implemented design fix** here, rather than keeping the submission log only in internal documentation.
+| ID | Section | Original | Change | Why |
+| --- | --- | --- | --- | --- |
+| F06 | Hero, language pills | "Русскийالعربية" in one pill (two languages, two writing directions) | Two pills, "Русский" and "العربية"; Arabic gets `lang="ar"` and `dir="rtl"` | One language per pill; correct rendering and screen-reader pronunciation of RTL text |
+| — | Hero, language pills | Labels carried trailing spaces ("Español ") | Clean labels from the languages resource | Spaces offset the text from the pill centre |
+| — | Hero, category cards | First card used a different shadow from the other two | Same card shadow on all three | Inconsistent elevation for identical components |
+| — | Mobile menu | Close icon drawn in a navy blue outside the palette | Brand dark green, same as the menu icon | Keeps the two toggle icons consistent |
 
-| ID | Section / source node | Original issue | Implemented change | Why | Verification |
-| --- | --- | --- | --- | --- | --- |
+### Noted, not changed
+
+| Section | Observation | Why it was left |
+| --- | --- | --- |
+| Hero, category cards | All three cards show the same Tirzepatide "Weight Loss Program" vial, including Birth Control and Sleep | Treated as a placeholder image (product decision Q4); swapping images is content, not UI |
+| Hero, badges | `#21ac88` 14px text on white is about 2.9:1, below WCAG AA | Kept for fidelity in this version; to be addressed in a later colour pass (C10) |
+| Hero, category cards | Eyebrow "Weight management" vs "Weight Loss" elsewhere | Naming / copy question, low UI impact (Q7) |
 
 ## Self-designed interaction states
 
-No interaction states have been implemented yet. Record every self-designed state and its rationale here; link the corresponding Storybook stories once available.
+The design has no hover / focus / pressed states. All interaction states are CSS (so Storybook's pseudo-states addon can show each one); Motion is used only for the menu reveal. Shared rules: hover applies only on devices that can hover (touch gets press feedback), one green focus ring everywhere (`:focus-visible`, 2px, offset 2px), and `prefers-reduced-motion` disables movement.
 
-| Component | States / transition | Why | Story / verification |
+| Component | States / transition | Why | Stories |
 | --- | --- | --- | --- |
+| Button (primary / secondary / outline) | Hover: scale 1.03, one tone darker (primary), soft shadow, arrow nudges 2px right. Pressed: scale 0.97. Disabled: 40% opacity, no hover (only "Calculate BMI") | A subtle "bubble" that is consistent across all pill buttons | `UI/Button/*` |
+| IconButton / IconLink (carousel, social, menu) | Hover: scale 1.08 + fill (light green on outline, lighter tone on solid). Pressed: scale 0.94. Disabled: 40% (carousel ends only) | Same bubble language for every circular control | `UI/IconButton/*` |
+| Pill (language) | Hover: scale 1.05 + tint. Pressed: 0.96. Selected: design's light-green fill (toggle, multi-select) | Pills are toggles (decision C1) | `UI/Pill/*` |
+| Nav link | Hover: text lifts 2px and turns green. Pressed: settles with a small shrink. Current section: green + underline (scroll-spy) | "Floating" text feedback requested; current-section highlight helps orientation | `Sections/Navigation/Link*` |
+| Sticky nav | Stays 12px from the top; shadow strengthens once the page scrolls | Keeps navigation reachable on a long page | e2e `navigation.spec.ts` |
+| Mobile menu | Circular reveal from the menu button (top-right) with items sliding down; reverse on close; opacity only under reduced motion. Focus trap, Esc, scroll lock, focus return (Radix Dialog) | Requested reveal direction; accessible dialog behaviour | `Sections/Navigation/MobileMenuOpen` |
+| Hero language marquee | Rows drift in opposite directions; hover middle pauses, hover a faded edge speeds towards it; touch drag scrubs with inertia; focus pauses; static scrollable rows under reduced motion | Requested behaviour (C1); makes it easy to find a language | `Sections/Hero/Languages`, e2e `hero.spec.ts` |
+| Hero category card | Whole card clickable; hover lifts 4px with a softer shadow and the product image grows 4%; pressed shrinks to 0.98 | Requested bubble feedback on the whole card | `Sections/Hero/Card*` |
 
 ## AI use and session records
 
