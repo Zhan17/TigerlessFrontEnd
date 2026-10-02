@@ -14,3 +14,6 @@
 # Preserve original AI exports byte-for-byte, including line endings.
 ai-logs/** -text -diff
 ai-logs/README.md text eol=lf diff
+.nvmrc text eol=lf
+*.js text eol=lf
+*.svg text eol=lf
