@@ -1,10 +1,123 @@
 @import "tailwindcss";
 
-/* Design tokens are added in the next task; only the font is wired here. */
+/*
+ * Design tokens for the Apsu home page.
+ * Source: Figma variables (file 0WMyYj8ycFQlykicaNToc1) plus colours sampled
+ * from the 1440/375 board screenshots where no variable exists. Raw palette
+ * values are kept exactly as designed; components should use the semantic
+ * aliases below, not raw hex values or Tailwind's default palette.
+ */
+
+@theme {
+  /* Drop Tailwind's default palette so only design tokens are available. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ---- Raw palette ---------------------------------------------------- */
+  /* Brand greens */
+  --color-brand-900: #102b1c; /* Primary/Brand 800, heading text 1, footer bg */
+  --color-brand-800: #173a26; /* Brand/800: footer social circles */
+  --color-green-600: #00774d; /* Highlighted / Label text, Secondary_Mint/600 */
+  --color-green-500: #009269; /* Secondary_Mint/500 */
+  --color-mint-400: #21ac88; /* Secondary_Mint/400: hero badges */
+  --color-mint-100: #bcffe6; /* Secondary_Mint/Brand 100 */
+  --color-green-light: #b8d9c6; /* Foundation/Green/Light :active */
+  --color-sage-500: #587362; /* Primary/500: expanded FAQ header */
+  --color-sage-400: #758c7d; /* Primary/400 */
+  --color-sage-300: #91a699; /* Primary/300 */
+  --color-sage-200: #afc1b6; /* Primary/200 */
+
+  /* Neutrals (near-blacks kept distinct for fidelity) */
+  --color-ink-900: #111111; /* Heading text 2, Charcoal 900 */
+  --color-ink-850: #1d1d1d; /* Primary Font Color */
+  --color-ink-800: #2a2a2a; /* Neutral/800: card titles */
+  --color-ink-780: #292b2a; /* Foundation/Neutral/Darker: pill text, BMI score */
+  --color-ink-700: #3b3b3c; /* sub heading text: body copy */
+  --color-ink-600: #585d5a; /* Foundation/Neutral/Dark: pill text */
+  --color-ink-550: #69706c; /* Foundation/Neutral/Normal :hover */
+  --color-ink-500: #6f6f6f; /* Neutral/500: input unit suffix */
+  --color-ink-450: #6c6c6c; /* Disable text: BMI legend */
+  --color-ink-400: #858586; /* Charcoal 400 */
+  --color-ink-300: #a0a0a1; /* Charcoal 300 */
+
+  /* Surfaces */
+  --color-off-white: #faf9f4; /* Background/Off White: page bg */
+  --color-input: #f6f8fa; /* Background/Normal [25]: input fields */
+  --color-mist: #f4fafa; /* Background Color */
+  --color-faq-tint: #f0f6f3; /* expanded FAQ item */
+
+  /* Borders */
+  --color-border-mint: #cddcd3; /* Border Mint: inputs, outlined buttons */
+  --color-border-blue: #83f2ec; /* Border blue: sleep divider */
+  --color-border-pink: #ffc0ff; /* sampled: birth control divider */
+  --color-border-footer: #b5c5bc; /* sampled: footer divider on dark */
+
+  /* Category card fills */
+  --color-card-mint: #bcffe6cc; /* Card Mint (80% alpha) */
+  --color-card-purple: #ffdeff; /* Card Purple */
+  --color-card-blue: #d0fffd; /* Card Blue */
+
+  /* Accents */
+  --color-star: #ffca00; /* sampled: rating stars */
+  --color-bmi-under: #3b82f6; /* BMI scale gradient stops */
+  --color-bmi-healthy: #1a8a79;
+  --color-bmi-over: #f59e0b;
+  --color-bmi-obese: #ef4444;
+
+  /* ---- Semantic aliases (use these in components) --------------------- */
+  --color-page: var(--color-off-white);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-off-white);
+  --color-heading: var(--color-brand-900);
+  --color-heading-strong: var(--color-ink-900);
+  --color-body: var(--color-ink-700);
+  --color-muted: var(--color-ink-450);
+  --color-accent: var(--color-green-600);
+  --color-accent-soft: var(--color-mint-400);
+  --color-primary: var(--color-brand-900);
+  --color-on-primary: var(--color-white);
+  --color-border: var(--color-border-mint);
+  --color-selected: var(--color-green-light);
+  --color-inverse: var(--color-brand-900);
+  --color-on-inverse: var(--color-off-white);
+  --color-focus: var(--color-green-600);
+}
+
+/*
+ * Category themes. Data only carries `category`; the front end maps it to a
+ * theme by setting data-theme on the section/card. Components use the
+ * bg-theme-surface / border-theme-divider utilities, which read the runtime
+ * --theme-* variables, so an unknown category falls back to :root defaults.
+ */
+:root {
+  --theme-surface: var(--color-surface);
+  --theme-divider: var(--color-border);
+}
+
+[data-theme="weight-loss"] {
+  --theme-surface: var(--color-card-mint);
+  --theme-divider: var(--color-border-mint);
+}
+
+[data-theme="birth-control"] {
+  --theme-surface: var(--color-card-purple);
+  --theme-divider: var(--color-border-pink);
+}
+
+[data-theme="sleep"] {
+  --theme-surface: var(--color-card-blue);
+  --theme-divider: var(--color-border-blue);
+}
+
 @theme inline {
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-divider: var(--theme-divider);
   --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
 body {
+  background-color: var(--color-page);
+  color: var(--color-body);
   font-family: var(--font-sans);
 }
