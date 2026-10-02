@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import type { RichText as RichTextContent } from "@/content/schemas";
 import { cn } from "@/lib/cn";
 import { TextAction } from "./TextAction";
@@ -41,7 +42,9 @@ export function RichText({
             {segment.text}
           </span>
         ) : (
-          <span key={key}>{segment.text}</span>
+          // Plain runs stay bare text so spacing between runs is preserved
+          // in the accessible name.
+          <Fragment key={key}>{segment.text}</Fragment>
         );
       })}
     </>
