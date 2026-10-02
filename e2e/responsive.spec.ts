@@ -27,16 +27,34 @@ test("no horizontal overflow from 320px to 1920px", async ({ page }) => {
     const result = await page.evaluate((viewport) => {
       const root = document.documentElement;
       if (root.scrollWidth <= viewport) return null;
+      // Elements sticking out of the viewport that are NOT clipped by an
+      // ancestor (overflow hidden/clip), i.e. the ones that cause scrolling.
+      const clipped = (el: Element) => {
+        for (
+          let p = el.parentElement;
+          p && p !== document.body;
+          p = p.parentElement
+        ) {
+          const { overflowX } = getComputedStyle(p);
+          if (overflowX === "hidden" || overflowX === "clip") {
+            const r = p.getBoundingClientRect();
+            if (r.right <= viewport + 0.5 && r.left >= -0.5) return true;
+          }
+        }
+        return false;
+      };
       const culprits: string[] = [];
       for (const el of document.body.querySelectorAll<HTMLElement>("*")) {
         const rect = el.getBoundingClientRect();
-        if (rect.right > viewport + 0.5 || rect.left < -0.5) {
+        if ((rect.right > viewport + 0.5 || rect.left < -0.5) && !clipped(el)) {
           const id = el.id ? `#${el.id}` : "";
           const cls = el.classList.length
-            ? `.${[...el.classList].slice(0, 3).join(".")}`
+            ? `.${[...el.classList].slice(0, 4).join(".")}`
             : "";
-          culprits.push(`${el.tagName.toLowerCase()}${id}${cls}`);
-          if (culprits.length >= 5) break;
+          culprits.push(
+            `${el.tagName.toLowerCase()}${id}${cls} right=${Math.round(rect.right)}`,
+          );
+          if (culprits.length >= 6) break;
         }
       }
       return { scrollWidth: root.scrollWidth, culprits };
