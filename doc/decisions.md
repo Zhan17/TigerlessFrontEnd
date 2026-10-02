@@ -40,9 +40,35 @@
 
 这一流程不固定谁“更擅长”设计或代码，也不要求每次换工具都新开分支。
 
+## D06：架构与技术选型（用户 2026-10-01 选定）
+
+- 状态：已采用，取代 D04 的草案。F1、F3、F4、F6 已于 2026-10-01 确认：
+  - F1：页面文案另加接口
+  - F3：SVGR 命令行一次性生成组件
+  - F4：Radix
+  - F6：保留 `Intl` 格式化和 `lang` / `dir`
+
+  另外两项也已确定：
+  - 2.6 固定短语放在前端字典
+  - 主题色由前端根据分类映射
+
+  **架构选型已全部确定。**
+- Decision：完整列表见 [architecture.md](architecture.md) 顶部的“决定汇总”。要点：
+  - 混合目录结构（组件库 + 功能区块 + 集中的数据契约）
+  - 接口按资源分；数据通过取数函数 + 环境变量开关提供
+  - Zod 推导 API 类型，加一层映射到组件 props
+  - 组件自己管理 state
+  - BMI 规则写死在前端，刷新不保留
+  - 只做英文
+  - Storybook 用 nextjs-vite；样式变体用 CVA + tailwind-merge；手风琴和菜单用无头组件库；跑马灯用 CSS；轮播用 scroll-snap；图标用 SVGR；图片走动态数据
+  - 测试用 Vitest；响应式检查用 Playwright；代码格式用 Biome
+- Why：既满足“组件库 + 页面”和“评审先看类型”的要求，也符合按功能组织的直觉；保留以后接后端、加子页面的扩展点；工具链以轻量为主。
+- 备选方案：每个决策的其他选项和取舍都在 architecture.md 对应章节，那些是列出的选项，不是经过实测后否决的。
+- 重新考虑条件：搭项目时发现兼容性问题，比如 Storybook vite 版和当前 Next 版本不兼容，或者 SVGR 双重配置出错。
+
 ## D04：架构建议尚未冻结
 
-- 状态：草案，见 [architecture.md](architecture.md)。
+- 状态：**已被 D06 取代**（原为草案），见 [architecture.md](architecture.md)。
 - 建议：单页组合 + ui/sections + types/mock + 简单数据入口。
 - Why：让评审能先看类型，再追踪数据与组件；符合当前单页范围。
 - 替代方案：所有内容放 page.tsx；完整 feature/domain/repository 多层结构。

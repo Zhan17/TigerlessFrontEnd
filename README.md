@@ -33,6 +33,8 @@ Add the actual Node/npm versions, scripts, ports, and committed lockfile when th
 | Path | Purpose |
 | --- | --- |
 | `doc/requirements.md` | Assignment requirements, acceptance criteria, and scope boundaries |
+| `doc/checklist.md` | Working checklist: hard requirements, scored items, bonus, implicit requirements, and easily missed items |
+| `doc/assets-checklist.md` | Design asset inventory: what has been exported, what is missing, and where raw files are staged |
 | `doc/design.md` | Design inventory, evidence, unresolved questions, and Hero audit |
 | `doc/architecture.md` | Proposed code structure, content contracts, and component boundaries |
 | `doc/decisions.md` | Significant choices, reasons, alternatives, and optional model handoff workflow |

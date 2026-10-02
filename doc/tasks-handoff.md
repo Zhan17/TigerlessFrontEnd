@@ -7,8 +7,9 @@
 - 阶段：初始化文档；尚未实现前端或安装依赖。
 - 工作目录：`Front-End Task`，本机路径 `F:\AI\TigerlessTask\Front-End Task`。
 - 本地分支：`main`；交接时重新运行 Git 命令核实，不依赖文档里的旧 commit 值。
-- Figma：读取受阻；已有设计笔记未直接核实。
-- AI：本轮使用 Codex；双模型流程是可选建议，尚未发生 Claude Code 交接。
+- Figma：原始文件读不了（仅查看权限）；用户副本 `0WMyYj8ycFQlykicaNToc1` 可读。**整页逐块审稿已完成**，见 [design.md](design.md)：13 个区块、同类组件、交互 brainstorm、设计错误候选、Q1–Q7 待用户决定。
+- ⚠️ Figma MCP（Starter 计划）调用额度已用完，素材还没导出。参考截图保存在仓库外的 `F:\AI\TigerlessTask\design-ref\`。
+- AI：初始化由 Codex 完成；2026-10-01 起 Claude Code 参与（第 2 个会话：复核需求、确认 Figma 访问）。两段会话的原始记录都需要导出到 `ai-logs/`。
 
 ## Done
 
@@ -27,8 +28,9 @@
 
 | 顺序 | 任务 | 完成条件 |
 | --- | --- | --- |
-| T01 | 核对 Figma 整页及 Hero | 取得桌面/移动画板 node ID 或可读截图；确认全部区块、默认状态及独立移动画板关系；补 design |
-| T02 | 确定首版结构和动态内容契约 | 有实际类型、符合类型的 mock、动态内容覆盖表；重要选择写 decisions，架构从草案更新 |
+| T01 | ✅ 审稿和逐块讨论已完成 | 结论见 design.md 的 4b 节：修正 F01–F14、已发现但不修改的清单、交互方案，C1–C10 全部有结论。C6（BMI 性别如何在结果里体现）实现前再和用户确认一次 |
+| T01b | 导出素材 | 用户按 [assets-checklist.md](assets-checklist.md) 手动导出，放到 `F:\AI\TigerlessTask\design-ref\assets\`；Figma MCP 额度为每月 20 次，2026-10 已用完 |
+| T02 | 架构选型已确定（见 [architecture.md](architecture.md) 的决定汇总 / decisions D06）；下一步是写出数据契约（Zod schema）和 mock | 有实际类型、符合类型的 mock、动态内容覆盖表；重要选择写 decisions，架构从草案更新 |
 | T03 | 初始化 Next.js / Storybook | App Router、TS strict、Tailwind、lockfile 和四个目标命令可用；记录真实版本和运行结果 |
 | T04 | 做首个端到端区块，再逐区块实现 | 数据 → 页面 → 组件链路成立；Hero 与导航先验证两个画板及中间宽度；随后完成全页 |
 | T05 | 交互、stories 与响应式验收 | 每个交互元素有状态/过渡；每个有状态组件每状态有 story；持续缩放 320–1920 并修复问题 |
@@ -50,7 +52,7 @@ P0 和 P1 都需要完成；P2 中如发现实际违背 PDF 的缺陷，提升�
 
 - Turn task：评估并初始化轻量文档及本地 Git，未开始 UI 实现。
 - 本轮变化：见 Done；应用目录树只是提议，不是已有文件。
-- 下一次第一步：读本页与 requirements；检查工作树；核对设计输入。普通开发不需要再重做本轮的文档规划。
+- 下一次第一步：读本页、requirements 与 [checklist.md](checklist.md)（与用户对齐过的需求理解和打勾清单）；检查工作树；核对设计输入。普通开发不需要再重做本轮的文档规划。
 - 不能直接读到/尚未知：Figma 具体画板与 tokens、真实素材、确切移动区块关系、邮件截止日期、最终依赖版本、AI 原始导出文件、GitHub 远程仓库地址。
 - 可用参考：父目录的 PDF 与两份分析/SOP；新克隆仓库可能没有它们，不能假定本机路径在别处存在。
 - 无需冻结：断点、组件拆分、状态管理、双模型角色、架构草案；按实际证据调整。
@@ -70,7 +72,7 @@ git diff --cached
 | 检查 | 本轮状态 | 说明 |
 | --- | --- | --- |
 | PDF | 已执行 | 1 页文字、链接提取及渲染查看 |
-| Figma | 未成功 | 两个连接读取均返回编辑权限错误；未取得设计内容 |
+| Figma | 部分完成 | 原始文件：编辑权限错误。用户副本：get_metadata 成功，已取得画板/区块节点；未审阅细节 |
 | 文档链接 / 需求映射 / Git | 已执行 | 本地链接与 UTF-8 检查通过；PDF 条款映射 R01–R12；main 已初始化，忽略与原始日志文本属性检查符合预期 |
 | install / build / dev / storybook | 未执行 | 尚无 package.json，不能宣称通过 |
 | 375 / 1440 与 320–1920 | 未执行 | 尚无 UI |
