@@ -207,7 +207,7 @@
   --spacing-step-pt: clamp(1rem, 0.4718rem + 2.2535vw, 2.5rem);
   --spacing-step-pb: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
   /* Program sections: gap between consecutive ones 32 -> 80 */
-  --spacing-program-gap: clamp(2rem, 1.1197rem + 3.7559vw, 5rem);
+  --spacing-program-gap: clamp(2rem, 0.9437rem + 4.507vw, 5rem);
   /* Program feature cards: inner padding 12 -> 32 */
   --spacing-feature-pad: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
   /* Product card image area height: 225 -> 332 */
