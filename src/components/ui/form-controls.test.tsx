@@ -72,6 +72,67 @@ describe("NumberField", () => {
     expect(screen.getByRole("spinbutton", { name: "Weight" })).toHaveValue(45);
   });
 
+  // R11: a step that cannot move the value the way the button points must
+  // not change it (e.g. 11.5 in with max 11: "increase" used to clamp it
+  // down to 11), and a step that changes nothing must not report a change.
+  it("never steps against its direction or reports a no-op change", async () => {
+    const user = userEvent.setup();
+    const calls: string[] = [];
+    const { rerender } = render(
+      <NumberField
+        label="Inches"
+        unit="in"
+        value="11.5"
+        onChange={(next) => calls.push(next)}
+        min={0}
+        max={11}
+        incrementLabel="Increase inches"
+        decrementLabel="Decrease inches"
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: "Increase inches" }));
+    rerender(
+      <NumberField
+        label="Inches"
+        unit="in"
+        value="11"
+        onChange={(next) => calls.push(next)}
+        min={0}
+        max={11}
+        incrementLabel="Increase inches"
+        decrementLabel="Decrease inches"
+      />,
+    );
+    await user.click(screen.getByRole("button", { name: "Increase inches" }));
+    expect(calls).toEqual([]);
+    // Normal steps still work, including from a decimal.
+    await user.click(screen.getByRole("button", { name: "Decrease inches" }));
+    expect(calls).toEqual(["10"]);
+  });
+
+  it("applies the same rules to the arrow keys", async () => {
+    const user = userEvent.setup();
+    const calls: string[] = [];
+    render(
+      <NumberField
+        label="Inches"
+        unit="in"
+        value="11.5"
+        onChange={(next) => calls.push(next)}
+        min={0}
+        max={11}
+        incrementLabel="Increase inches"
+        decrementLabel="Decrease inches"
+      />,
+    );
+    const input = screen.getByRole("spinbutton", { name: "Inches" });
+    input.focus();
+    await user.keyboard("{ArrowUp}");
+    expect(calls).toEqual([]);
+    await user.keyboard("{ArrowDown}");
+    expect(calls).toEqual(["10.5"]);
+  });
+
   it("announces errors", () => {
     render(
       <NumberField

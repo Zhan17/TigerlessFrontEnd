@@ -1,4 +1,9 @@
-import { type ChangeEvent, type InputHTMLAttributes, useId } from "react";
+import {
+  type ChangeEvent,
+  type InputHTMLAttributes,
+  type KeyboardEvent,
+  useId,
+} from "react";
 import { SortIcon } from "@/components/icons";
 import { cn } from "@/lib/cn";
 
@@ -24,7 +29,10 @@ type NumberFieldProps = Omit<
 
 /**
  * Pill number input with a unit suffix and the design's up/down stepper
- * (the sort icon split into two hit areas). Arrow keys step natively.
+ * (the sort icon split into two hit areas). The buttons and the arrow keys
+ * share one stepping rule: within min / max, never against the direction
+ * pressed (a typed 11.5 with max 11 stays 11.5 on "increase" instead of
+ * dropping to 11), and a step that changes nothing reports nothing (R11).
  * Self-designed states: hover = darker border, focus = ring, invalid = red
  * border + message.
  */
@@ -58,7 +66,17 @@ export function NumberField({
     let next = current + direction * step;
     if (min !== undefined) next = Math.max(min, next);
     if (max !== undefined) next = Math.min(max, next);
-    onChange(String(Math.round(next * 100) / 100));
+    next = Math.round(next * 100) / 100;
+    if (direction === 1 ? next <= current : next >= current) return;
+    onChange(String(next));
+  };
+
+  // Arrow keys use the same rule (the native step would also clamp a value
+  // above max downwards on ArrowUp).
+  const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key !== "ArrowUp" && event.key !== "ArrowDown") return;
+    event.preventDefault();
+    stepBy(event.key === "ArrowUp" ? 1 : -1);
   };
 
   return (
@@ -85,6 +103,7 @@ export function NumberField({
           onChange={(event: ChangeEvent<HTMLInputElement>) =>
             onChange(event.target.value)
           }
+          onKeyDown={onKeyDown}
           className={cn(
             "w-full min-w-0 bg-transparent text-button text-heading-strong outline-none placeholder:text-ink-400",
             "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none",

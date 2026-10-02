@@ -66,6 +66,41 @@ describe("BmiCalculator", () => {
     ).toHaveValue(79.8);
   });
 
+  // R11: 90 cm / 20 kg shows as 2 ft 11 in after a switch (the exact 90 cm
+  // is kept). "Increase inches" cannot go past 11, so it must change
+  // nothing; it used to report "11" again, which dropped the exact 90 cm,
+  // recomputed 88.9 cm and made the valid input invalid.
+  it("a stepper press that changes nothing keeps a valid switched input valid", async () => {
+    const user = userEvent.setup();
+    render(
+      <BmiCalculator
+        {...props}
+        defaultInput={{
+          unit: "metric",
+          heightFt: "",
+          heightIn: "",
+          heightCm: "90",
+          weight: "20",
+        }}
+        defaultCalculated
+      />,
+    );
+    const form = screen.getByRole("form", { name: props.heading });
+    await user.click(within(form).getByText("ft / lbs"));
+    await user.click(
+      within(form).getByRole("button", { name: "Increase height, inches" }),
+    );
+    expect(
+      within(form).getByRole("spinbutton", { name: "Height, inches" }),
+    ).toHaveValue(11);
+    expect(
+      within(form).getByRole("spinbutton", { name: "Height, feet" }),
+    ).not.toHaveAttribute("aria-invalid");
+    expect(
+      within(form).getByRole("button", { name: "Calculate BMI" }),
+    ).toBeEnabled();
+  });
+
   it("labels the legend from the thresholds (F08)", () => {
     render(<BmiCalculator {...props} />);
     expect(screen.getByText("18.5–24.9")).toBeInTheDocument();

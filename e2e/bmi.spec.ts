@@ -109,6 +109,19 @@ test.describe("BMI calculator", () => {
     await expect(
       f.getByRole("spinbutton", { name: "Height, feet" }),
     ).not.toHaveAttribute("aria-invalid", "true");
+
+    // R11: inches are at the stepper's max (11); "increase" must change
+    // nothing instead of dropping the exact 90 cm and invalidating it.
+    await f.getByRole("button", { name: "Increase height, inches" }).click();
+    await expect(
+      f.getByRole("spinbutton", { name: "Height, inches" }),
+    ).toHaveValue("11");
+    await expect(
+      f.getByRole("spinbutton", { name: "Height, feet" }),
+    ).not.toHaveAttribute("aria-invalid", "true");
+    await expect(submit).toBeEnabled();
+    await submit.click();
+    await expect(result.last()).toBeVisible();
   });
 
   test("works with the keyboard only", async ({ page }) => {
