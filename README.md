@@ -2,7 +2,7 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** scaffold, design tokens, icons and the base component library are in place, with Storybook stories per state. The data layer and the home page sections are not implemented yet; the page is a placeholder.
+**Current status:** scaffold, design tokens, icons, the base component library (stories per state) and the data layer (Zod contract, mocks, data access) are in place. The home page sections are not implemented yet; the page is a placeholder.
 
 ## Assignment and design
 
@@ -36,6 +36,7 @@ Other scripts:
 | `npm test` | Vitest unit and component tests (jsdom) |
 | `npm run test:e2e` | Playwright: builds the app and checks for horizontal overflow at every width from 320 to 1920 px. Run `npx playwright install chromium` once first; browsers are not downloaded by `npm install` |
 | `npm run build-storybook` | Static Storybook build |
+| — | Content source: copy `.env.example` to `.env.local`; `DATA_SOURCE=mock` (default) or `api` with `API_BASE_URL` |
 | `npm run icons` | Regenerate icon components from `src/components/icons/svg` (SVGR) |
 
 `npm install` prints an npm 11 `allow-scripts` warning for `esbuild`'s postinstall. It is harmless: the esbuild binary is delivered through optional dependencies, and builds pass without the script.
@@ -56,6 +57,7 @@ Other scripts:
 | `src/app/` | Next.js App Router routes (currently a placeholder home page), `globals.css` design tokens, shared font |
 | `src/components/ui/` | Component library: one folder per component with its stories and tests (Button, IconButton/IconLink, Pill, Eyebrow, CheckList, Price, Rating, SocialLinks) |
 | `src/components/icons/` | `svg/` normalised sources (origins in `SOURCES.md`) and `generated/` typed components from `npm run icons` |
+| `src/content/` | Data layer: `schemas/` (Zod API contract, the future backend shape — start here), `mock/` (responses conforming to it), `api/` (data access with `DATA_SOURCE=mock\|api`) |
 | `src/lib/` | Framework-agnostic helpers: `cn` (class merging aware of design tokens), `format/money`, `ui-copy` (fixed interface phrases) |
 | `src/styles/` | Storybook foundations (tokens reference) |
 | `scripts/` | Build helpers (SVGR index template) |

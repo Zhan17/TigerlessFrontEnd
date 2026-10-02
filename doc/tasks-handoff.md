@@ -1,10 +1,10 @@
 # Tasks & Handoff
 
-更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T06 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
+更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T07 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
 
 ## Current status
 
-- **阶段**：T03–T06 已完成（搭项目、tokens、图标、基础组件）；下一步是 T07（数据层）。页面还是占位页。
+- **阶段**：T03–T07 已完成（搭项目、tokens、图标、基础组件、数据层）；下一步是 T08（逐个区块实现）。页面还是占位页。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
 - **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
 - **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
@@ -69,6 +69,21 @@
   - 共有 25 个单元测试；Storybook 每个有状态组件、每个状态一个 story
   - 所有尺寸和状态都在 Storybook 里实测过，读取前先让过渡动画结束（`getAnimations().finish()`）
 
+- **T07 数据层**（`src/content/`）。用户决定：
+  - 接口按资源分可以，**同一内容不要出现两次**
+  - 信任条目放在 `content/home`
+  - 睡眠区块的两张浮层卡片放进数据，作为 sleep program 可选的 `highlights`
+
+  | 提交 | 内容 |
+  | --- | --- |
+  | `f6d14f6` | **Zod schema（API 契约）**：`/content/home`、`/programs`、`/products`、`/languages`、`/services`、`/testimonials`、`/faqs`。导航、页脚、评价都用 id 引用 program（名称取自 program）；共用的按钮文案只在 `home.ctas` 里定义一次，按 key 引用；首页用 id 列表决定放哪些内容、什么顺序；对象会忽略未知字段，开放集合（分类、图标 key）保留为 string，前端兜底 |
+  | `1e346df` | 12 张 WebP 图片放在 `public/images`（约为显示尺寸的 2 倍，共 1.1 MB），加一张从手机样机裁出的医生头像。来源见 `public/images/SOURCES.md` |
+  | `a0cf140` | **mock 数据**：内容来自设计稿，已应用修正 F01–F07、F11；FAQ 第 2–4 条答案是起草的（F10，**等用户审核**）。测试检查：每个资源都通过 schema 校验、所有引用都能解析、所有图片文件都存在 |
+  | `1ec2bf5` | **数据访问层**：`createContentClient`，用 `DATA_SOURCE=mock\|api` 切换；首页内容是必需的，其他资源失败时只把对应区块置空，并记录在 `degraded` 里；`pickByIds` 保持顺序并跳过不存在的引用；环境变量用 Zod 校验；有 `.env.example`。api 分支用模拟的 fetch 测过，**没有对接过真实后端** |
+
+  - 共 45 个单元测试
+  - **映射层**（API 类型 → 组件 props）按决定 2.4 要做，放到 T08 每个区块各自的 feature 文件夹里一起写
+
 ## In Progress
 
 - 无。
@@ -79,7 +94,6 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 
 | 顺序 | 任务 | 完成条件 |
 | --- | --- | --- |
-| T07 | 数据层：Zod schema（按资源 + `content/home`）、mock、取数函数加 `DATA_SOURCE` 开关、映射到组件 props | 类型可读；mock 通过校验；有测试 |
 | T08 | 逐个区块实现（导航和 Hero 先做），桌面和移动同时做 | 375 / 1440 对照截图；`test:e2e` 通过 |
 | T09 | 有状态组件：移动菜单、语言跑马灯、轮播、FAQ、BMI（BMI 前先确认 C6） | 状态 story 齐全；BMI 纯函数有测试 |
 | T10 | 动效（Motion）、减少动态效果、键盘操作 | 和 design.md 4b 的交互表一致 |
@@ -103,6 +117,8 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 | K14 | 运行中的 Storybook 不会扫描**新建文件夹**里的 Tailwind 类（新文件夹里的组件看起来没有样式） | 新建组件文件夹后重启 Storybook。已有文件改动的热更新正常 |
 | K15 | Windows 上停止后台 npm 服务时，node 子进程还在，占着端口（6006 被占后，新的 Storybook 会跑到 6007 / 6008 / 6009） | 停止后用 `Get-NetTCPConnection` 检查端口，并结束残留进程 |
 | K16 | 设计稿默认状态里有两个语言胶囊同时高亮（中文、Português） | T09 做跑马灯前问用户：允许多选并默认选中这两个（和设计一致），还是单选 |
+| K17 | FAQ 第 2–4 条答案是我起草的（设计里没有） | **请用户审核** `src/content/mock/faqs.ts` |
+| K18 | 减重区块自己的按钮和 Hero 卡片共用的按钮都叫 “See plans”，按“program 自己的按钮”和“首页卡片的共用按钮”分开定义 | 用户如果要求完全去重，把 program 的按钮也改成引用共用文案 |
 | K13 | hover / 按下的放大比例（1.03 / 0.97）和色调变化是我自己设计的默认值 | 用户统一讲动效时可能会调整 |
 | K12 | 评价卡片上的 LinkedIn 图标用的是 Hugeicons `linkedin-01`（描边），设计里是实心的 “in” | 按用户规则，图标达到设计意图即可，不需要处理 |
 
