@@ -12,7 +12,7 @@ The assignment requires complete, unedited AI session records for this project. 
 
 Notes:
 
-- The Claude Code files are copied byte-for-byte from `~/.claude/projects/F--AI-TigerlessTask-Front-End-Task/`; nothing was edited or removed. The session was still running when the copy was taken, so the last few turns may be missing. Last refreshed 2026-10-02 (≈ 79 MB), after the user's local-testing fixes.
+- The Claude Code files are copied byte-for-byte from `~/.claude/projects/F--AI-TigerlessTask-Front-End-Task/`; nothing was edited or removed. The session was still running when the copy was taken, so the last few turns may be missing. Last refreshed 2026-10-02 (≈ 80 MB), after the R02–R12 review fixes.
 - Two short sessions forked from this one by the user for quick checks are not included (user decision); this session is the project record.
 - The Codex files are the user's unedited copies of the session files in `~/.codex/sessions/2026/10/02/`; each matches its original byte for byte up to the moment it was copied (sessions may continue afterwards). Earlier Codex sessions that only tested the Figma connection are not included (user decision).
 - Earlier parts of the session were automatically compacted by Claude Code when the context grew long; the transcript keeps the original turns, and the compaction summaries appear in it as written.
