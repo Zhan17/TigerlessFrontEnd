@@ -4,7 +4,7 @@
 
 ## Current status
 
-- **阶段**：T03–T10 已完成；T11 除了 AI 日志都已完成（favicon、README、干净 clone 验证）。**剩下的唯一事项：导出 AI 日志，需要用户先检查能否公开**（见下方 T11）。
+- **阶段**：T03–T10 已完成；T11 已完成（favicon、README、干净 clone 验证、Claude Code 日志已上传）。**剩下的：用户上传 Codex 日志**，提交前如有需要再刷新一次 Claude Code 日志副本。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
 - **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
 - **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
@@ -166,7 +166,9 @@
     - `f5f456d` README：当前状态、阅读指引（先看 `src/content/schemas`）、修复被空行拆开的结构表、AI 使用说明
     - `5e3c5d9` 干净 clone 发现 `npm run typecheck` 找不到 Next 生成的 `LayoutProps`，脚本改为先 `next typegen`
     - **干净 clone 验证**（scratchpad 里 `git clone` 后）：`npm install`、lint、typecheck、120 个单元测试、build、build-storybook、24 个 e2e 全部通过；`npm run dev`、`npm run storybook` 都返回 200
-  - **T11 剩余：AI 日志**（等用户检查，**用户确认前不复制进仓库、不推送**）
+  - **T11 剩余：AI 日志**
+    - `6e6351c` 用户 2026-10-02 要求先上传 Claude Code 日志：原样复制到 `ai-logs/claude-code/`（jsonl 约 70 MB + tool-results 文件夹，逐字节比对一致；上传前扫描过 token / 密钥模式，没有发现）。GitHub 提示超过 50 MB 的警告，但已正常推送。会话还在继续，提交前如果需要可以再刷新一次副本（文件不能超过 100 MB）
+    - **Codex 日志由用户自己挑选真正在用的那个会话上传**（有几个是一开始测试 Figma 连接的会话）
     - Claude Code：`C:/Users/h8438/.claude/projects/F--AI-TigerlessTask-Front-End-Task/49a5b82d-24c0-49f7-8a28-b0a36d54120b.jsonl`（约 70 MB，会话结束前还会变大）和同名文件夹（tool-results，约 0.4 MB）
     - Codex（cwd 为 `F:/AI/TigerlessTask` 的会话），在 `~/.codex/sessions/` 下：`2026/10/01/` 的 14-50-39（15 MB）、16-37-47、17-09-04；`2026/10/02/` 的 09-38-23、09-45-11（今天这两条要用户确认是否属于本项目）
     - 注意：GitHub 单文件上限 100 MB，超过 50 MB 会有警告
@@ -253,7 +255,7 @@ npm run storybook
 | `npm run test:e2e` | 通过 | 24 个：320–1920 每个宽度无溢出、导航、Hero、BMI、轮播、FAQ / 页脚、axe、键盘遍历 |
 | Tokens 渲染 | 通过 | Storybook 里人工查看；流式 token 端点有单元测试 |
 | 375 / 1440 视觉对照 | 全部区块已完成 | 截图拼接对照（K20）；1440 整页高度和设计稿一致 |
-| AI 原始日志 | 未完成 | 文件已定位，等用户检查后再导出 |
+| AI 原始日志 | 部分完成 | Claude Code 已上传（`ai-logs/claude-code/`）；Codex 由用户上传 |
 
 ## Git 和提交
 
