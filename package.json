@@ -12,7 +12,7 @@
     "build-storybook": "storybook build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test:e2e": "playwright test",
     "icons": "node -e \"require('node:fs').rmSync('src/components/icons/generated',{recursive:true,force:true})\" && svgr --config-file svgr.config.cjs --ext tsx --out-dir src/components/icons/generated src/components/icons/svg && biome check --write src/components/icons/generated"
   },

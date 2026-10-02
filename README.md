@@ -34,7 +34,7 @@ Other scripts:
 | --- | --- |
 | `npm run start` | Serve the production build |
 | `npm run lint` / `npm run format` | Biome check / format |
-| `npm run typecheck` | `tsc --noEmit` (strict) |
+| `npm run typecheck` | `next typegen` (route types such as `LayoutProps`) then `tsc --noEmit` (strict); works on a fresh clone without a prior build |
 | `npm test` | Vitest unit and component tests (jsdom) |
 | `npm run test:e2e` | Playwright against a production build: no horizontal overflow at every width from 320 to 1920 px, nav never wraps, marquee / menu / BMI / carousel / FAQ / footer behaviour, an axe accessibility scan and a keyboard walk. Run `npx playwright install chromium` once first; browsers are not downloaded by `npm install` |
 | `npm run build-storybook` | Static Storybook build |
