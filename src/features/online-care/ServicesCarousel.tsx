@@ -15,8 +15,12 @@ import { ServiceCard } from "./ServiceCard";
 import type { OnlineCareProps } from "./to-online-care-props";
 
 type Props = OnlineCareProps & {
-  /** Start scrolled to this card (stories: the "end" state). */
-  defaultIndex?: number;
+  /**
+   * Where the row starts (stories): the start, the end of the scrollable
+   * range, or halfway (both arrows enabled). Defined by the scroll range,
+   * not by card index: on wide screens several cards share the end.
+   */
+  initialPosition?: "start" | "middle" | "end";
   className?: string;
 };
 
@@ -56,7 +60,7 @@ function snapPositions(track: HTMLElement): number[] {
 export function ServicesCarousel({
   heading,
   services,
-  defaultIndex = 0,
+  initialPosition = "start",
   className,
 }: Props) {
   const headingId = useId();
@@ -85,9 +89,10 @@ export function ServicesCarousel({
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    if (defaultIndex > 0) {
-      const target = snapPositions(track)[defaultIndex];
-      if (target !== undefined) track.scrollLeft = target;
+    if (initialPosition !== "start") {
+      const max = track.scrollWidth - track.clientWidth;
+      track.style.scrollSnapType = "none";
+      track.scrollLeft = initialPosition === "end" ? max : max / 2;
     }
     updateEdges();
     track.addEventListener("scroll", updateEdges, { passive: true });
@@ -103,7 +108,7 @@ export function ServicesCarousel({
       resize.disconnect();
       stopGlide();
     };
-  }, [defaultIndex, updateEdges, stopGlide]);
+  }, [initialPosition, updateEdges, stopGlide]);
 
   const step = (direction: 1 | -1) => {
     const track = trackRef.current;

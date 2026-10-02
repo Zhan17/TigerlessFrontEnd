@@ -21,10 +21,10 @@ type Story = StoryObj<typeof meta>;
 export const Start: Story = {};
 
 /** Scrolled to the last card: "next" is disabled. */
-export const End: Story = { args: { defaultIndex: 3 } };
+export const End: Story = { args: { initialPosition: "end" } };
 
 /** Middle: both arrows enabled. */
-export const Middle: Story = { args: { defaultIndex: 1 } };
+export const Middle: Story = { args: { initialPosition: "middle" } };
 
 export const Mobile: Story = {
   globals: { viewport: { value: "board375", isRotated: false } },
@@ -32,15 +32,15 @@ export const Mobile: Story = {
 
 /** Arrow states (same bubble states as every circular control). */
 export const ArrowHover: Story = {
-  args: { defaultIndex: 1 },
+  args: { initialPosition: "middle" },
   parameters: { pseudo: { hover: ['button[aria-label="Next"]'] } },
 };
 export const ArrowPressed: Story = {
-  args: { defaultIndex: 1 },
+  args: { initialPosition: "middle" },
   parameters: { pseudo: { active: ['button[aria-label="Next"]'] } },
 };
 export const ArrowFocus: Story = {
-  args: { defaultIndex: 1 },
+  args: { initialPosition: "middle" },
   parameters: { pseudo: { focusVisible: ['button[aria-label="Next"]'] } },
 };
 
