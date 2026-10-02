@@ -1,10 +1,10 @@
 # Tasks & Handoff
 
-更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T05 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
+更新：2026-10-01（Claude Code 会话 `49a5b82d…`，T06 完成后）。这里是当前状态的唯一入口。交接时覆盖本页快照，历史由 Git 保存。
 
 ## Current status
 
-- **阶段**：T03 搭项目、T04 design tokens、T05 图标已完成；下一步是 T06（基础组件）。页面还是占位页。
+- **阶段**：T03–T06 已完成（搭项目、tokens、图标、基础组件）；下一步是 T07（数据层）。页面还是占位页。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
 - **环境**：Node 24.19.0 / npm 11.17.0（2026-10-01 通过 winget 从 v19 升级），`.nvmrc` = 24。
 - **决策**：需求和评分项见 [checklist.md](checklist.md)；设计审稿和交互结论见 [design.md](design.md) 的 4b 节；架构选型见 [architecture.md](architecture.md) 顶部的“决定汇总”和 [decisions.md](decisions.md) D06。
@@ -51,18 +51,27 @@
   - 左箭头用 `rotate-180`，收起的箭头用 `-scale-y-100`
   - 图标本身是装饰性的，无障碍名称写在父级按钮或链接上
 
-## In Progress
-
-- **T06 基础组件**（进行中）。用户在 T06 开始时做的决定：
+- **T06 基础组件**（`src/components/ui/<组件>/`：组件、story、测试放在同一个文件夹）。用户在 T06 做的决定：
   - 用 `storybook-addon-pseudo-states` 为 hover / focus / 按下各做一个 story，所以这些交互状态要用 CSS 实现，不用 Motion 的 whileHover
   - **禁用态只有两处**：轮播箭头滑到两端时、BMI 输入无效时的 “Calculate BMI”；其他按钮都没有禁用态（design.md 未改动，以这里为准）
 
-  已完成：
-  - `0b15b9b` 安装 pseudo-states 插件
-  - `83be438` 修复 tailwind-merge 不认识自定义 token 的问题（原来会把 `text-button` 当成颜色删掉）
-  - `3d4d84f` Button：primary / secondary / outline，lg / md，可选箭头，全宽；hover = 放大到 1.03 + 色调变化 + 箭头右移，按下 = 缩小到 0.97，禁用 = 40% 透明度；每个状态一个 story；有单元测试
+  | 提交 | 内容 |
+  | --- | --- |
+  | `0b15b9b` | pseudo-states 插件 |
+  | `83be438` | tailwind-merge 认识自定义 token（原来会把 `text-button` 当成颜色删掉） |
+  | `3d4d84f` | **Button**：primary / secondary / outline，lg 56 / md 48，可选两色箭头，全宽；hover = 放大到 1.03 + 色调变化 + 箭头右移；按下 = 缩小到 0.97；禁用 = 40% 透明度 |
+  | `e1c6ffc` | **IconButton / IconLink**：outline（轮播 48）、solid / inverse / footer（社交 36）、plain（菜单 32）；必须传 `label`；hover 放大到 1.08，按下缩小到 0.94 |
+  | `d2ec2a2` | `formatMoney`（用 Intl 把最小货币单位格式化）、`ui-copy.ts` 前端字典、价格 token（项目 32 / 52，产品 24 / 40，两个画板相同） |
+  | `e792dd1` | **Eyebrow、CheckList、Price、Rating**（静态组件，每个变体一个 story） |
+  | `891fd10` | **Pill**：语言胶囊，切换按钮（`aria-pressed`），高度 32→44、左右内边距 16→32；选中 = 浅绿色 |
+  | `3c78ced` | **SocialLinks**：组合 IconLink，有卡片 / 照片 / 页脚三种外观 |
 
-  接下来：IconButton（圆形按钮：轮播箭头、社交图标）→ Eyebrow / CheckList / Price / Rating → SocialLinks → 语言胶囊 Pill
+  - 共有 25 个单元测试；Storybook 每个有状态组件、每个状态一个 story
+  - 所有尺寸和状态都在 Storybook 里实测过，读取前先让过渡动画结束（`getAnimations().finish()`）
+
+## In Progress
+
+- 无。
 
 ## Next
 
@@ -70,7 +79,6 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 
 | 顺序 | 任务 | 完成条件 |
 | --- | --- | --- |
-| T06 | 基础组件（`components/ui`）：Button、IconButton、Eyebrow、CheckList、Price、Rating、SocialLinks 等，每个组件和它的状态、story 一起做 | 每个状态一个 story；hover / focus / 按下 / 禁用状态统一 |
 | T07 | 数据层：Zod schema（按资源 + `content/home`）、mock、取数函数加 `DATA_SOURCE` 开关、映射到组件 props | 类型可读；mock 通过校验；有测试 |
 | T08 | 逐个区块实现（导航和 Hero 先做），桌面和移动同时做 | 375 / 1440 对照截图；`test:e2e` 通过 |
 | T09 | 有状态组件：移动菜单、语言跑马灯、轮播、FAQ、BMI（BMI 前先确认 C6） | 状态 story 齐全；BMI 纯函数有测试 |
@@ -92,6 +100,9 @@ T04 及以后的拆分是**建议**，开始前可以和用户确认顺序。
 | K9 | 移动端白色外壳的圆角还没量（token 现在是 32） | T08 做 Hero 时核对 |
 | K10 | Tailwind 的默认色板、字号、圆角、阴影都被清掉了，只能用设计 token | 有意为之；需要新值时在 `globals.css` 里加 token |
 | K11 | 新增 token 时要避免和 Tailwind 工具类前缀撞名（例：`--color-body` 和 `--text-body` 都对应 `text-body`） | 新增 token 后用一次构建检查生成的 CSS |
+| K14 | 运行中的 Storybook 不会扫描**新建文件夹**里的 Tailwind 类（新文件夹里的组件看起来没有样式） | 新建组件文件夹后重启 Storybook。已有文件改动的热更新正常 |
+| K15 | Windows 上停止后台 npm 服务时，node 子进程还在，占着端口（6006 被占后，新的 Storybook 会跑到 6007 / 6008 / 6009） | 停止后用 `Get-NetTCPConnection` 检查端口，并结束残留进程 |
+| K16 | 设计稿默认状态里有两个语言胶囊同时高亮（中文、Português） | T09 做跑马灯前问用户：允许多选并默认选中这两个（和设计一致），还是单选 |
 | K13 | hover / 按下的放大比例（1.03 / 0.97）和色调变化是我自己设计的默认值 | 用户统一讲动效时可能会调整 |
 | K12 | 评价卡片上的 LinkedIn 图标用的是 Hugeicons `linkedin-01`（描边），设计里是实心的 “in” | 按用户规则，图标达到设计意图即可，不需要处理 |
 

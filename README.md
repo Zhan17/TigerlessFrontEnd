@@ -2,7 +2,7 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** the project scaffold is in place (Next.js, Tailwind, Storybook, Biome, Vitest, Playwright) and all four evaluator commands run. The home page sections, components and data layer are not implemented yet; the page is a placeholder.
+**Current status:** scaffold, design tokens, icons and the base component library are in place, with Storybook stories per state. The data layer and the home page sections are not implemented yet; the page is a placeholder.
 
 ## Assignment and design
 
@@ -36,6 +36,7 @@ Other scripts:
 | `npm test` | Vitest unit and component tests (jsdom) |
 | `npm run test:e2e` | Playwright: builds the app and checks for horizontal overflow at every width from 320 to 1920 px. Run `npx playwright install chromium` once first; browsers are not downloaded by `npm install` |
 | `npm run build-storybook` | Static Storybook build |
+| `npm run icons` | Regenerate icon components from `src/components/icons/svg` (SVGR) |
 
 `npm install` prints an npm 11 `allow-scripts` warning for `esbuild`'s postinstall. It is harmless: the esbuild binary is delivered through optional dependencies, and builds pass without the script.
 
@@ -52,8 +53,12 @@ Other scripts:
 | `doc/tasks-handoff.md` | Current progress, next task, validation evidence, and handoff |
 | `ai-logs/` | Original AI session records and an index explaining their scope |
 
-| `src/app/` | Next.js App Router routes (currently a placeholder home page) |
-| `src/lib/` | Framework-agnostic helpers (`cn` class merging so far) |
+| `src/app/` | Next.js App Router routes (currently a placeholder home page), `globals.css` design tokens, shared font |
+| `src/components/ui/` | Component library: one folder per component with its stories and tests (Button, IconButton/IconLink, Pill, Eyebrow, CheckList, Price, Rating, SocialLinks) |
+| `src/components/icons/` | `svg/` normalised sources (origins in `SOURCES.md`) and `generated/` typed components from `npm run icons` |
+| `src/lib/` | Framework-agnostic helpers: `cn` (class merging aware of design tokens), `format/money`, `ui-copy` (fixed interface phrases) |
+| `src/styles/` | Storybook foundations (tokens reference) |
+| `scripts/` | Build helpers (SVGR index template) |
 | `src/test/` | Vitest setup |
 | `e2e/` | Playwright checks (responsive floor 320–1920 px) |
 | `.storybook/` | Storybook configuration (`@storybook/nextjs-vite`) |
