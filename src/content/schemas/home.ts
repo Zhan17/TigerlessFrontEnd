@@ -70,6 +70,8 @@ export const HomeContent = z.object({
   }),
   /** BMI / eligibility checker copy. Rules and field labels live in code. */
   eligibility: z.object({
+    /** Program section that hosts the checker (weight loss in the design). */
+    programId: Id,
     eyebrow: z.string().min(1),
     tag: z.string().min(1),
     heading: z.string().min(1),

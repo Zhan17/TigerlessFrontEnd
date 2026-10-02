@@ -104,6 +104,7 @@ export const homeContent: HomeContent = {
     productCtaRef: "getStarted",
   },
   eligibility: {
+    programId: "weight-loss",
     eyebrow: "Check your eligibility",
     tag: "BMI",
     heading: "Could a GLP-1 program be right for you?",

@@ -47,6 +47,7 @@ describe("references between resources resolve", () => {
       ...homeContent.footer.columns.flatMap((c) => programRefs(c.items)),
       ...homeContent.hero.categories.programIds,
       ...homeContent.programs.programIds,
+      homeContent.eligibility.programId,
       ...products.map((p) => p.programId),
       ...testimonials.flatMap((t) => (t.kind === "quote" ? [t.programId] : [])),
     ];
