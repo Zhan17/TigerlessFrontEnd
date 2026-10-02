@@ -137,6 +137,67 @@
   /* Captions (BMI scale legend): 12 */
   --text-caption: 0.75rem;
   --text-caption--line-height: 1;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  /* max-w-shell: white rounded shells (hero, stories, CTA) = 1384px at 1440 */
+  --container-shell: 86.5rem;
+  /* max-w-content: section content width = 1320px at 1440 */
+  --container-content: 82.5rem;
+  /* px-gutter: page side margin, 20px (375 board) -> 60px (1440 board) */
+  --spacing-gutter: clamp(1.25rem, 0.3697rem + 3.7559vw, 3.75rem);
+  /* mx-shell-inset: inset of the white shells, 12px -> 28px */
+  --spacing-shell-inset: clamp(0.75rem, 0.3979rem + 1.5023vw, 1.75rem);
+
+  /* ---- Radius ------------------------------------------------------------ */
+  /* rounded-full stays available for pills and circular buttons. */
+  --radius-*: initial;
+  --radius-shell: 2rem; /* 32: hero / stories / CTA shells */
+  --radius-card: 1rem; /* 16: cards, BMI panels */
+  --radius-panel: 0.75rem; /* 12: FAQ items */
+
+  /* ---- Shadows ----------------------------------------------------------- */
+  --shadow-*: initial;
+  --shadow-card: 0 4px 12px 0 rgb(2 31 24 / 0.06); /* category / BMI cards */
+  --shadow-soft: 0 4px 21.6px 0 rgb(2 29 23 / 0.06); /* "card shadow 2" */
+  --shadow-pill: 0 4px 5.15px 0 rgb(0 0 0 / 0.05); /* language pills */
+  --shadow-raised: 0 4px 12px 0 rgb(2 34 39 / 0.08); /* expanded FAQ */
+  /* "Card Shadow" effect style: layered, used on the floating nav bar */
+  --shadow-layered:
+    1px 1px 2px 0 rgb(0 0 0 / 0.1), 2px 3px 4px 0 rgb(0 0 0 / 0.09),
+    5px 7px 5px 0 rgb(0 0 0 / 0.05), 9px 13px 6px 0 rgb(0 0 0 / 0.01);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  /* "Fast then slow" settle used for carousel steps and reveals. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* Motion durations (use as duration-(--duration-fast) etc.). */
+:root {
+  --duration-fast: 150ms; /* colour changes */
+  --duration-base: 200ms; /* transforms: hover lift, press */
+  --duration-slow: 300ms; /* accordion, menu, carousel step */
+}
+
+@layer base {
+  /* One consistent, visible focus ring for every interactive element. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* biome-ignore-start lint/complexity/noImportantStyles: reduced-motion fallback must override every component transition */
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    /* biome-ignore-end lint/complexity/noImportantStyles: end of reduced-motion block */
+  }
 }
 
 /*
