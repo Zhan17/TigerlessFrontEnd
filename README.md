@@ -2,7 +2,9 @@
 
 Front-end take-home assignment: a responsive home page and React component library based on the supplied Figma design.
 
-**Current status:** foundations (tokens, icons, component library, data layer) are done; the page currently renders the navigation, hero, trust strip, How it works and the program sections and the BMI calculator (birth control / sleep details still to come). The remaining sections are in progress (see `doc/tasks-handoff.md`).
+**Status:** the whole page is implemented (navigation, hero, trust strip, How it works, the three program sections with products and the BMI calculator, services carousel, success stories, FAQ, closing CTA, footer) on top of a typed data contract, a component library and Storybook. Progress and evidence: [`doc/tasks-handoff.md`](doc/tasks-handoff.md).
+
+**Reading guide:** start with the data contract in [`src/content/schemas`](src/content/schemas) (Zod schemas = the future API; types are inferred from them), then a feature folder such as [`src/features/online-care`](src/features/online-care) (mapper from API types to props → section component → stories → tests), then [`src/components/ui`](src/components/ui) for the shared building blocks.
 
 ## Assignment and design
 
@@ -34,7 +36,7 @@ Other scripts:
 | `npm run lint` / `npm run format` | Biome check / format |
 | `npm run typecheck` | `tsc --noEmit` (strict) |
 | `npm test` | Vitest unit and component tests (jsdom) |
-| `npm run test:e2e` | Playwright: builds the app and checks for horizontal overflow at every width from 320 to 1920 px. Run `npx playwright install chromium` once first; browsers are not downloaded by `npm install` |
+| `npm run test:e2e` | Playwright against a production build: no horizontal overflow at every width from 320 to 1920 px, nav never wraps, marquee / menu / BMI / carousel / FAQ / footer behaviour, an axe accessibility scan and a keyboard walk. Run `npx playwright install chromium` once first; browsers are not downloaded by `npm install` |
 | `npm run build-storybook` | Static Storybook build |
 | — | Content source: copy `.env.example` to `.env.local`; `DATA_SOURCE=mock` (default) or `api` with `API_BASE_URL` |
 | `npm run icons` | Regenerate icon components from `src/components/icons/svg` (SVGR) |
@@ -53,11 +55,10 @@ Other scripts:
 | `doc/decisions.md` | Significant choices, reasons, alternatives, and optional model handoff workflow |
 | `doc/tasks-handoff.md` | Current progress, next task, validation evidence, and handoff |
 | `ai-logs/` | Original AI session records and an index explaining their scope |
-
 | `src/app/` | App Router route: `page.tsx` fetches the data once and passes mapped props to each section; `globals.css` design tokens; shared font |
-| `src/components/ui/` | Component library: one folder per component with its stories and tests (Button, IconButton/IconLink, Pill, Eyebrow, CheckList, Price, Rating, SocialLinks) |
+| `src/components/ui/` | Component library: one folder per component with its stories and tests (Button / ButtonLink, IconButton / IconLink, Pill, Eyebrow, CheckList, Price, Rating, SocialLinks, SegmentedControl, NumberField, RadioPill) |
 | `src/components/icons/` | `svg/` normalised sources (origins in `SOURCES.md`) and `generated/` typed components from `npm run icons` |
-| `src/features/` | Page sections, one folder per feature (`navigation`, `hero`, …): section components, the mapper from API types to component props (`to-*-props.ts`), stories and tests. `shared/` holds content-to-UI helpers (CtaButton, RichText, link and icon mapping) |
+| `src/features/` | Page sections, one folder per feature (`navigation`, `hero`, `trust-strip`, `how-it-works`, `programs`, `bmi`, `online-care`, `stories`, `faq`, `footer`): section components, the mapper from API types to component props (`to-*-props.ts`), stories and tests. `shared/` holds content-to-UI helpers (CtaButton, TextAction, RichText, link / icon / nav-item mapping) |
 | `src/content/` | Data layer: `schemas/` (Zod API contract, the future backend shape — start here), `mock/` (responses conforming to it), `api/` (data access with `DATA_SOURCE=mock\|api`) |
 | `src/lib/` | Framework-agnostic helpers: `cn` (class merging aware of design tokens), `format/money`, `ui-copy` (fixed interface phrases) |
 | `src/styles/` | Storybook foundations (tokens reference) |
@@ -66,7 +67,7 @@ Other scripts:
 | `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour, BMI calculator, services carousel, FAQ and footer |
 | `.storybook/` | Storybook configuration (`@storybook/nextjs-vite`) |
 
-The full structure (component library in `components/ui`, feature sections in `features/`, a central data contract, `lib/`) is described in `doc/architecture.md`. This table will be updated as those folders are created.
+The reasoning behind this structure (options considered and decisions) is in `doc/architecture.md` and `doc/decisions.md`.
 
 ## Design deviations
 
@@ -115,6 +116,7 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | Services carousel, phone | The phone mockup source is low resolution (the phone is ~265px wide in the exported image), so it is slightly soft at 305px | Same asset as the design; replace with a higher-resolution export when available |
 | Success stories | The photo card is signed "David L." but shows a woman | Content question for the client; the card renders whatever the testimonials resource provides |
 | FAQ (mobile) | The "FAQs" eyebrow is shown on desktop only, as in the boards | Followed the design |
+| How it works | The big "01" / "02" (`#c1e8de` on white) are low contrast | Decorative and hidden from screen readers (the ordered list announces the order), so exempt under WCAG 1.4.3; the axe test allows only this and the hero badges (C10) |
 | Footer | Most footer links have no destination yet (About, Blogs, Contact, Terms…) | They render as buttons with press feedback only (decision C3); they become links once the content provides URLs |
 
 ## Self-designed interaction states
@@ -137,7 +139,7 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | RadioPill (BMI sex) | Hover tint + darker border; pressed shrink; focus ring; checked = filled icon + dark border | Consistent with the other pill controls | `UI/Form controls/Radio*` |
 | BMI result | Arc fills and the score counts up (0.9s, fast-then-slow); the scale marker slides to the result; the active legend label turns dark | Makes the result feel computed; instant under reduced motion | `Sections/BMI calculator/Result*` |
 | Full-width buttons (mobile) | A label too long for the width wraps to two lines (min-height keeps single-line buttons unchanged) | Graceful behaviour at 320px instead of overflowing | `UI/Button/ResponsiveMobile` |
-| Services carousel | Arrows glide one card (0.7s, ease-out-expo); swipe / trackpad / keyboard scroll natively with snap; a swipe or wheel during a glide takes over; arrows disabled at the ends; reduced motion jumps instead of gliding | Requested smooth stepping without fighting native scrolling | `Sections/Services carousel/*`, e2e `services.spec.ts` |
+| Services carousel | Arrows glide one card (0.7s, ease-out-expo); swipe / trackpad scroll natively with snap; the track itself takes keyboard focus (arrow keys scroll it); a swipe or wheel during a glide takes over; arrows disabled at the ends; reduced motion jumps instead of gliding | Requested smooth stepping without fighting native scrolling | `Sections/Services carousel/*`, e2e `services.spec.ts` |
 | Success stories, social links | The IconLink bubble states on dark circles (quote cards) and white circles (photo card) | Same circular-control language as everywhere | `Sections/Success stories/*Social*` |
 | FAQ rows | Closed hover tints the row and pops the chevron circle (1.08); pressed shrinks to 0.99; open = sage header with white text, dashed edge and raised shadow, hover a lighter sage; the answer slides open (300ms, ease-out-expo) and closed (200ms) and the chevron turns; keyboard: Tab / Enter / Space and arrow keys between questions | Clear open state and smooth reveal; no animation on page load | `Sections/FAQ/*`, e2e `faq-footer.spec.ts` |
 | Footer links | Hover turns the text mint, pressed a deeper green; social circles use the IconLink states | Readable feedback on the dark background | `Sections/Footer/*` |
@@ -147,9 +149,9 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | Tool | Contribution | Original session record |
 | --- | --- | --- |
 | Codex | Initial requirement analysis, documentation and local Git setup; later collected 9 raw image assets from Figma | Pending export; see [AI log index](ai-logs/README.md) |
-| Claude Code | Requirement review, Figma audit (`doc/design.md`), asset and icon sourcing (`doc/assets-checklist.md`), architecture options (`doc/architecture.md`), project scaffold and tooling configuration | Pending export of session `49a5b82d…`; see [AI log index](ai-logs/README.md) |
+| Claude Code (desktop app, Claude Opus) | Requirement review, Figma audit (`doc/design.md`), asset and icon sourcing (`doc/assets-checklist.md`), architecture options (`doc/architecture.md`); then, following the decisions recorded in `doc/`, the implementation: project scaffold and tooling, design tokens, icons, component library, data contract and mocks, every page section, Storybook stories, unit / e2e / accessibility tests, visual comparison against the boards, and the README logs. The user made the product and design decisions (`doc/design.md` §4b, `doc/decisions.md`) and reviewed each group before it was pushed | Pending export of session `49a5b82d…` (after the user reviews it for publication); see [AI log index](ai-logs/README.md) |
 
-Update this table as work continues. Working documents and handoff summaries do not replace original transcripts.
+Working documents and handoff summaries do not replace original transcripts.
 
 ## Validation and known limitations
 
