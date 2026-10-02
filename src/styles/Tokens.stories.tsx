@@ -95,7 +95,7 @@ const semanticColors = [
   "surface-muted",
   "heading",
   "heading-strong",
-  "body",
+  "copy",
   "muted",
   "accent",
   "accent-soft",

@@ -71,7 +71,9 @@
   --color-surface-muted: var(--color-off-white);
   --color-heading: var(--color-brand-900);
   --color-heading-strong: var(--color-ink-900);
-  --color-body: var(--color-ink-700);
+  --color-copy: var(
+    --color-ink-700
+  ); /* body copy (text-copy); text-body is the font size */
   --color-muted: var(--color-ink-450);
   --color-accent: var(--color-green-600);
   --color-accent-soft: var(--color-mint-400);
@@ -234,6 +236,6 @@
 
 body {
   background-color: var(--color-page);
-  color: var(--color-body);
+  color: var(--color-copy);
   font-family: var(--font-sans);
 }
