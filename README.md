@@ -63,7 +63,7 @@ Other scripts:
 | `src/styles/` | Storybook foundations (tokens reference) |
 | `scripts/` | Build helpers (SVGR index template) |
 | `src/test/` | Vitest setup |
-| `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour |
+| `e2e/` | Playwright: responsive floor (320–1920 px, every width), nav never wraps, marquee / menu / sticky-nav behaviour, BMI calculator, services carousel |
 | `.storybook/` | Storybook configuration (`@storybook/nextjs-vite`) |
 
 The full structure (component library in `components/ui`, feature sections in `features/`, a central data contract, `lib/`) is described in `doc/architecture.md`. This table will be updated as those folders are created.
@@ -86,6 +86,13 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | F09 | BMI (mobile) | Mobile board has no unit switch | Same ft/lbs ↔ cm/kg switch as desktop | Feature parity: metric users on mobile |
 | — | BMI | Calculate looks enabled with empty inputs | Disabled (40% opacity) until the input is valid; out-of-range values show a message | Prevents calculating with no / impossible data (product decision) |
 | — | BMI | No result sentence | "As a woman, your BMI is 24.2 — Healthy Weight." under the gauge (announced politely to screen readers) | Shows the category in words and reflects the sex selection (C6, see below) |
+| — | Birth control (mobile) | The mobile board drops the intro paragraph ("Choose the method that fits your life…") | Shown on mobile too | Same content on every device; nothing about the method choice is lost on phones |
+| — | Sleep, highlight cards | The "Your profile" bar is drawn full width while the label says 82% | The gradient fills 82% of the track; the rest is neutral | The bar should agree with its number (data-driven `percent`) |
+| — | Program sections (1024–1440) | Boards exist only at 375 and 1440; at 1024 the photos would cover the price and copy | Each photo's width is capped at its 1440 share of the card, so it shrinks in place; the Sleep stat cards shrink and wrap at 320 | Graceful in-between widths (no overlap, no overflow) |
+| F05 | Services carousel | "Easy Manager Treatment" | "Easy Treatment Management" | Grammar |
+| — | Services carousel | White titles sit directly on bright photos (e.g. the sky behind "Free Expedited Shipping") | A light dark-to-transparent scrim behind the top of photo cards | Title contrast |
+| — | Services carousel | Both arrows look identical at the start | "Previous" disabled at the start, "Next" at the end (40% opacity) | Shows where the row ends (agreed disabled states) |
+| F07 | Success stories | "David L" | "David L." | Matches "Maria R." and "An N." |
 
 ### Noted, not changed
 
@@ -98,10 +105,13 @@ Every change made to the supplied design, and why. Rows are added as each sectio
 | Weight loss (mobile) | The "WEIGHT LOSS" eyebrow is shown on desktop only, as in the boards | Followed the design |
 | BMI | The sex field does not change the number: adult BMI and its categories are the same for women and men. Kept because the UI design has it; the result sentence names the selection (C6). Alternative considered: a one-line note "Adult BMI ranges are the same for women and men", or removing the field | Follows the design; can be revisited with the product team |
 | BMI (mobile) | Mobile shows no legend and no "See your GLP-1 Options" link, as on the mobile board | Followed the design |
+| Services carousel, chat preview | The chat panel uses 7–9px text, as on the board | It illustrates the app at phone scale; drawn as real text (readable by screen readers, editable from data) and kept at the board's size for fidelity |
+| Services carousel, phone | The phone mockup source is low resolution (the phone is ~265px wide in the exported image), so it is slightly soft at 305px | Same asset as the design; replace with a higher-resolution export when available |
+| Success stories | The photo card is signed "David L." but shows a woman | Content question for the client; the card renders whatever the testimonials resource provides |
 
 ## Self-designed interaction states
 
-The design has no hover / focus / pressed states. All interaction states are CSS (so Storybook's pseudo-states addon can show each one); Motion is used only for the menu reveal. Shared rules: hover applies only on devices that can hover (touch gets press feedback), one green focus ring everywhere (`:focus-visible`, 2px, offset 2px), and `prefers-reduced-motion` disables movement.
+The design has no hover / focus / pressed states. All interaction states are CSS (so Storybook's pseudo-states addon can show each one); Motion is used only where physics or values must be animated (menu reveal, segmented-control squash, BMI gauge, carousel glide). Shared rules: hover applies only on devices that can hover (touch gets press feedback), one green focus ring everywhere (`:focus-visible`, 2px, offset 2px), and `prefers-reduced-motion` disables movement.
 
 | Component | States / transition | Why | Stories |
 | --- | --- | --- | --- |
@@ -119,6 +129,8 @@ The design has no hover / focus / pressed states. All interaction states are CSS
 | RadioPill (BMI sex) | Hover tint + darker border; pressed shrink; focus ring; checked = filled icon + dark border | Consistent with the other pill controls | `UI/Form controls/Radio*` |
 | BMI result | Arc fills and the score counts up (0.9s, fast-then-slow); the scale marker slides to the result; the active legend label turns dark | Makes the result feel computed; instant under reduced motion | `Sections/BMI calculator/Result*` |
 | Full-width buttons (mobile) | A label too long for the width wraps to two lines (min-height keeps single-line buttons unchanged) | Graceful behaviour at 320px instead of overflowing | `UI/Button/ResponsiveMobile` |
+| Services carousel | Arrows glide one card (0.7s, ease-out-expo); swipe / trackpad / keyboard scroll natively with snap; a swipe or wheel during a glide takes over; arrows disabled at the ends; reduced motion jumps instead of gliding | Requested smooth stepping without fighting native scrolling | `Sections/Services carousel/*`, e2e `services.spec.ts` |
+| Success stories, social links | The IconLink bubble states on dark circles (quote cards) and white circles (photo card) | Same circular-control language as everywhere | `Sections/Success stories/*Social*` |
 
 ## AI use and session records
 
@@ -132,7 +144,8 @@ Update this table as work continues. Working documents and handoff summaries do 
 ## Validation and known limitations
 
 - PDF requirement extraction and Figma design audit: done (see `doc/design.md`).
-- Scaffold: `npm install`, `build`, `dev`, `storybook`, `lint`, `typecheck`, `test` and `test:e2e` verified from a clean install on Node 24.19.0 / npm 11.17.0. The page is still a placeholder, so these checks don't cover the real page yet.
+- Scaffold: `npm install`, `build`, `dev`, `storybook`, `lint`, `typecheck`, `test` and `test:e2e` verified from a clean install on Node 24.19.0 / npm 11.17.0.
+- Page: navigation, hero, trust strip, how it works, the three program sections with products and the BMI calculator, the services carousel and the success stories are implemented and compared with both boards (375 / 1440) plus 320, 768, 1024, 1280 and 1920. FAQ, closing CTA and footer are next.
 - AI transcript export: pending.
 
 See [current handoff](doc/tasks-handoff.md) for the next concrete task.
