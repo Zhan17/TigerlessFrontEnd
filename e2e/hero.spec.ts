@@ -101,11 +101,31 @@ test.describe("language marquee", () => {
       fire("pointerdown", start);
       for (let step = 1; step <= 10; step++)
         fire("pointermove", start - step * 20);
-      fire("pointerup", start - 200);
       return true;
     });
     expect(moved).toBe(true);
+    // Measure while the finger is still down: after release the row keeps
+    // gliding with inertia, so a later reading depends on timing (and could
+    // land a whole period away, which the wrap below would read as ~0).
     const after = await trackX(page, 0);
+    await page.evaluate(() => {
+      const viewport = [...document.querySelectorAll("fieldset")]
+        .find((f) =>
+          f.querySelector("legend")?.textContent?.startsWith("Languages"),
+        )
+        ?.querySelector(".touch-pan-y");
+      const r = viewport?.getBoundingClientRect();
+      if (!viewport || !r) return;
+      viewport.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 7,
+          clientX: r.left + r.width / 2 - 200,
+          clientY: r.top + r.height / 2,
+        }),
+      );
+    });
     // Dragged ~200px left (offset wraps, so compare the distance both ways).
     const period = await marquee(page)
       .locator(".will-change-transform > div")
@@ -132,6 +152,47 @@ test.describe("language marquee", () => {
       els.map((el) => el.getAttribute("tabindex")),
     )) {
       expect(tabIndex).toBe("-1");
+    }
+  });
+
+  test("keyboard focus always shows the real pill, clear of the fades", async ({
+    page,
+  }) => {
+    // The real (focusable) pills move with the track and can sit outside
+    // the clipped row while a copy shows the same label; focusing one must
+    // bring it fully into the visible part of the row.
+    for (const width of [1440, 375]) {
+      await page.setViewportSize({ width, height: 900 });
+      await page.goto("/");
+      await page
+        .getByRole("button", { name: "Start a free consultation" })
+        .first()
+        .focus();
+      const steps = [
+        ...Array.from({ length: 11 }, () => "Tab"),
+        ...Array.from({ length: 10 }, () => "Shift+Tab"),
+      ];
+      for (const key of steps) {
+        await page.keyboard.press(key);
+        const where = await page.evaluate(() => {
+          const el = document.activeElement as HTMLElement | null;
+          const row = el?.closest(".overflow-hidden");
+          const fade = el
+            ?.closest("fieldset")
+            ?.querySelector<HTMLElement>(":scope > div[aria-hidden]");
+          if (!el || !row || !fade) return null;
+          const pill = el.getBoundingClientRect();
+          const view = row.getBoundingClientRect();
+          return {
+            label: el.textContent,
+            inside:
+              pill.left >= view.left + fade.offsetWidth - 0.5 &&
+              pill.right <= view.right - fade.offsetWidth + 0.5,
+          };
+        });
+        expect(where, `${width}px ${key}`).not.toBeNull();
+        expect(where?.inside, `${width}px ${key} → ${where?.label}`).toBe(true);
+      }
     }
   });
 

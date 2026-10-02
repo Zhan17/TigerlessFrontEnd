@@ -68,7 +68,29 @@ test("tabbing reaches every control in order with a visible focus ring", async (
         getComputedStyle(node).outlineStyle !== "none" &&
         getComputedStyle(node).outlineWidth !== "0px";
       const box = el.getBoundingClientRect();
+      // Also not clipped away by a scrolling / overflow-hidden ancestor
+      // (e.g. a pill moved outside the marquee row): its centre must lie
+      // inside every clipping ancestor.
+      const cx = box.left + box.width / 2;
+      const cy = box.top + box.height / 2;
+      let clipped = false;
+      for (let node = el.parentElement; node; node = node.parentElement) {
+        const style = getComputedStyle(node);
+        if (style.overflowX === "visible" && style.overflowY === "visible")
+          continue;
+        const clip = node.getBoundingClientRect();
+        if (
+          cx < clip.left ||
+          cx > clip.right ||
+          cy < clip.top ||
+          cy > clip.bottom
+        ) {
+          clipped = true;
+          break;
+        }
+      }
       return {
+        where: `top ${Math.round(box.top)} bottom ${Math.round(box.bottom)} viewport ${window.innerHeight} scrollY ${Math.round(window.scrollY)}`,
         name: `${el.tagName.toLowerCase()} ${el.getAttribute("aria-label") ?? el.textContent?.trim().slice(0, 40) ?? ""}`,
         ring:
           ringOn(el) ||
@@ -78,14 +100,17 @@ test("tabbing reaches every control in order with a visible focus ring", async (
           box.width > 0 &&
           box.height > 0 &&
           box.bottom > 0 &&
-          box.top < window.innerHeight,
+          box.top < window.innerHeight &&
+          !clipped,
         // The page footer, not the <footer> inside testimonial cards.
         inFooter: Boolean(el.closest("footer") && !el.closest("article")),
       };
     });
     if (!info) break;
     expect.soft(info.ring, `focus ring on ${info.name}`).toBe(true);
-    expect.soft(info.visible, `${info.name} scrolled into view`).toBe(true);
+    expect
+      .soft(info.visible, `${info.name} scrolled into view (${info.where})`)
+      .toBe(true);
     seen.push(info.name);
     if (info.inFooter && info.name.includes("on LinkedIn")) break;
   }

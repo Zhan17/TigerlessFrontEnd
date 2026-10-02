@@ -94,6 +94,7 @@ export function LanguageMarquee({
           start={ROW_STARTS[0]?.desktop ?? FALLBACK_START}
           startMobile={ROW_STARTS[0]?.mobile ?? FALLBACK_START}
           zone={zone}
+          edge={fadeRef}
           reduce={reduce}
           selected={selected}
           onToggle={toggle}
@@ -104,6 +105,7 @@ export function LanguageMarquee({
           start={ROW_STARTS[1]?.desktop ?? FALLBACK_START}
           startMobile={ROW_STARTS[1]?.mobile ?? FALLBACK_START}
           zone={zone}
+          edge={fadeRef}
           reduce={reduce}
           selected={selected}
           onToggle={toggle}
@@ -134,6 +136,8 @@ type MarqueeRowProps = {
   /** The mobile board starts each row at a different pill. */
   startMobile: StartPosition;
   zone: RefObject<Zone>;
+  /** Edge fade: pills under it count as out of view. */
+  edge: RefObject<HTMLDivElement | null>;
   reduce: boolean;
   selected: ReadonlySet<string>;
   onToggle: (code: string) => void;
@@ -145,6 +149,7 @@ function MarqueeRow({
   start,
   startMobile,
   zone,
+  edge,
   reduce,
   selected,
   onToggle,
@@ -157,6 +162,8 @@ function MarqueeRow({
   const offset = useRef(0);
   const period = useRef(0);
   const paused = useRef(false);
+  /** A real pill has keyboard focus: keep the row where it shows that pill. */
+  const focusLock = useRef(false);
   const inertia = useRef(0);
   const drag = useRef<{
     lastX: number;
@@ -177,8 +184,9 @@ function MarqueeRow({
       const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
       period.current = set.offsetWidth + gap;
       if (period.current > 0) {
+        // Copies after the original set (one more sits before it).
         setCopies(
-          Math.max(2, Math.ceil(viewport.offsetWidth / period.current) + 1),
+          Math.max(1, Math.ceil(viewport.offsetWidth / period.current)),
         );
       }
     };
@@ -187,7 +195,13 @@ function MarqueeRow({
     const initial = window.innerWidth < 768 ? startMobile : start;
     const first = set.children[initial.index];
     if (first instanceof HTMLElement) {
-      offset.current = -(first.offsetLeft + initial.shift * first.offsetWidth);
+      // The original set sits one period in (after the leading copy).
+      offset.current =
+        -(
+          first.offsetLeft -
+          set.offsetLeft +
+          initial.shift * first.offsetWidth
+        ) - period.current;
       // Apply now so the first paint already matches the design position.
       track.style.transform = `translate3d(${offset.current}px, 0, 0)`;
     }
@@ -223,7 +237,11 @@ function MarqueeRow({
         }
         offset.current += velocity * dt;
       }
-      if (w > 0) offset.current = ((offset.current % w) - w) % w;
+      // Keep the original set within one period left of the row start, with
+      // a copy on each side; a focused pill may hold the row elsewhere.
+      if (w > 0 && !focusLock.current) {
+        offset.current = (((offset.current % w) - w) % w) - w;
+      }
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${offset.current}px, 0, 0)`;
       }
@@ -277,6 +295,29 @@ function MarqueeRow({
     }
   };
 
+  // Keyboard focus lands on the real pill, which may be anywhere on the
+  // moving track (often outside the clipped row while a copy shows the same
+  // label). Shift the row so the focused pill sits fully inside the visible
+  // part, clear of the edge fades; the copies on both sides fill the rest.
+  const revealFocused = (target: EventTarget) => {
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    if (!(target instanceof HTMLElement) || !viewport || !track) return;
+    const view = viewport.getBoundingClientRect();
+    const fade = edge.current?.offsetWidth ?? 0;
+    const margin = 8;
+    const min = view.left + fade + margin;
+    const max = view.right - fade - margin;
+    const pill = target.getBoundingClientRect();
+    let delta = 0;
+    if (pill.left < min) delta = min - pill.left;
+    else if (pill.right > max) delta = max - pill.right;
+    focusLock.current = true;
+    if (delta === 0) return;
+    offset.current += delta;
+    track.style.transform = `translate3d(${offset.current}px, 0, 0)`;
+  };
+
   const renderSet = (clone: boolean) =>
     items.map((language) => (
       <Pill
@@ -310,21 +351,28 @@ function MarqueeRow({
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
       onClickCapture={onClickCapture}
-      onFocus={() => {
+      onFocus={(event) => {
         paused.current = true;
+        revealFocused(event.target);
       }}
       onBlur={() => {
         paused.current = false;
+        focusLock.current = false;
       }}
     >
       <div
         ref={trackRef}
         className="flex w-max gap-pill-gap will-change-transform"
       >
+        {/* Leading copy: lets the original set move right of the row
+            start (to reveal a focused pill) without a gap opening. */}
+        <div className="flex gap-pill-gap" aria-hidden>
+          {renderSet(true)}
+        </div>
         <div ref={setRef} className="flex gap-pill-gap">
           {renderSet(false)}
         </div>
-        {Array.from({ length: copies - 1 }, (_, i) => i + 1).map((copy) => (
+        {Array.from({ length: copies }, (_, i) => i + 1).map((copy) => (
           // Copies are hidden from assistive tech and the tab order, but they
           // stay clickable: most of the pills on screen at any moment are
           // copies, and each toggles the same language as the original.
