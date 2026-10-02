@@ -167,26 +167,32 @@ export function ServicesCarousel({
         </div>
       </div>
 
+      {/* The track scrolls but holds no links, so it takes focus itself:
+          keyboard users can scroll it with the arrow keys. */}
       <ul
         ref={trackRef}
         id={trackId}
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: a scrollable region must be keyboard focusable (WCAG 2.1.1)
+        tabIndex={0}
+        aria-labelledby={headingId}
         className={cn(
           "relative mt-carousel-gap flex snap-x snap-mandatory gap-service-gap overflow-x-auto overscroll-x-contain",
           "[--track-inset:max(var(--spacing-gutter),calc((100%-var(--container-content))/2))]",
           "pr-gutter pl-(--track-inset) scroll-pl-(--track-inset)",
           "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+          "focus-visible:-outline-offset-2",
         )}
       >
         {services.map((service, index) => (
-          // biome-ignore lint/a11y/useSemanticElements: APG carousel slide pattern (group + roledescription)
-          <li
-            key={service.id}
-            role="group"
-            aria-roledescription={copy.slideRoleDescription}
-            aria-label={copy.slide(index + 1, services.length)}
-            className="shrink-0 snap-start"
-          >
-            <ServiceCard {...service} />
+          <li key={service.id} className="shrink-0 snap-start">
+            {/* biome-ignore lint/a11y/useSemanticElements: APG carousel slide pattern (group + roledescription) */}
+            <div
+              role="group"
+              aria-roledescription={copy.slideRoleDescription}
+              aria-label={copy.slide(index + 1, services.length)}
+            >
+              <ServiceCard {...service} />
+            </div>
           </li>
         ))}
       </ul>

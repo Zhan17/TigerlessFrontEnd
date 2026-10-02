@@ -66,7 +66,7 @@ describe("ServicesCarousel", () => {
     expect(slides[0]).toHaveAccessibleName("1 of 4");
     expect(slides[0]).toHaveAttribute("aria-roledescription", "slide");
 
-    const track = slides[0]?.parentElement;
+    const track = slides[0]?.closest("ul");
     for (const name of ["Previous", "Next"]) {
       expect(screen.getByRole("button", { name })).toHaveAttribute(
         "aria-controls",
