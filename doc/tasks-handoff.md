@@ -4,7 +4,7 @@
 
 ## Current status
 
-- **修复进度（Claude Code，2026-10-02，Codex 审查之后）**：R02–R10 已逐项复现、修复并验证，记录见下方“Claude Code 修复记录”。**R01（Codex 原始日志）由用户处理**：工作区已出现未跟踪的 `ai-logs/codex/`，Claude 未读取、未提交；放好后需更新 `ai-logs/README.md` 和根 README 的 Codex 行。
+- **修复进度（Claude Code，2026-10-02，Codex 审查之后）**：R02–R10 已逐项复现、修复并验证，记录见下方“Claude Code 修复记录”。**R01（Codex 原始日志）**：用户把选定的 Codex 会话放入 `ai-logs/codex/`，Claude 核对为原始文件的逐字节前缀（会话之后还在继续）、扫描无密钥后按原样提交，并更新了 `ai-logs/README.md` 与根 README 的 Codex 行。早期仅测试 Figma 连接的 Codex 会话按用户决定不收录。
 - **阶段**：T03–T10 实现已完成；T11 收尾尚未关闭。两轮 Codex 审查共记录 **R01–R05、R07–R08 七项需处理问题**，另有 **R06 测试稳定性待核实项、R09 未来多币种扩展限制、R10 与 R03 相关的测试盲区**，详见下方“2026-10-02 最终审查交接”。问题状态是审查时快照；后续修改需按关闭条件复验，不能把此前构建 / 测试通过等同于最终验收全部通过。
 - **当前执行边界**：用户要求本轮只审查、指出问题，随后授权详细记录到交接文档；本轮仅更新本文件，不修改应用、测试、配置或其他文档，不实施修复。后续 agent 应根据用户的新指令开展修复。
 - **仓库**：本地 `F:\AI\TigerlessTask\Front-End Task`，分支 `main`，远程 `origin` = https://github.com/Zhan17/TigerlessFrontEnd （**私有**）。作者 `Zhan17 <h843836717@gmail.com>`，只对本仓库生效。
