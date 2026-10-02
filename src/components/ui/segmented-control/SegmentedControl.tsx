@@ -1,7 +1,7 @@
 "use client";
 
 import { animate, useReducedMotion } from "motion/react";
-import { type CSSProperties, useId, useRef, useState } from "react";
+import { type CSSProperties, useId, useRef } from "react";
 import { cn } from "@/lib/cn";
 
 export type SegmentedOption<T extends string> = { value: T; label: string };
@@ -15,22 +15,29 @@ type SegmentedControlProps<T extends string> = {
   className?: string;
 };
 
+/** Pill geometry from the selected index (options are equal width). */
+const lobe =
+  "absolute inset-y-1 rounded-full bg-primary left-[calc(0.25rem+var(--i)*(var(--seg)+0.25rem))] right-[calc(0.25rem+(var(--n)-1-var(--i))*(var(--seg)+0.25rem))]";
+
 /**
  * Two-or-more option switch (BMI units). Native radio inputs give the
  * radio-group semantics and arrow-key navigation.
  *
- * The dark pill is one element positioned with CSS from the selected index
- * (options are equal width), so it is right on the server render too.
- * The switch behaves like two drops of liquid meeting: a small droplet
- * swells at the new option, the pill flows towards it (leading edge first,
- * trailing edge a beat later), and an SVG "goo" filter (blur + alpha
- * threshold) on the layer behind the labels draws the surface-tension
- * bridge between them: a thin neck that thickens until they merge. A small
- * vertical squash sells the volume change. The labels are not filtered, so
- * the text stays crisp; nothing leaves the track; reduced motion jumps.
+ * The selection is a blob of liquid made of two lobes that normally sit on
+ * top of each other, both positioned with CSS from the selected index (so
+ * the server render is right). On a switch the front lobe flows to the new
+ * option first while the back lobe holds, so the blob stretches into a
+ * dumbbell; an SVG "goo" filter (blur + alpha threshold) on the liquid
+ * layer draws the surface tension between them, a thin waist that thickens
+ * as the back lobe follows, until the two merge into one pill. A small
+ * vertical squash sells the volume change. Nothing appears out of nowhere
+ * and nothing leaves the track; reduced motion jumps.
+ *
+ * Layers: hover tint (z-0) < liquid (z-10) < label text (z-20), so a hover
+ * tint never covers the liquid and the text is always on top.
  *
  * Self-designed states: hover = green text on a tint, pressed = small
- * shrink, focus = ring on the option.
+ * shrink of the text, focus = ring on the option.
  */
 export function SegmentedControl<T extends string>({
   label,
@@ -41,35 +48,20 @@ export function SegmentedControl<T extends string>({
 }: SegmentedControlProps<T>) {
   const name = useId();
   const reduce = useReducedMotion();
-  const pill = useRef<HTMLSpanElement>(null);
-  const droplet = useRef<HTMLSpanElement>(null);
+  const liquid = useRef<HTMLDivElement>(null);
   const goo = `${name}-goo`;
   const index = Math.max(
     0,
     options.findIndex((option) => option.value === value),
   );
-  const [direction, setDirection] = useState<"left" | "right">("right");
 
   const select = (next: T) => {
-    const nextIndex = options.findIndex((option) => option.value === next);
-    if (nextIndex === index) return;
-    setDirection(nextIndex > index ? "right" : "left");
-    if (pill.current && droplet.current && !reduce) {
-      // The droplet swells first; the pill sets off a moment later.
+    if (next === value) return;
+    if (liquid.current && !reduce) {
       animate(
-        droplet.current,
-        { scale: [0, 1] },
-        { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
-      );
-      animate(
-        pill.current,
-        { scaleY: [1, 0.84, 1.04, 1] },
-        {
-          duration: 0.6,
-          delay: 0.22,
-          times: [0, 0.35, 0.75, 1],
-          ease: "easeInOut",
-        },
+        liquid.current,
+        { scaleY: [1, 0.88, 1.03, 1] },
+        { duration: 0.65, times: [0, 0.4, 0.8, 1], ease: "easeInOut" },
       );
     }
     onChange(next);
@@ -99,53 +91,37 @@ export function SegmentedControl<T extends string>({
             <filter id={goo}>
               <feGaussianBlur
                 in="SourceGraphic"
-                stdDeviation="4"
+                stdDeviation="5"
                 result="blur"
               />
               <feColorMatrix
                 in="blur"
                 mode="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 20 -9"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -10"
                 result="goo"
               />
               <feComposite in="SourceGraphic" in2="goo" operator="atop" />
             </filter>
           </defs>
         </svg>
-        {/* Layers: hover tints (z-0) < liquid (z-10) < label text (z-20),
-            so the pill and droplet always paint over a fading hover tint
-            and the text always paints over the pill. */}
         <div
+          ref={liquid}
           aria-hidden
           className="absolute inset-0 z-10"
           style={{ filter: `url(#${goo})` }}
         >
+          {/* Front lobe: sets off at once and arrives fast. */}
           <span
-            ref={droplet}
-            data-direction={direction}
             className={cn(
-              "absolute top-1/2 size-5.5 -translate-1/2 rounded-full bg-primary",
-              // It forms just inside the new option, on the side facing the
-              // pill, so it touches the pill as it swells (thin neck first)
-              // and covers as little of the label as possible.
-              "data-[direction=right]:left-[calc(0.25rem+var(--i)*(var(--seg)+0.25rem)+1.0625rem)]",
-              "data-[direction=left]:left-[calc(0.25rem+var(--i)*(var(--seg)+0.25rem)+var(--seg)-1.0625rem)]",
+              lobe,
+              "[transition:left_380ms_cubic-bezier(0.22,1,0.36,1),right_380ms_cubic-bezier(0.22,1,0.36,1)]",
             )}
-            // Hidden until a switch; Motion animates `transform`, so the
-            // resting state is set there too (not the `scale` property).
-            style={{ transform: "scale(0)" }}
           />
+          {/* Back lobe: holds a moment, then follows and merges. */}
           <span
-            ref={pill}
-            data-direction={direction}
             className={cn(
-              "absolute inset-y-1 rounded-full bg-primary",
-              "left-[calc(0.25rem+var(--i)*(var(--seg)+0.25rem))]",
-              "right-[calc(0.25rem+(var(--n)-1-var(--i))*(var(--seg)+0.25rem))]",
-              // Leading edge first (after the droplet appears), trailing
-              // edge a beat later and slower.
-              "data-[direction=right]:[transition:right_520ms_cubic-bezier(0.6,0,0.25,1)_200ms,left_480ms_cubic-bezier(0.65,0,0.35,1)_380ms]",
-              "data-[direction=left]:[transition:left_520ms_cubic-bezier(0.6,0,0.25,1)_200ms,right_480ms_cubic-bezier(0.65,0,0.35,1)_380ms]",
+              lobe,
+              "[transition:left_460ms_cubic-bezier(0.65,0,0.35,1)_160ms,right_460ms_cubic-bezier(0.65,0,0.35,1)_160ms]",
             )}
           />
         </div>
@@ -181,12 +157,11 @@ export function SegmentedControl<T extends string>({
                   // Text above the liquid; the press shrink lives here so the
                   // label never becomes its own stacking context.
                   "relative z-20 transition-[color,scale] duration-(--duration-base) ease-standard group-active/option:scale-[0.97]",
-                  // The new option turns white as the pill's leading edge
-                  // reaches it; the old one waits for the trailing edge to
-                  // leave before turning dark, so no text vanishes on the pill.
+                  // The new option turns white as the front lobe reaches it;
+                  // the old one waits for the back lobe to leave.
                   checked
-                    ? "text-on-primary delay-[400ms]"
-                    : "text-heading delay-[520ms] group-hover/option:text-accent group-hover/option:delay-0",
+                    ? "text-on-primary delay-[40ms]"
+                    : "text-heading delay-[360ms] group-hover/option:text-accent group-hover/option:delay-0",
                 )}
               >
                 {option.label}
