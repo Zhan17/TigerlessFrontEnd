@@ -1,0 +1,465 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens for the Apsu home page.
+ * Source: Figma variables plus colours sampled
+ * from the 1440/375 board screenshots where no variable exists. Raw palette
+ * values are kept exactly as designed; components should use the semantic
+ * aliases below, not raw hex values or Tailwind's default palette.
+ */
+
+@theme static {
+  /* Drop Tailwind's default palette so only design tokens are available. */
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ---- Raw palette ---------------------------------------------------- */
+  /* Brand greens */
+  --color-brand-900: #102b1c; /* Primary/Brand 800, heading text 1, footer bg */
+  --color-brand-800: #173a26; /* Brand/800: footer social circles */
+  --color-green-600: #00774d; /* Highlighted / Label text, Secondary_Mint/600 */
+  --color-green-500: #009269; /* Secondary_Mint/500 */
+  --color-mint-400: #21ac88; /* Secondary_Mint/400: hero badges */
+  --color-mint-100: #bcffe6; /* Secondary_Mint/Brand 100 */
+  --color-green-light: #b8d9c6; /* Foundation/Green/Light :active */
+  --color-sage-500: #587362; /* Primary/500: expanded FAQ header */
+  --color-sage-400: #758c7d; /* Primary/400 */
+  --color-sage-300: #91a699; /* Primary/300 */
+  --color-sage-200: #afc1b6; /* Primary/200 */
+
+  /* Neutrals (near-blacks kept distinct for fidelity) */
+  --color-ink-900: #111111; /* Heading text 2, Charcoal 900 */
+  --color-ink-850: #1d1d1d; /* Primary Font Color */
+  --color-ink-800: #2a2a2a; /* Neutral/800: card titles */
+  --color-ink-780: #292b2a; /* Foundation/Neutral/Darker: pill text, BMI score */
+  --color-ink-700: #3b3b3c; /* sub heading text: body copy */
+  --color-ink-600: #585d5a; /* Foundation/Neutral/Dark: pill text */
+  --color-ink-550: #69706c; /* Foundation/Neutral/Normal :hover */
+  --color-ink-500: #6f6f6f; /* Neutral/500: input unit suffix */
+  --color-ink-450: #6c6c6c; /* Disable text: BMI legend */
+  --color-ink-400: #858586; /* Charcoal 400 */
+  --color-ink-300: #a0a0a1; /* Charcoal 300 */
+
+  /* Surfaces */
+  --color-off-white: #faf9f4; /* Background/Off White: page bg */
+  --color-input: #f6f8fa; /* Background/Normal [25]: input fields */
+  --color-mist: #f4fafa; /* Background Color */
+  --color-faq-tint: #f0f6f3; /* expanded FAQ item */
+  --color-chat-panel: #e9f4f2; /* chat preview panel (services carousel) */
+  --color-story-photo: #e5fcee; /* behind the cut-out on the photo story card */
+  --color-cta-start: #173223; /* closing CTA gradient, top-left (sampled) */
+  --color-cta-end: #cce3d7; /* closing CTA gradient, bottom-right (sampled) */
+
+  /* Borders */
+  --color-border-mint: #cddcd3; /* Border Mint: inputs, outlined buttons */
+  --color-border-blue: #83f2ec; /* Border blue: sleep divider */
+  --color-border-pink: #ffc0ff; /* sampled: birth control divider */
+  --color-border-footer: #b5c5bc; /* sampled: footer divider on dark */
+
+  /* Category card fills */
+  --color-card-mint: #bcffe6cc; /* Card Mint (80% alpha) */
+  --color-card-purple: #ffdeff; /* Card Purple */
+  --color-card-blue: #d0fffd; /* Card Blue */
+
+  /* Accents */
+  --color-star: #ffca00; /* sampled: rating stars */
+  --color-step: #c1e8de; /* sampled: "01" / "02" in How it works */
+  --color-bmi-under: #3b82f6; /* BMI scale gradient stops */
+  --color-bmi-healthy: #1a8a79;
+  --color-bmi-over: #f59e0b;
+  --color-bmi-obese: #ef4444;
+
+  /* ---- Semantic aliases (use these in components) --------------------- */
+  --color-page: var(--color-off-white);
+  --color-surface: var(--color-white);
+  --color-surface-muted: var(--color-off-white);
+  --color-heading: var(--color-brand-900);
+  --color-heading-strong: var(--color-ink-900);
+  --color-copy: var(
+    --color-ink-700
+  ); /* body copy (text-copy); text-body is the font size */
+  --color-muted: var(--color-ink-450);
+  --color-accent: var(--color-green-600);
+  --color-accent-soft: var(--color-mint-400);
+  --color-primary: var(--color-brand-900);
+  --color-on-primary: var(--color-white);
+  --color-border: var(--color-border-mint);
+  --color-selected: var(--color-green-light);
+  --color-inverse: var(--color-brand-900);
+  --color-on-inverse: var(--color-off-white);
+  --color-focus: var(--color-green-600);
+  --color-danger: var(
+    --color-bmi-obese
+  ); /* form errors (no error colour in the design) */
+
+  /* ---- Typography ------------------------------------------------------ */
+  /*
+   * Fluid sizes interpolate linearly from the 375px board value to the
+   * 1440px board value (clamped outside that range), so both boards match
+   * the design exactly and widths in between scale smoothly. Pairs were
+   * derived from Figma text styles and text-box heights on each board.
+   * Work Sans only uses weights 400 (font-normal) and 500 (font-medium).
+   */
+  --text-*: initial;
+
+  /* Hero H1: 36/1.24 -> 72/1.1 */
+  --text-display: clamp(2.25rem, 1.4577rem + 3.3803vw, 4.5rem);
+  --text-display--line-height: clamp(2.79rem, 2.0294rem + 3.2451vw, 4.95rem);
+  /* Section H2 (How it works, programs, carousel, stories, FAQ): 32 -> 52 */
+  --text-section: clamp(2rem, 1.5599rem + 1.8779vw, 3.25rem);
+  --text-section--line-height: 1.24;
+  /* How-it-works card titles: 32 -> 40 */
+  --text-card-title: clamp(2rem, 1.8239rem + 0.7512vw, 2.5rem);
+  --text-card-title--line-height: 1.24;
+  /* Carousel card headers, testimonial categories: 24 -> 32 */
+  --text-card-heading: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+  --text-card-heading--line-height: 1.16;
+  /* Product names: 20 -> 32 */
+  --text-product-title: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
+  --text-product-title--line-height: 1.16;
+  /* Hero category card titles, FAQ questions, BMI title: 20 -> 24 */
+  --text-title: clamp(1.25rem, 1.162rem + 0.3756vw, 1.5rem);
+  --text-title--line-height: 1.16;
+  /* Body copy and check-list items: 16 -> 20 */
+  --text-body: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  --text-body--line-height: 1.6;
+  /* Smaller body copy (card descriptions, FAQ answers): 16 -> 18 */
+  --text-body-sm: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-body-sm--line-height: 1.6;
+  /* Buttons and nav links: 16 -> 18 */
+  --text-button: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-button--line-height: 1.32;
+  /* Language pills, segmented control: 14 -> 16 */
+  --text-label: clamp(0.875rem, 0.831rem + 0.1878vw, 1rem);
+  --text-label--line-height: 1.24;
+  /* Hero trust badges: 12 -> 14 */
+  --text-badge: clamp(0.75rem, 0.706rem + 0.1878vw, 0.875rem);
+  --text-badge--line-height: 1.6;
+  /* Eyebrow labels (HOW IT WORKS, WEIGHT LOSS, FAQs): 16, tracked 2px */
+  --text-eyebrow: 1rem;
+  --text-eyebrow--line-height: 1.32;
+  --text-eyebrow--letter-spacing: 0.125rem;
+  /* Hero category card eyebrows: 16 -> 18, tracked 2px */
+  --text-eyebrow-lg: clamp(1rem, 0.956rem + 0.1878vw, 1.125rem);
+  --text-eyebrow-lg--line-height: 1.32;
+  --text-eyebrow-lg--letter-spacing: 0.125rem;
+  /* Lead sentence (How it works footnote): 16 -> 20, medium */
+  --text-lead: clamp(1rem, 0.912rem + 0.3756vw, 1.25rem);
+  --text-lead--line-height: 1.32;
+  /* Trust strip items: 14 -> 18 */
+  --text-strip: clamp(0.875rem, 0.787rem + 0.3756vw, 1.125rem);
+  --text-strip--line-height: 1.6;
+  /* Big step numbers "01" / "02": 52 -> 80 */
+  --text-step-number: clamp(3.25rem, 2.6338rem + 2.6291vw, 5rem);
+  --text-step-number--line-height: 1.2;
+  /* BMI gauge score: 40 -> 56 */
+  --text-score: clamp(2.5rem, 2.1479rem + 1.5023vw, 3.5rem);
+  --text-score--line-height: 1.24;
+  /* Prices: same size on both boards (measured from the screenshots). */
+  /* Program sections (birth control / sleep): "From" 32, amount 52 */
+  --text-price: 3.25rem;
+  --text-price--line-height: 1.24;
+  --text-price-unit: 2rem;
+  --text-price-unit--line-height: 1.24;
+  /* Product cards (weight loss): "From" 24, amount 32 (re-measured by width) */
+  --text-price-sm: 2rem;
+  --text-price-sm--line-height: 1.24;
+  --text-price-sm-unit: 1.5rem;
+  --text-price-sm-unit--line-height: 1.24;
+  /* Sleep highlight cards: title 16 -> 24, stat value 16 -> 32, label 12 -> 18 */
+  --text-stat-title: clamp(1rem, 0.8239rem + 0.7512vw, 1.5rem);
+  --text-stat-title--line-height: 1.2;
+  --text-stat: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
+  --text-stat--line-height: 1.25;
+  --text-stat-label: clamp(0.75rem, 0.618rem + 0.5634vw, 1.125rem);
+  --text-stat-label--line-height: 1.24;
+  /* Testimonial author: name 20, location 16 (same on both boards) */
+  --text-author: 1.25rem;
+  --text-author--line-height: 1.6;
+  --text-meta: 1rem;
+  --text-meta--line-height: 1.6;
+  /* Closing CTA: heading 48, points 20 (same on both boards) */
+  --text-cta: 3rem;
+  --text-cta--line-height: 1.25;
+  --text-cta-point: 1.25rem;
+  --text-cta-point--line-height: 1.3;
+  /* Footer: disclaimer / terms 18, tagline and column titles 18 (tighter) */
+  --text-footer: 1.125rem;
+  --text-footer--line-height: 1.6;
+  --text-footer-title: 1.125rem;
+  --text-footer-title--line-height: 1.32;
+  /*
+   * Chat preview inside the services carousel: an illustration of the app
+   * UI, drawn at the board's size on both boards (9 / 8 / 7px).
+   */
+  --text-chat-title: 0.5625rem;
+  --text-chat-title--line-height: 1.3;
+  --text-chat: 0.5rem;
+  --text-chat--line-height: 1.25;
+  --text-chat-meta: 0.4375rem;
+  --text-chat-meta--line-height: 1.15;
+  /* Captions (BMI scale legend): 12 */
+  --text-caption: 0.75rem;
+  --text-caption--line-height: 1;
+
+  /* ---- Layout ------------------------------------------------------------ */
+  /* max-w-shell: white rounded shells (hero, stories, CTA) = 1384px at 1440 */
+  --container-shell: 86.5rem;
+  /* max-w-content: section content width = 1320px at 1440 */
+  --container-content: 82.5rem;
+  /* max-w-footer: closing CTA card and footer content = 1376px at 1440 */
+  --container-footer: 86rem;
+  /* px-gutter: page side margin, 20px (375 board) -> 60px (1440 board) */
+  --spacing-gutter: clamp(1.25rem, 0.3697rem + 3.7559vw, 3.75rem);
+  /* mx-shell-inset: inset of the white shells, 12px -> 28px */
+  --spacing-shell-inset: clamp(0.75rem, 0.3979rem + 1.5023vw, 1.75rem);
+  /* White shells: inner padding 8 -> 28, top offset on the page 12 -> 32 */
+  --spacing-shell-pad: clamp(0.5rem, 0.0599rem + 1.8779vw, 1.75rem);
+  --spacing-shell-top: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /* Hero: content starts 112 -> 168 below the shell top (clears the nav) */
+  --spacing-hero-top: clamp(7rem, 5.7676rem + 5.2582vw, 10.5rem);
+  --spacing-hero-pills: clamp(1.5rem, 1.3239rem + 0.7512vw, 2rem);
+  --spacing-hero-cards: clamp(2.25rem, 1.8099rem + 1.8779vw, 3.5rem);
+  /* Edge fades of the language marquee: 60 -> 120 */
+  --spacing-fade: clamp(3.75rem, 2.4296rem + 5.6338vw, 7.5rem);
+  /* Card inner padding 12 -> 24; small gaps 8 -> 16 and 4 -> 12 */
+  --spacing-card-pad: clamp(0.75rem, 0.4859rem + 1.1268vw, 1.5rem);
+  --spacing-pill-gap: clamp(0.5rem, 0.3239rem + 0.7512vw, 1rem);
+  --spacing-badge-gap: clamp(0.25rem, 0.0739rem + 0.7512vw, 0.75rem);
+  /* Nav pill height, used to tuck the hero shell under the sticky nav */
+  --spacing-nav: 3.5rem;
+  /* Vertical rhythm between sections: 56 -> 120 */
+  --spacing-section-y: clamp(3.5rem, 2.0915rem + 6.0094vw, 7.5rem);
+  /* Trust strip: gap above 32 -> 80, gap between items 32 -> 56 */
+  --spacing-strip-top: clamp(2rem, 0.9437rem + 4.507vw, 5rem);
+  --spacing-strip-gap: clamp(2rem, 1.4718rem + 2.2535vw, 3.5rem);
+  /* Section intro -> cards: 24 -> 48 */
+  --spacing-intro-cards: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem);
+  /* How it works cards: number -> title 24 -> 59, top 16 -> 40, bottom 38 -> 60 */
+  --spacing-step-number-gap: clamp(1.5rem, 0.7298rem + 3.2864vw, 3.6875rem);
+  --spacing-step-pt: clamp(1rem, 0.4718rem + 2.2535vw, 2.5rem);
+  --spacing-step-pb: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
+  /* Program sections: gap between consecutive ones 32 -> 80 */
+  --spacing-program-gap: clamp(2rem, 0.9437rem + 4.507vw, 5rem);
+  /* Program feature cards: inner padding 12 -> 32 */
+  --spacing-feature-pad: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /* Program photo below the copy (mobile / tablet): at most 416 tall */
+  --spacing-program-photo: 26rem;
+  /* Product card image area height: 225 -> 332 */
+  --spacing-product-media: clamp(14.0625rem, 11.7077rem + 10.0469vw, 20.75rem);
+  /*
+   * Sleep highlight cards over the photo: padding 8 -> 16, gap between the
+   * cards 6 -> 12, inset from the card edge 4 -> 32 and from its bottom
+   * 57 -> 71, widths 204 -> 378 (metrics) and 117 -> 185 (progress), gap
+   * between the two metrics 12 -> 32.
+   */
+  --spacing-highlight-pad: clamp(0.5rem, 0.3239rem + 0.7512vw, 1rem);
+  --spacing-highlight-gap: clamp(0.375rem, 0.243rem + 0.5634vw, 0.75rem);
+  --spacing-highlight-inset: clamp(0.25rem, -0.3662rem + 2.6291vw, 2rem);
+  --spacing-highlight-bottom: clamp(3.5625rem, 3.2544rem + 1.3146vw, 4.4375rem);
+  --spacing-highlight-metrics: clamp(12.75rem, 8.9208rem + 16.338vw, 23.625rem);
+  --spacing-highlight-progress: clamp(
+    7.3125rem,
+    5.816rem +
+    6.385vw,
+    11.5625rem
+  );
+  --spacing-highlight-stat-gap: clamp(0.75rem, 0.3099rem + 1.8779vw, 2rem);
+  /*
+   * Services carousel: extra top space after the programs 0 -> 80 (200 in
+   * total on desktop), heading -> cards 24 -> 48, cards 333x510 -> 382x654
+   * with gaps 12 -> 24. Inside the chat card: phone 244 -> 305 wide, its top
+   * 96 -> 126, the chat panel 38 -> 60 above the card bottom.
+   */
+  --spacing-carousel-top: clamp(0rem, -1.7606rem + 7.5117vw, 5rem);
+  --spacing-carousel-gap: clamp(1.5rem, 0.9718rem + 2.2535vw, 3rem);
+  --spacing-service-w: clamp(20.8125rem, 19.7342rem + 4.6009vw, 23.875rem);
+  --spacing-service-h: clamp(31.875rem, 28.706rem + 13.5211vw, 40.875rem);
+  --spacing-service-gap: clamp(0.75rem, 0.4859rem + 1.1268vw, 1.5rem);
+  --spacing-phone-w: clamp(15.25rem, 13.9076rem + 5.7277vw, 19.0625rem);
+  --spacing-phone-top: clamp(6rem, 5.3398rem + 2.8169vw, 7.875rem);
+  --spacing-chat-bottom: clamp(2.375rem, 1.8909rem + 2.0657vw, 3.75rem);
+  /* Success stories: shell padding 8 -> 120, card height 400 -> 530 */
+  --spacing-stories-y: clamp(0.5rem, -1.9648rem + 10.5164vw, 7.5rem);
+  --spacing-story-h: clamp(25rem, 22.1391rem + 12.2066vw, 33.125rem);
+  /* FAQ items: padding 16 -> 24 */
+  --spacing-faq-pad: clamp(1rem, 0.8239rem + 0.7512vw, 1.5rem);
+  /*
+   * Footer: side inset of the CTA shell and footer content 20 -> 32, white
+   * space under the CTA card 20 -> 120, dark footer top padding 40 -> 120,
+   * giant wordmark width 390 -> 1342.
+   */
+  --spacing-footer-x: clamp(1.25rem, 0.9859rem + 1.1268vw, 2rem);
+  --spacing-cta-bottom: clamp(1.25rem, -0.9507rem + 9.3897vw, 7.5rem);
+  --spacing-footer-top: clamp(2.5rem, 0.7394rem + 7.5117vw, 7.5rem);
+  --spacing-wordmark: clamp(24.375rem, 3.4249rem + 89.3897vw, 83.875rem);
+  /* Form controls (BMI inputs, radios, segmented control): 40 -> 52 */
+  --spacing-control: clamp(2.5rem, 2.2359rem + 1.1268vw, 3.25rem);
+  /* Language pills: h-pill 32 -> 44, px-pill-x 16 -> 32 (375 -> 1440) */
+  --spacing-pill: clamp(2rem, 1.7359rem + 1.1268vw, 2.75rem);
+  --spacing-pill-x: clamp(1rem, 0.6479rem + 1.5023vw, 2rem);
+
+  /* Navigation: full desktop nav from 70rem (all links fit on one line). */
+  --breakpoint-nav: 70rem;
+
+  /* ---- Radius ------------------------------------------------------------ */
+  /* rounded-full stays available for pills and circular buttons. */
+  --radius-*: initial;
+  --radius-shell: 2rem; /* 32: hero / stories / CTA shells */
+  --radius-card: 1rem; /* 16: cards, BMI panels */
+  --radius-panel: 0.75rem; /* 12: FAQ items */
+  --radius-feature: 1.5rem; /* 24: program feature cards (sampled) */
+  --radius-bubble: 0.5rem; /* 8: chat bubbles in the services carousel */
+
+  /* ---- Shadows ----------------------------------------------------------- */
+  --shadow-*: initial;
+  --shadow-card: 0 4px 12px 0 rgb(2 31 24 / 0.06); /* category / BMI cards */
+  --shadow-soft: 0 4px 21.6px 0 rgb(2 29 23 / 0.06); /* "card shadow 2" */
+  --shadow-pill: 0 4px 5.15px 0 rgb(0 0 0 / 0.05); /* language pills */
+  --shadow-raised: 0 4px 12px 0 rgb(2 34 39 / 0.08); /* expanded FAQ */
+  /* "Card Shadow" effect style: layered, used on the floating nav bar */
+  --shadow-layered:
+    1px 1px 2px 0 rgb(0 0 0 / 0.1), 2px 3px 4px 0 rgb(0 0 0 / 0.09),
+    5px 7px 5px 0 rgb(0 0 0 / 0.05), 9px 13px 6px 0 rgb(0 0 0 / 0.01);
+
+  /* ---- Motion ------------------------------------------------------------ */
+  /* "Fast then slow" settle used for carousel steps and reveals. */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  /* Trust strip: endless leftward scroll (track = two identical copies). */
+  --animate-marquee: marquee 64s linear infinite;
+  /* FAQ answers: height from Radix's measured content height. */
+  --animate-accordion-down: accordion-down 300ms var(--ease-out-expo);
+  --animate-accordion-up: accordion-up 200ms var(--ease-standard);
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+@media (width >= 70rem) {
+  :root {
+    --spacing-nav: 3.75rem;
+  }
+}
+
+/* BMI scale bar (design stops at 0 / 33.3 / 66.7 / 100%). */
+:root {
+  --gradient-bmi: linear-gradient(
+    90deg,
+    var(--color-bmi-under) 0%,
+    var(--color-bmi-healthy) 33.333%,
+    var(--color-bmi-over) 66.667%,
+    var(--color-bmi-obese) 100%
+  );
+}
+
+/* Motion durations (use as duration-(--duration-fast) etc.). */
+:root {
+  --duration-fast: 150ms; /* colour changes */
+  --duration-base: 200ms; /* transforms: hover lift, press */
+  --duration-slow: 300ms; /* accordion, menu, carousel step */
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /*
+   * Keep anchored sections and focused controls clear of the sticky nav.
+   * Not `scroll-padding-top` on <html>: that also applies to the sticky
+   * nav's own controls, so focusing them (a click on the menu button, or
+   * focus returning to it when the menu closes) scrolled the page ~400px
+   * and cut short the scroll to the chosen section.
+   */
+  main [id],
+  :is(main, footer)
+    :is(
+      a[href],
+      button,
+      input,
+      select,
+      textarea,
+      [tabindex]:not([tabindex="-1"])
+    ) {
+    scroll-margin-top: 6rem;
+  }
+
+  /* One consistent, visible focus ring for every interactive element. */
+
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* biome-ignore-start lint/complexity/noImportantStyles: reduced-motion fallback must override every component transition */
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+    /* biome-ignore-end lint/complexity/noImportantStyles: end of reduced-motion block */
+  }
+}
+
+/*
+ * Category themes. Data only carries `category`; the front end maps it to a
+ * theme by setting data-theme on the section/card. Components use the
+ * bg-theme-surface / border-theme-divider utilities, which read the runtime
+ * --theme-* variables, so an unknown category falls back to :root defaults.
+ */
+:root {
+  --theme-surface: var(--color-surface);
+  --theme-divider: var(--color-border);
+}
+
+[data-theme="weight-loss"] {
+  --theme-surface: var(--color-card-mint);
+  --theme-divider: var(--color-border-mint);
+}
+
+[data-theme="birth-control"] {
+  --theme-surface: var(--color-card-purple);
+  --theme-divider: var(--color-border-pink);
+}
+
+[data-theme="sleep"] {
+  --theme-surface: var(--color-card-blue);
+  --theme-divider: var(--color-border-blue);
+}
+
+@theme inline {
+  --color-theme-surface: var(--theme-surface);
+  --color-theme-divider: var(--theme-divider);
+  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--color-page);
+  color: var(--color-copy);
+  font-family: var(--font-sans);
+}
